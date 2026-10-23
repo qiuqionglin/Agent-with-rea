@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "semantics": "replace-value",
+  "read": {
+    "command": "document.read",
+    "input": {}
+  },
+  "write": {
+    "command": "document.replace",
+    "input": {
+      "body": "$value"
+    }
+  },
+  "valuePath": "body",
+  "testValue": "APP2CLI_7dfdb5c606114bac810c8ec866a641f0",
+  "witness": {
+    "kind": "web-text",
+    "selector": "#preview",
+    "comparison": "equals",
+    "expected": "APP2CLI_7dfdb5c606114bac810c8ec866a641f0"
+  }
+}

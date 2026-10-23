@@ -2,17 +2,17 @@
 
 **Turn application knowledge into verifiable CLIs for agents.**
 
-`app2cli` uses [REA](https://github.com/morluto/rea) to inspect an application, helps an agent author a semantic adapter, and compiles the adapter into a separate CLI package. Each generated CLI exposes typed commands, JSON output, request deduplication, version checks, and execution evidence.
+`app2cli` uses [REA](https://github.com/morluto/rea) to inspect an application, runs a coding agent to generate a semantic adapter, compiles it into a separate CLI package, and tests it against the actual app. Failures feed a bounded repair loop. Each generated CLI exposes typed commands, JSON output, request deduplication, version checks, and execution evidence.
 
-[中文说明](README.zh-CN.md) · [Adapter contract](docs/adapter-contract.md) · [Architecture and scope](docs/architecture.md) · [Acceptance evidence](docs/acceptance.json)
+[中文说明](README.zh-CN.md) · [Automatic generation](docs/generation.md) · [Adapter contract](docs/adapter-contract.md) · [Architecture and scope](docs/architecture.md)
 
 ```text
-Application → REA evidence → semantic adapter → per-app CLI → execute → verify
-                              ↑
-                     agent-written and reviewed
+URL / APK → REA evidence → agent → adapter → CLI → real-app test + independent read
+                            ↑                           │
+                            └──── failure feedback ─────┘
 ```
 
-The architecture is open to more applications. **Automatic support for every website or app is a goal, not a current capability.** Analysis candidates are not automatically trusted executable commands. Draft adapters cannot be built until their mapping is completed.
+The generator does not look up an application in the bundled adapter list. It currently tests a reversible value/content replacement, not every capability of an arbitrary app. An application may require login, lack accessible source/UI, or have no supported reversible operation; those cases fail explicitly. Analysis candidates and successful builds alone are not execution proof.
 
 ## What works today
 
@@ -20,10 +20,15 @@ The architecture is open to more applications. **Automatic support for every web
 | --- | --- | --- | --- |
 | Knockout TodoMVC | Original browser view-model functions | Model + DOM + localStorage + reload | `todomvc-cli todos create --title "Hello"` |
 | Fossify Calculator 1.4.0 | Original Android UI controls via ADB | Two fresh native UI hierarchy observations | `fossify-calculator-cli calculate --a 12 --operator multiply --b 7` |
+| Dillinger, generated from its live URL | Original native document-store actions, discovered by the agent | Independent preview observation after reload, plus original-content restoration | `dillinger-cli document replace --body "Hello"` |
 
 The recorded local run passed **13/13 real-app checks** and **10/10 kernel/compiler tests**. The framework and both generated tarballs also passed an isolated installation/readback check outside the repository, with no REA dependency in the generated runtime. See [package verification](docs/packaging-check.json).
 
-Both examples have been exercised on real applications. The Android example reads `84` from the installed app; it does not return a locally calculated answer. Local arithmetic is only a postcondition used to check the app's output. Android UI readback does not claim backend confirmation or persistence across process restarts.
+The original Web and Android examples have been exercised on real applications. The Android example reads `84` from the installed app; it does not return a locally calculated answer. Local arithmetic is only a postcondition used to check the app's output. Android UI readback does not claim backend confirmation or persistence across process restarts.
+
+The later automatic-generation experiment used **Dillinger without a pre-existing adapter**. After framework development fixes, a fresh URL-to-CLI run passed **8/8 real-app checks on its first candidate**, followed by another 8/8 recheck. A deliberately lying no-op adapter was rejected by the independent observer. The generated tarball also ran outside this repository without REA installed. Current fixture tests pass **22/22**. See [generation acceptance](docs/generation-acceptance.json), including earlier failures and evidence boundaries, and the [unmodified generated example](examples/dillinger-generated/README.md).
+
+![Independent readback after reload](docs/generation-witness.png)
 
 ## Install from this repository
 
@@ -38,6 +43,27 @@ node bin/app2cli.mjs list
 ```
 
 REA is pinned to `6.7.0`. Set `REA_CLI_PATH` to its `scripts/rea.mjs` if it is installed elsewhere. No global agent configuration is modified. Downloaded applications, browser profiles, raw evidence and execution journals belong under ignored `.local/` directories.
+
+## Generate from a new URL or APK
+
+With an authenticated Codex CLI and Chrome installed:
+
+```bash
+node bin/app2cli.mjs generate https://dillinger.io/ \
+  --id dillinger --out .local/generate/dillinger \
+  --goal "Read and replace the current Markdown document; verify the preview after reload"
+```
+
+For Android, prepare REA's JADX provider and an authorized test device:
+
+```bash
+node bin/app2cli.mjs generate /path/to/application.apk \
+  --id my-app --serial emulator-5554 --install --out .local/generate/android
+```
+
+The agent gets actual REA evidence, source files, a live UI observation and the adapter contract. It returns a candidate or requests another read-only probe. The runner compiles and executes the CLI, checks a separate native witness, and supplies real failures for repair. Web tests use a random marker that repair attempts cannot change. Failed restoration stops further mutations.
+
+Success returns the package path, required local environment and digest-bound test report. Read its `--schema` for the generated command names. Run `app2cli verify <run-dir> --out <new-report-dir>` to repeat acceptance without another model call. [Generation details](docs/generation.md) cover options, limitations, source-integrity handling and private artifacts.
 
 ## Web: inspect, build, run
 
@@ -100,7 +126,7 @@ node dist/fossify-calculator/cli.mjs calculate \
 
 The driver checks the installed APK hash, launches an exported activity, finds controls by resource ID, and derives coordinates from the current hierarchy. No root, Frida injection, or fixed screen coordinates are needed for this sample. Four arithmetic operators and bounded nonnegative integer operands are supported; it is not the entire Calculator feature set.
 
-## Add another application
+## Manual adapter authoring
 
 ```bash
 node bin/app2cli.mjs scaffold --id my-app \
@@ -139,7 +165,7 @@ pnpm check:release --tarball .local/packages/agent-with-rea-0.1.0.tgz
 
 CI runs unit and package checks. It does not pretend to run a signed-in browser or an Android device. The published [acceptance summary](docs/acceptance.json) records the separate local live run.
 
-Current limits include authored semantic mappings, one browser and one Android example, local process locks, no automatic login renewal, no Android internal-method/Frida driver, and no iOS/desktop runtime driver. A source or APK change fails closed and requires reanalysis. Evidence substring checks validate recipe anchors, not a formal proof that the adapter correctly implements a business operation; real readback tests remain necessary.
+Current limits include a reversible-value generation test contract, model-dependent semantic mappings, local process locks, no automatic login renewal, no Android internal-method/Frida driver, and no iOS/desktop runtime driver. A source or APK change fails closed and requires reanalysis. Evidence substring checks validate recipe anchors, not a formal proof that the adapter correctly implements a business operation; real readback tests remain necessary.
 
 ## Related projects and license
 

@@ -17,6 +17,9 @@ flowchart LR
   Web --> Readback[Application readback]
   Android --> Readback
   Readback --> Audit[Private audit and request journal]
+  CLI --> Test[Independent native observer]
+  Test -->|failure details| Agent
+  Test -->|verified effect and restoration| Accepted[Generation report]
 ```
 
 ## What each artifact proves
@@ -30,6 +33,8 @@ flowchart LR
 | `provenance.json` | Compiler | Claims were found in the selected analysis; `runtimeVerified` remains false |
 | Execution audit | Runtime | Before / dispatch / after / fresh readback and errors |
 | Acceptance summary | Test runner | Which scenarios actually passed in that run |
+| `agent.stdout` / `agent.stderr` | Codex CLI | Native generation trace, retained privately |
+| `generation.json` | Orchestrator | Attempt history and links to actual test failures; not a model-native trajectory |
 
 The compiler checks raw-output digests and recipe anchors. It is not a semantic proof engine or a defense against a deliberately malicious local author. Adapter modules execute trusted local JavaScript. A REA finding can be incomplete; no generated wrapper can recover permissions, unavailable backend state, or unknown behavior merely by having a CLI name.
 
@@ -52,6 +57,10 @@ An outcome reserved before dispatch but not verified stays uncertain. It cannot 
 | Official HTTP API, desktop, iOS | Planned | Interface permits plugins; these transports are not implemented |
 
 REA supports more analysis targets than this repository currently supports for execution. Analysis coverage and operational coverage must be reported separately.
+
+## Generation loop
+
+`generate` accepts a URL or APK without selecting a bundled adapter. REA analysis and independent DOM/UI observations provide the input. Codex returns a structured candidate or requests a bounded read-only probe. The framework validates, compiles and tests it in separate processes. Failures are fed back into a new attempt, with the original objective frozen. A failed restoration halts mutation attempts. See [automatic generation](generation.md) for the current reversible-value scope and evidence limitations.
 
 ## Operational findings
 

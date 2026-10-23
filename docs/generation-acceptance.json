@@ -1,0 +1,153 @@
+{
+  "producer": "Sanitized orchestrator summary, not raw REA or native model trace",
+  "application": {
+    "name": "Dillinger",
+    "origin": "https://dillinger.io",
+    "bundledAdapterBeforeExperiment": false
+  },
+  "status": "passed",
+  "verification": "reload-persisted",
+  "agent": {
+    "engine": "Codex CLI",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "perProcessConfigOnly": true
+  },
+  "cleanRun": {
+    "startedAt": "2026-10-23T09:59:45.118Z",
+    "finishedAt": "2026-10-23T10:03:53.743Z",
+    "attempts": 1,
+    "repairs": 0,
+    "manualAdapterEdits": false,
+    "commandsReadFromOtherRecipes": 0,
+    "adapterDigest": "d8a4017ecd57dc40bb7dcae7798feae855be24f6d8647b1686ebe3ce314cb95a",
+    "checks": [
+      {
+        "name": "Generated CLI schema",
+        "passed": true
+      },
+      {
+        "name": "Dry run preserves application state",
+        "passed": true
+      },
+      {
+        "name": "Mutation and runtime fresh readback",
+        "passed": true
+      },
+      {
+        "name": "Independent native witness",
+        "passed": true,
+        "kind": "web-text",
+        "selector": "#preview",
+        "actual": "APP2CLI_7dfdb5c606114bac810c8ec866a641f0",
+        "expected": "APP2CLI_7dfdb5c606114bac810c8ec866a641f0",
+        "reloaded": true
+      },
+      {
+        "name": "Separate CLI process reads actual value",
+        "passed": true
+      },
+      {
+        "name": "Request replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "Stale revision is rejected",
+        "passed": true
+      },
+      {
+        "name": "Original application content restored",
+        "passed": true
+      }
+    ],
+    "restored": true
+  },
+  "repeat": {
+    "passed": 8,
+    "status": "passed",
+    "restored": true
+  },
+  "negativeControl": {
+    "producer": "Deliberately faulty test copy, not model output",
+    "fault": "dispatch returns success without effect and matches always returns true",
+    "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+    "restored": true
+  },
+  "independentInstallation": {
+    "producer": "Independent generated tarball installation test",
+    "ok": true,
+    "outsideRepository": true,
+    "reaInstalled": false,
+    "readPassed": true,
+    "bodyLength": 2507,
+    "bodySha256": "a4483f06ecd5852bf3f3912a1d8a7abe99e0a9030636eedd1ba1f3c7cac9c067",
+    "tarballSha256": "f1b8ff5f426f20a388e1b5b089737ceb590193ffcf77e228a52d63b32970bb3f",
+    "at": "2026-10-23T10:06:21.490Z"
+  },
+  "unitTests": {
+    "passed": 22,
+    "total": 22,
+    "kind": "Kernel, compiler and generation-loop fixtures; not live-application evidence"
+  },
+  "rea": {
+    "version": "6.7.0",
+    "rawRecords": [
+      {
+        "operation": "list_browser_targets",
+        "evidenceId": "ev_3b02a7a872b59e25582c95c6a376699274189b6aee5c4dedae2f98073e3cfa8d",
+        "sha256": "e3e305a30a08d9f4bef23026480ea02e5b7fa6cd621eda53011b97dd026617e2"
+      },
+      {
+        "operation": "inspect_web_page",
+        "evidenceId": "ev_36efcd40ce8eabdd9662d71ff770c04936c3edc9c45361392012e1917ce7aad1",
+        "sha256": "68ade0cf184331c28e1aa8561a745db529f4c4be1a7fc6439b56dec3da873823"
+      },
+      {
+        "operation": "export_web_scripts",
+        "evidenceId": "ev_7a82c9ff56b6770b8d7a54bde7e966fb1ec908b1d221075327c3abe36e1ef761",
+        "sha256": "10b0cdece4414d91a6091169798208e6cf68a7a08be0f0b221be3032f8da9e5b"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "evidenceId": "ev_c09671ea51c5ce09723b26fc93b22251619615776da234e0bd05fd1ef8193266",
+        "sha256": "0b3f9781f4be8d58c5dd537b7a53fac03ba0655705bf3fccd77b9f3107871d30"
+      }
+    ],
+    "quarantinedSources": [
+      {
+        "url": "https://dillinger.io/_next/static/chunks/1740.f623e33d84b43a0c.js?dpl=dpl_DsNCMRr5kQDDHrqRfxPCErj5YxRT",
+        "reportedSha256": "05ead3e852070ccdcb03a1dff4df36d38e963245d8c8be8fa74aa3100fbbfe53",
+        "observedSha256": "601ae7ed81fb816f7c08030ccdb882ec62b93fd4abb4b66a22678524c2dd5afc"
+      }
+    ],
+    "staticAnalysisCoverage": "Bounded selected-source analysis, not whole-application coverage"
+  },
+  "sourceDigests": {
+    "lib/generate.mjs": "0c5c143a3d99eb4a5b86ed1db542dc4e0ccf1b8435cea7c7a8f95b43bb9e0b27",
+    "lib/inspect.mjs": "e2024c34d6749e0db963e1c769eb8152ae5256fdbe86b98997c77b1d7eb8c50d",
+    "lib/rea.mjs": "5affd79b244aa7dea2d013c970aa6352d4596159f728da91bb310d5eb5b19c37",
+    "lib/generation-test.mjs": "491811b09283deea9f6b2f23a2faed96c8c6b0bf47d8d7f36b8699c77252d0fe",
+    "lib/runtime.mjs": "7246b88ecd326f5fc33386f0b98e3c3460f60418034a025cd99318b8fea0a6e3",
+    "lib/web.mjs": "80ed26d15f5f400ad5f0fb061abd85954062239c42eadaf4ba33e2292774bd34"
+  },
+  "developmentFailures": {
+    "retainedPrivately": true,
+    "failures": [
+      "REA retained-text hash mismatch; inconsistent source quarantined without changing reported digests",
+      "Underspecified compiler claim format; contract and schema corrected",
+      "Model provider usage/connection errors and authoring timeout",
+      "Generated script-element checks failed after reload",
+      "Generated Webpack factory serialization check failed after reload"
+    ],
+    "manualRecovery": "Earlier development runs that could not restore were stopped. Parent restored their original documents through native app methods and independently checked preview hashes after reload. This intervention is separate from the successful clean run.",
+    "cleanRunHadNoFrameworkOrAdapterEditsDuringExecution": true
+  },
+  "boundaries": [
+    "The generated app CLI invokes original native document-store methods, not a replacement editor",
+    "Independent observer reloads the live application and reads #preview without importing adapter code",
+    "This proves browser-local document persistence, not a cloud/backend write",
+    "The negative-control adapter is an intentionally faulty test copy, not a model output",
+    "Only the selected Web app was used for unseen-app generation acceptance; arbitrary APK generation is not proven",
+    "Raw evidence, agent prompts/traces, browser profiles and execution journals remain private"
+  ]
+}

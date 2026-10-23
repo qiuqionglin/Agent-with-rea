@@ -2,18 +2,53 @@
 
 利用 REA 的分析证据，把应用能力封装成 Agent 可发现、可调用、可验证的独立 CLI。
 
-**当前是可扩展框架和两个真实样例，不是已经自动支持所有网站与 App。** 目标应用的语义映射仍由 Agent 编写和检验；未完成的草稿不能构建。命令名是 `app2cli`，仓库名是 Agent-with-rea。
+现在可以输入网址或 APK，让实际的 coding agent 根据 REA 证据生成适配器、编译 CLI、执行真实应用测试，并根据失败自动修复。命令名是 `app2cli`，仓库名是 Agent-with-rea。
+
+**当前自动验收覆盖可恢复的内容或数值修改，不保证任意网站、任意 App 的所有功能都能生成。** 登录、设备权限、源码可见性和业务语义仍会影响结果；无法验证时会明确失败。
 
 完整命令和环境准备见 [English README](README.md)。
 
+已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。通用测试为 **22/22**。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
+
+开发期间失败的运行和人工恢复步骤在摘要中单独披露，不算入成功验收。最终成功的干净运行没有沿用旧适配器，也没有在执行中修改框架或候选代码。本例验证的是浏览器本地持久化，不是服务端写入。
+
 ## 工作流程
 
-`目标应用 → REA 分析 → 候选能力 → Agent 编写适配包 → 生成独立 CLI → 调用原应用 → 验证结果`
+`网址 / APK → REA 分析 → Agent 生成适配器 → 独立 CLI → 真实调用和独立回读 → 失败反馈给 Agent 修复`
 
 - **分析层**：保存真实 REA stdout 和来源哈希，区分原始证据与本项目生成的摘要。
 - **适配包**：描述命令、输入 Schema、版本约束、执行入口和后置条件。
 - **CLI 生成器**：核对证据与适配包，生成可单独安装的 npm 包。
 - **通用运行时**：参数检查、会话范围、状态版本、跨进程锁、请求去重、私有审计和结果验证。
+- **自动生成循环**：实际调用已登录的 Codex CLI；生成过程只读证据，测试器运行候选代码。每轮保存输入、原始输出和真实失败，默认最多 4 轮。
+- **独立测试器**：Web 刷新页面后直接读取 DOM，Android 重新抓取原生 UI 层级；观察过程不调用适配器的结果函数。恢复原始状态失败时停止继续修改。
+
+## 自动生成
+
+准备 Node.js 24.11+、依赖、Chrome 和已登录的 Codex CLI 后：
+
+```bash
+node bin/app2cli.mjs generate https://dillinger.io/ \
+  --id dillinger --out .local/generate/dillinger \
+  --goal "读取和替换当前 Markdown 文档，刷新后检查预览并恢复原文"
+```
+
+只传网址时会自动创建独立 Chrome 配置和本地 CDP 端口。已登录的网站可显式传 `--cdp` 和 `--target`，无需把 Cookie 或密码交给 agent。APK 输入方式：
+
+```bash
+node bin/app2cli.mjs generate /path/to/application.apk \
+  --id my-app --serial emulator-5554 --install --out .local/generate/android
+```
+
+Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设备中不存在的包；现有安装包哈希不一致时会拒绝覆盖。新应用的自动生成实测选择 Web，Android 自动生成入口不能据此宣称已经覆盖任意 APK。
+
+成功后，`result.json` 给出 CLI 路径、调用所需环境、适配器哈希和验证报告。先用 `--schema` 查看实际生成的命令。无需再次消耗模型调用即可复验：
+
+```bash
+node bin/app2cli.mjs verify .local/generate/dillinger --out .local/verify/dillinger
+```
+
+生成器不读取内置适配器来匹配网站；新目标的语义映射来自当次 agent 输出。Web 测试使用每次随机生成且修复期间不可更改的文本，避免以现有页面内容替换预期来通过测试。完整选项和证据边界见 [自动生成说明](docs/generation.md)。
 
 ## 已实现的样例
 
@@ -53,7 +88,7 @@ Android 需要已授权的 ADB 设备和完整 JDK。下载脚本会核对 APK /
 
 ## 接入其他应用
 
-先用 `inspect` 保存 REA 证据，再用 `scaffold` 生成草稿和候选信息。Agent 按 [适配器契约](docs/adapter-contract.md) 完成语义映射，再用 `build` 生成 `<应用>-cli`。新应用的控件、函数、协议、状态模型和业务校验仍需要单独确定。
+优先使用 `generate` 自动循环。也可手动用 `inspect` 保存 REA 证据，再用 `scaffold` 生成草稿和候选信息，按 [适配器契约](docs/adapter-contract.md) 完成语义映射，再用 `build` 生成 `<应用>-cli`。新应用的控件、函数、协议、状态模型和业务校验由适配器表达。
 
 生成器会把构建标记为 `runtimeVerified: false`。只有实际执行和回读测试才能提供运行验证；代码存在、静态分析通过或 CLI 返回零退出码都不能单独证明业务操作成功。
 

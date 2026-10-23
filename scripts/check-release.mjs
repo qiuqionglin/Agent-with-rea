@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readdir,readFile,stat } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { resolve } from 'node:path';
-const roots=['bin','lib','schemas','adapters','docs','scripts','test','.github'];let count=0;
+const roots=['bin','lib','schemas','adapters','examples','docs','scripts','test','.github'];let count=0;
 async function visit(path){
   for(const entry of await readdir(path,{withFileTypes:true})){
     const name=path+'/'+entry.name;if(entry.isDirectory()){await visit(name);continue;}

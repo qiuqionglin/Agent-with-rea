@@ -13,6 +13,8 @@ An adapter directory contains `adapter.json` and `adapter.mjs`. Use `app2cli sca
 
 Command IDs can contain dots. `todos.create` is exposed as either `todos.create` or `todos create`. Simple inputs become named flags; use `--input` for nested JSON. Every compiled adapter carries a frozen digest checked before execution.
 
+Each `analysis.claims` entry must be `{ "operation": "analyze_javascript_application", "contains": "a literal string present in that REA output", "sha256": "optional 64-character source digest present in that output" }`. `operation` is required and must exactly match an evidence-index record (underscore spelling, not the CLI command's hyphen spelling). `contains` and `sha256` are optional literal anchors. Graph nodes such as `{kind,label,properties}` are findings to interpret, not the compiler's claim format. Claims are anchor checks, not complete semantic proofs.
+
 ## JavaScript module
 
 Export a default object with these methods:
@@ -31,6 +33,9 @@ Export a default object with these methods:
 | `close(ctx)` | Release this connection without closing unrelated user sessions |
 
 Read commands call `check`, `read` and `result`. Mutation commands add plan, journal reservation, dispatch, bounded polling, refresh and confirmation. A successful dispatcher alone is insufficient. Preserve unrelated data in `matches`; do not only check that the new field exists.
+
+For browser version checks, use source hashes and the actual native interface. Lazy-loaded bundles may remove their `<script>` elements after execution, so absence from `document.scripts` is not sufficient evidence of a changed deployment. Test checks after a normal reload, including the app's hydration path.
+Webpack factory `Function.toString()` is also not a stable source-version fingerprint: duplicate module registrations and load order can select different wrappers in the same pinned deployment. Pin source bytes and verify the required callable methods and state shape rather than requiring a particular factory serialization.
 
 `scopeKey` identifies the observed principal or local session. Do not use an account supplied by the caller without checking it against the application. A browser module, cookie or device address being present does not prove authentication. The shipped examples use isolated browser target/device scopes because they require no account.
 

@@ -11,7 +11,7 @@
     "platform": {"enum": ["web", "android"]},
     "verification": {"enum": ["reload-persisted", "native-ui-readback", "server-confirmed"]},
     "config": {"type": "object"},
-    "analysis": {"type": "object", "required": ["recipe", "claims"], "properties": {"recipe": {"type": "string"}, "claims": {"type": "array", "minItems": 1, "items": {"type": "object"}}}, "additionalProperties": false},
+    "analysis": {"type": "object", "required": ["recipe", "claims"], "properties": {"recipe": {"type": "string"}, "claims": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["operation"], "additionalProperties": false, "properties": {"operation": {"type": "string", "minLength": 1}, "contains": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}}}, "additionalProperties": false},
     "commands": {
       "type": "object", "minProperties": 1,
       "propertyNames": {"pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$"},

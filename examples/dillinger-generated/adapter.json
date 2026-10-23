@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "id": "dillinger",
+  "description": "Read and replace the current Markdown document, preserving other documents and settings.",
+  "platform": "web",
+  "verification": "reload-persisted",
+  "commands": {
+    "document.read": {
+      "description": "Read the current Markdown document.",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "document.replace": {
+      "description": "Replace and save the current document body.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "body": {
+            "type": "string",
+            "maxLength": 1000000
+          }
+        },
+        "required": [
+          "body"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "analysis": {
+    "recipe": "Inspect the exported page bundle: module 17367 consumes module 92167 export o for currentDocument and editor updates. Module 92167 implements updateDocumentBody by replacing only the selected document body, and persist saves documents, currentDocument and settings through the application's own persistence function. The layout bundle also registers module 92167 and hydrates its store from the Providers component. Acquire the active Webpack require through its runtime callback, check export o.getState/subscribe and the native method/state shapes, and reacquire after reload. Pin source bytes rather than factory serialization or script-element presence. Read native state and Monaco readback; inspect #preview for rendered output.",
+    "claims": [
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "updateDocumentBody",
+        "sha256": "b8505f2fde682d2eb66c8d9b8563dafe64d21bee8ada21d9421f6797d76bfc80"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "currentDocument"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "persist"
+      },
+      {
+        "operation": "export_web_scripts",
+        "contains": "app/layout-25e1141c564fef1f.js",
+        "sha256": "8c62ee1f228fea0fc7eec972da558bacb4cb8062b7479a64586f99657e8c50ad"
+      },
+      {
+        "operation": "export_web_scripts",
+        "contains": "webpack-d9693cb4d390dd86.js",
+        "sha256": "cf98d32a1e74d6a0c95ab2e3dd502dd265e05c77189f2949e75b72b591f0f653"
+      }
+    ]
+  },
+  "config": {
+    "origin": "https://dillinger.io",
+    "pathname": "/",
+    "pins": [
+      {
+        "path": "/_next/static/chunks/app/page-8bc2dec54a4b2288.js?dpl=dpl_DsNCMRr5kQDDHrqRfxPCErj5YxRT",
+        "sha256": "b8505f2fde682d2eb66c8d9b8563dafe64d21bee8ada21d9421f6797d76bfc80"
+      },
+      {
+        "path": "/_next/static/chunks/app/layout-25e1141c564fef1f.js?dpl=dpl_DsNCMRr5kQDDHrqRfxPCErj5YxRT",
+        "sha256": "8c62ee1f228fea0fc7eec972da558bacb4cb8062b7479a64586f99657e8c50ad"
+      },
+      {
+        "path": "/_next/static/chunks/webpack-d9693cb4d390dd86.js?dpl=dpl_DsNCMRr5kQDDHrqRfxPCErj5YxRT",
+        "sha256": "cf98d32a1e74d6a0c95ab2e3dd502dd265e05c77189f2949e75b72b591f0f653"
+      }
+    ],
+    "ready": "Boolean(globalThis.webpackChunk_N_E && document.querySelector('.monaco-editor') && document.querySelectorAll('#preview').length === 1)"
+  }
+}

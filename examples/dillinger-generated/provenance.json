@@ -1,0 +1,9 @@
+{
+  "producer": "Framework projection of original Codex final response; module bytes are unchanged",
+  "noManualAdapterEdits": true,
+  "bundledBeforeRun": false,
+  "adapterDigest": "d8a4017ecd57dc40bb7dcae7798feae855be24f6d8647b1686ebe3ce314cb95a",
+  "moduleSha256": "f1598b57c53907fceca7a8c5a209efaf7d6486d1baa5bd3cbbdf8ff8dedd674f",
+  "nativeAgentTraceSha256": "23e7c1fee9c6787f3e6774c05973295751ca8866b6964cc513bbc5c15174dc2d",
+  "nativeFinalResponseSha256": "52d235b5334870a196afd998466c8a18eaa6ce2c7894c939d2a12d4704f393e6"
+}

@@ -12,6 +12,7 @@ Project-authored code in this repository is licensed under MIT. Dependencies ret
 | Knockout, Director, TodoMVC styles/common | Pinned development dependencies in package/lock files | Original licenses retained by their packages |
 | Fossify Calculator | [source tag 1.4.0](https://github.com/FossifyOrg/Calculator/tree/1.4.0), `calculator-10-foss-release.apk` | GPL-3.0; separately downloaded and installed, APK and decompiled source not shipped here |
 | JADX headless MCP | [v0.7.1](https://github.com/1013503897/jadx-headless-mcp/releases/tag/v0.7.1), revision `5844800a486d2248fa949b74c9896285f5b54de2` | External analysis provider; its own distribution terms apply, JAR not shipped here |
+| Dillinger | [live application](https://dillinger.io/), source hashes in the generated recipe | Used as an independent live test target. Client bundles are retained only in private analysis evidence; this repository ships the generated adapter and a test screenshot, not the application source |
 
 Pinned downloads:
 
