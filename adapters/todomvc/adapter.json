@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "todomvc",
+  "description": "Operate the unmodified Knockout TodoMVC through its native view model",
+  "platform": "web",
+  "verification": "reload-persisted",
+  "config": {
+    "pathname": "/",
+    "ready": "Boolean(window.ko && ko.dataFor(document.body))",
+    "pins": [
+      {"path": "/js/app.js", "sha256": "fc01edc03a90a4e7569755bc3b8ab7b5015768980cdfebfaa4251f55c894a698"},
+      {"path": "/", "sha256": "6f152959d63c670e9d926a68e977f5bf4865d95fc40765f8072158dd6be56dbb"}
+    ]
+  },
+  "analysis": {
+    "recipe": "Agent-authored native view-model mapping for TodoMVC ff43b02e59dfa604386bb382034b2cd07c2bcd8a",
+    "claims": [{"operation": "analyze_javascript_application", "sha256": "fc01edc03a90a4e7569755bc3b8ab7b5015768980cdfebfaa4251f55c894a698", "contains": "saveEditing"}]
+  },
+  "commands": {
+    "todos.list": {"description": "Read current todos", "readOnly": true, "inputSchema": {"type": "object", "properties": {}, "additionalProperties": false}},
+    "todos.get": {"description": "Read one todo by snapshot ID", "readOnly": true, "inputSchema": {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"], "additionalProperties": false}},
+    "todos.create": {"description": "Create and confirm a persisted todo", "readOnly": false, "inputSchema": {"type": "object", "properties": {"title": {"type": "string", "minLength": 1, "maxLength": 240, "pattern": "\\S"}}, "required": ["title"], "additionalProperties": false}},
+    "todos.rename": {"description": "Rename and confirm after reload", "readOnly": false, "inputSchema": {"type": "object", "properties": {"id": {"type": "string"}, "title": {"type": "string", "minLength": 1, "maxLength": 240, "pattern": "\\S"}}, "required": ["id", "title"], "additionalProperties": false}},
+    "todos.set_completed": {"description": "Change completion state", "readOnly": false, "inputSchema": {"type": "object", "properties": {"id": {"type": "string"}, "completed": {"type": "boolean"}}, "required": ["id", "completed"], "additionalProperties": false}},
+    "todos.delete": {"description": "Delete one todo and verify reload", "readOnly": false, "inputSchema": {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"], "additionalProperties": false}}
+  }
+}

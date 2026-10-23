@@ -1,0 +1,17 @@
+name: Unit and package checks
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm test
+      - run: pnpm pack --pack-destination .local/packages
+      - run: pnpm check:release --tarball .local/packages/agent-with-rea-0.1.0.tgz

@@ -1,0 +1,114 @@
+{
+  "producer": "Real application acceptance summary; not REA raw output",
+  "startedAt": "2026-10-23T06:56:50.855Z",
+  "checks": [
+    {
+      "name": "Both generated CLIs expose typed command schemas",
+      "passed": true,
+      "durationMs": 120
+    },
+    {
+      "name": "Web native creation survives reload",
+      "passed": true,
+      "durationMs": 956
+    },
+    {
+      "name": "Web get and rename use the created object",
+      "passed": true,
+      "durationMs": 1113
+    },
+    {
+      "name": "Web completion persists",
+      "passed": true,
+      "durationMs": 903
+    },
+    {
+      "name": "Web replay creates no duplicate",
+      "passed": true,
+      "durationMs": 436
+    },
+    {
+      "name": "Web stale and invalid writes are rejected",
+      "passed": true,
+      "durationMs": 295
+    },
+    {
+      "name": "Web deletion restores the original list",
+      "passed": true,
+      "durationMs": 1198
+    },
+    {
+      "name": "Android display reads the installed native app",
+      "passed": true,
+      "durationMs": 20048
+    },
+    {
+      "name": "Android native addition yields 42",
+      "passed": true,
+      "durationMs": 27527
+    },
+    {
+      "name": "Android replay returns the earlier verified result",
+      "passed": true,
+      "durationMs": 5305
+    },
+    {
+      "name": "Android stale operation and division by zero are rejected",
+      "passed": true,
+      "durationMs": 5363
+    },
+    {
+      "name": "Android clear is verified from the UI",
+      "passed": true,
+      "durationMs": 14405
+    },
+    {
+      "name": "Android native multiplication yields 84",
+      "passed": true,
+      "durationMs": 12028
+    }
+  ],
+  "webRestored": true,
+  "androidReadback": true,
+  "packages": [
+    {
+      "id": "todomvc",
+      "adapterDigest": "143d582c27fe363dcfa01ab906ba5496935fdc13b6f1f5db32e5bc828818ba0d"
+    },
+    {
+      "id": "fossify-calculator",
+      "adapterDigest": "86b92f2f7ccfe507a8c803020163f6f35c6f4be6595b73c3e16cab21f0eb4cc3"
+    }
+  ],
+  "androidDisplay": {
+    "result": "84",
+    "formula": "12×7"
+  },
+  "status": "passed",
+  "finishedAt": "2026-10-23T06:58:20.947Z",
+  "passed": 13,
+  "unitTests": {
+    "kind": "kernel/compiler fixtures, not real-app evidence",
+    "passed": 10,
+    "total": 10
+  },
+  "sourceDigests": {
+    "lib/runtime.mjs": "7246b88ecd326f5fc33386f0b98e3c3460f60418034a025cd99318b8fea0a6e3",
+    "lib/android.mjs": "4f9c2a67f260f820d7763c4e4f2cf0330246a3c7c484aebfcb3a6879c7a214e8",
+    "lib/web.mjs": "adb253bce96de655b2c2fd372462e46fa063510e1d39f211a63d8eeeba13d204",
+    "lib/build.mjs": "1f1f82ea5becb4c585fbd963a1c64c2e89e7a6666cae9b3f58618095a5589c87"
+  },
+  "environment": {
+    "host": "macOS arm64",
+    "web": "Chrome with isolated profile",
+    "android": "Android 13 emulator; no root or Frida used",
+    "rea": "6.7.0",
+    "jadx": "0.7.1"
+  },
+  "boundaries": [
+    "Web was tested against unmodified, locally hosted TodoMVC",
+    "Android actions used original native UI controls; no internal-method invocation claimed",
+    "Raw REA outputs, application profiles and full audits remain local",
+    "Earlier failed live runs are retained locally; this summary describes the final successful run"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "fossify-calculator",
+  "description": "Use Fossify Calculator 1.4.0 on an explicitly selected Android device",
+  "platform": "android",
+  "verification": "native-ui-readback",
+  "config": {"package": "org.fossify.math", "component": "org.fossify.math/.activities.SplashActivity.Green", "apkSha256": "7c5443c22d6d62c67dfe80df33ea9161ff0fa440f92590bcb45d7008b57613ed"},
+  "analysis": {
+    "recipe": "Agent-authored mapping from APK declarations, REA class inspection and observed native UI resource IDs",
+    "claims": [
+      {"operation": "inspect_android_package", "contains": "org.fossify.math", "sha256": "7c5443c22d6d62c67dfe80df33ea9161ff0fa440f92590bcb45d7008b57613ed"},
+      {"operation": "inspect_android_class", "contains": "org.fossify.math.activities.MainActivity"},
+      {"operation": "inspect_android_method", "contains": "onCreate"}
+    ]
+  },
+  "commands": {
+    "display": {"description": "Read the actual native calculator display", "readOnly": true, "inputSchema": {"type": "object", "properties": {}, "additionalProperties": false}},
+    "calculate": {
+      "description": "Tap native controls, evaluate, then verify two fresh UI readbacks",
+      "readOnly": false,
+      "inputSchema": {"type": "object", "additionalProperties": false, "required": ["a", "operator", "b"], "properties": {"a": {"type": "integer", "minimum": 0, "maximum": 999999}, "operator": {"enum": ["add", "subtract", "multiply", "divide"], "type": "string"}, "b": {"type": "integer", "minimum": 0, "maximum": 999999}}}
+    },
+    "clear": {"description": "Clear the native display and verify zero", "readOnly": false, "inputSchema": {"type": "object", "properties": {}, "additionalProperties": false}}
+  }
+}

@@ -1,0 +1,14 @@
+# Agent with REA / app2cli
+
+Purpose: analyze applications with REA, author semantic adapters, compile per-app CLIs, execute and verify.
+
+Discover: `app2cli --help`, `app2cli list`, `<app>-cli --schema`.
+Analyze: `app2cli inspect web <owned-cdp-url> --target <id> --out <evidence-dir>` or `app2cli inspect android <apk> --class <class> --method <method> --out <evidence-dir>`.
+Draft: `app2cli scaffold --id <id> --evidence <dir> --out <new-adapter-dir>`.
+Author: implement adapter.json and adapter.mjs according to docs/adapter-contract.md. Drafts are blocked from compilation.
+Compile: `app2cli build <adapter-dir> --evidence <dir> --out <new-package-dir>`.
+Call: `<app>-cli <group> <verb> --input '{...}' --request-id <stable-id>`.
+
+All command results are JSON on stdout; progress is stderr. Read schemas before constructing inputs. Reuse request IDs only for the identical mutation. Pass a prior revision with --expected-revision when acting on previously observed state. --dry-run reads and plans without dispatching. Unknown or unverified outcomes require inspection, not blind retries.
+
+Build success does not prove runtime success. Verify actual application effects and preserve unrelated data. Report verification levels accurately: native-ui-readback, reload-persisted, and server-confirmed are different evidence standards. Current shipped examples: TodoMVC Web and Fossify Calculator Android. General arbitrary-app automation, iOS, desktop and Android internal-method invocation are not implemented.

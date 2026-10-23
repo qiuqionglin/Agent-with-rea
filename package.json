@@ -1,0 +1,18 @@
+{
+  "name": "agent-with-rea",
+  "version": "0.1.0",
+  "description": "REA-grounded application adapters compiled into verifiable CLIs for agents",
+  "type": "module",
+  "license": "MIT",
+  "repository": {"type": "git", "url": "https://github.com/qiuqionglin/Agent-with-rea.git"},
+  "packageManager": "pnpm@11.25.0",
+  "engines": {"node": ">=24.11.0"},
+  "bin": {"app2cli": "bin/app2cli.mjs"},
+  "exports": {"./runtime": "./lib/app-cli.mjs", "./sdk": "./lib/sdk.mjs"},
+  "files": ["bin", "lib", "schemas", "adapters", "docs", "llms.txt", "README.md", "README.zh-CN.md", "LICENSE", "THIRD_PARTY_NOTICES.md"],
+  "scripts": {"test": "node --test test/*.test.mjs", "demo:web": "node scripts/web-demo.mjs", "test:live": "node scripts/live-acceptance.mjs", "check:release": "node scripts/check-release.mjs"},
+  "dependencies": {"ajv": "8.20.0", "playwright-core": "1.58.2", "@xmldom/xmldom": "0.9.12"},
+  "peerDependencies": {"rea-agents": "6.7.0"},
+  "peerDependenciesMeta": {"rea-agents": {"optional": true}},
+  "devDependencies": {"director": "1.2.8", "knockout": "3.5.1", "todomvc-app-css": "2.4.3", "todomvc-common": "1.0.5"}
+}

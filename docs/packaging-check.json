@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "frameworkTarballInstalled": true,
+  "generatedTarballsInstalled": true,
+  "outsideRepository": true,
+  "generatedRuntimeWorksWithoutREA": true,
+  "frameworkApps": [
+    "fossify-calculator",
+    "todomvc"
+  ],
+  "webRead": true,
+  "androidRead": {
+    "result": "84",
+    "formula": "12×7"
+  },
+  "at": "2026-10-23T07:10:47.952Z"
+}
