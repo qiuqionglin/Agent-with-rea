@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {connectHttp,httpUrl,requestHttp} from '../lib/http.mjs';
-import {observeHttpWitness} from '../lib/generation-api.mjs';
+import {connectHttp,httpUrl,requestHttp} from '../src/drivers/http/index.mjs';
+import {observeHttpWitness} from '../src/verify/http.mjs';
 
 async function fixture(t){
   const calls=[];let value='baseline';

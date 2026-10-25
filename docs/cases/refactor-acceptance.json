@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "producer": "Framework refactor regression summary; not raw REA evidence or a new model generation",
+  "baselineCommit": "e1747f0982164b29caa91de65bd1e23100af9d0b",
+  "verifiedAt": "2026-10-25T13:01:31.367192+00:00",
+  "frameworkTests": {
+    "passed": 58,
+    "failed": 0,
+    "includesAndroidProtocolFixtures": true,
+    "liveDeviceEvidence": false
+  },
+  "examples": {
+    "schemaAndModuleLoadPassed": 9,
+    "historicalCliPathsPassed": 9,
+    "acceptedAdapterFilesUnchanged": [
+      {
+        "path": "examples/fossify-calculator/adapter.json",
+        "previousPath": "adapters/fossify-calculator/adapter.json",
+        "sha256": "133724316d21a6ec3ba037c73b35e1cd0bbfb9da156ab61d2d7eee6603465189"
+      },
+      {
+        "path": "examples/fossify-calculator/adapter.mjs",
+        "previousPath": "adapters/fossify-calculator/adapter.mjs",
+        "sha256": "d10be449972f1284017ccb7e0992dd1a6ce491cd69088acf58a25b876387ba0f"
+      },
+      {
+        "path": "examples/todomvc/adapter.json",
+        "previousPath": "adapters/todomvc/adapter.json",
+        "sha256": "3deaa690891ffe34f8e02473e411cc5340aad9b5b731229a73f2080dd6eb94ed"
+      },
+      {
+        "path": "examples/todomvc/adapter.mjs",
+        "previousPath": "adapters/todomvc/adapter.mjs",
+        "sha256": "c2e9934aeed3ed74b544b69312588737a8769b07fefff5d740dff098ba1cc600"
+      },
+      {
+        "path": "examples/booker-api/adapter.json",
+        "previousPath": "examples/booker-api-generated/adapter.json",
+        "sha256": "3b6ee3495471bbc3ac57c37bc8cdbe5bd94168edb553f29a255fde7fa65da836"
+      },
+      {
+        "path": "examples/booker-api/adapter.mjs",
+        "previousPath": "examples/booker-api-generated/adapter.mjs",
+        "sha256": "f6de10ae006f21cbe4a2668d80334409d9d636b27c267ee56d488f1ed483ae89"
+      },
+      {
+        "path": "examples/dillinger/adapter.json",
+        "previousPath": "examples/dillinger-generated/adapter.json",
+        "sha256": "b6e3185e259552b44ded0763b5d6c4f47cab978831069fed01b81c9a48f9dab8"
+      },
+      {
+        "path": "examples/dillinger/adapter.mjs",
+        "previousPath": "examples/dillinger-generated/adapter.mjs",
+        "sha256": "f1598b57c53907fceca7a8c5a209efaf7d6486d1baa5bd3cbbdf8ff8dedd674f"
+      },
+      {
+        "path": "examples/douyin-web/adapter.json",
+        "previousPath": "examples/douyin-browser-api/adapter.json",
+        "sha256": "560c05204206480e80b30d57e06d80142deca75d8ba64824ca47396c53b0cfe2"
+      },
+      {
+        "path": "examples/douyin-web/adapter.mjs",
+        "previousPath": "examples/douyin-browser-api/adapter.mjs",
+        "sha256": "cba9e414b0186bcd16ca3ea3517401488ec7f6b2fde80d9ef154a5409c0b89da"
+      },
+      {
+        "path": "examples/douyin-android/adapter.json",
+        "previousPath": "examples/douyin-generated/adapter.json",
+        "sha256": "2482b82635673a3eb087cce4192fa4c1e3e3abbbd3c2b35dab9db5e0cc299672"
+      },
+      {
+        "path": "examples/douyin-android/adapter.mjs",
+        "previousPath": "examples/douyin-generated/adapter.mjs",
+        "sha256": "2a3c32c0150e614dea92ec710f9228d1381e11aef853dc5af527c4c5f66f5683"
+      },
+      {
+        "path": "examples/editor/adapter.json",
+        "previousPath": "examples/editor-generated/adapter.json",
+        "sha256": "fa7a1f3bb93ae597be88b64030a28e28c25d22880612dd960e9012f32cd73751"
+      },
+      {
+        "path": "examples/editor/adapter.mjs",
+        "previousPath": "examples/editor-generated/adapter.mjs",
+        "sha256": "5a1e21e204fc6e271e6145a6a7c9076775b6d871c70509ef5ed07192e60153f3"
+      },
+      {
+        "path": "examples/linkding/adapter.json",
+        "previousPath": "examples/linkding-generated/adapter.json",
+        "sha256": "326203a23b3499cf90a3361ce17be62855247b1b25c581912b7a0860aadf78c3"
+      },
+      {
+        "path": "examples/linkding/adapter.mjs",
+        "previousPath": "examples/linkding-generated/adapter.mjs",
+        "sha256": "d100992076752d151a916e18d4a0c1d482b1b884e8ba21c23306e5f45a179085"
+      },
+      {
+        "path": "examples/marktext/adapter.json",
+        "previousPath": "examples/marktext-generated/adapter.json",
+        "sha256": "efca3075e1cb9432453634cf3ff14c2d352a8e9813e07eec3f1fd5d0f51453ce"
+      },
+      {
+        "path": "examples/marktext/adapter.mjs",
+        "previousPath": "examples/marktext-generated/adapter.mjs",
+        "sha256": "a8806c8741c3fe1e532a8b2f28ebcf930a32c6754b4b54794c59cb84fb742ba7"
+      }
+    ]
+  },
+  "realApplicationRegressions": {
+    "booker-api": {
+      "status": "passed",
+      "checks": 8,
+      "restoredOrCleanupConfirmed": true
+    },
+    "dillinger": {
+      "status": "passed",
+      "checks": 8,
+      "restoredOrCleanupConfirmed": true
+    },
+    "douyin-android": {
+      "status": "passed",
+      "checks": 23,
+      "restoredOrCleanupConfirmed": true,
+      "restorationScope": "Declared home screen only; feed item, search history and server state are not restored"
+    },
+    "douyin-web": {
+      "status": "passed",
+      "checks": 2,
+      "mutations": 0,
+      "uiActions": 0,
+      "independentNetworkHashMatch": true,
+      "observedNetworkResponses": 4
+    },
+    "editor": {
+      "status": "passed",
+      "checks": 8,
+      "restoredOrCleanupConfirmed": true,
+      "restorationScope": "Original text buffer and edit/view mode"
+    },
+    "fossify-calculator": {
+      "status": "passed",
+      "checks": 8,
+      "restoredOrCleanupConfirmed": true,
+      "restorationScope": "Original display expression and result; calculator history is not restored"
+    },
+    "linkding": {
+      "status": "passed",
+      "checks": 13,
+      "restoredOrCleanupConfirmed": true
+    },
+    "marktext": {
+      "status": "passed",
+      "checks": 18,
+      "restoredOrCleanupConfirmed": true
+    },
+    "todomvc": {
+      "status": "passed",
+      "checks": 8,
+      "restoredOrCleanupConfirmed": true
+    }
+  },
+  "negativeControl": {
+    "ok": true,
+    "producer": "Deliberately faulty copy, never presented as generated code",
+    "faultCommand": "document.edit",
+    "fault": "Acknowledge an actual content mutation without performing it, and lie about matches",
+    "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+    "cleanupComplete": true
+  },
+  "outsideRepositoryInstallation": {
+    "ok": true,
+    "exampleSchemas": 9,
+    "allInstalledAdapterModulesLoaded": true,
+    "historicalPathWorks": true,
+    "reaInstalled": false,
+    "installedMarktextChecks": 18,
+    "installedMarktextCleanup": true
+  },
+  "packaging": {
+    "booker-api": {
+      "baselineCopiedCodeFiles": 29,
+      "baselineCopiedCodeBytes": 195211,
+      "runtimeCodeFiles": 10,
+      "runtimeCodeBytes": 24060,
+      "dependencies": [
+        "ajv"
+      ]
+    },
+    "marktext": {
+      "baselineCopiedCodeFiles": 29,
+      "baselineCopiedCodeBytes": 195211,
+      "runtimeCodeFiles": 11,
+      "runtimeCodeBytes": 21917,
+      "dependencies": [
+        "ajv",
+        "playwright-core"
+      ]
+    }
+  },
+  "bookerFixtureCleanup": {
+    "deleteStatus": 201,
+    "independentGet": 404
+  },
+  "androidLiveRegression": {
+    "status": "passed",
+    "apps": [
+      "editor",
+      "douyin-android",
+      "fossify-calculator"
+    ],
+    "checks": 39,
+    "protocolAndPackagingTestsPassed": true,
+    "nativeResultClaimed": true,
+    "initialAdbEnabled": false,
+    "temporaryEnablementExplicitlyAuthorized": true,
+    "finalAdbEnabled": false,
+    "restorationObserved": "BlueStacks Advanced ADB checkbox value 0, Save changes disabled after saving, and visible switch off",
+    "nativeReportProducer": "Independent hierarchy observer, separate CLI processes"
+  },
+  "limitations": [
+    "Real application reports require their retained original sessions, source pins and private evidence.",
+    "No new whole-application coverage or model-generation acceptance is claimed.",
+    "Private sessions, raw evidence, auth and downloaded artifacts are excluded from Git and packages."
+  ],
+  "environmentRecoveries": [
+    {
+      "application": "linkding",
+      "condition": "Retained public-demo login session expired before the first independent GET",
+      "action": "Fresh login using credentials published on the public demo page; no personal credentials",
+      "failedAttemptBeforeWrites": true,
+      "countedAsPassed": false
+    },
+    {
+      "application": "android",
+      "condition": "BlueStacks ADB was disabled; old and rebuilt CLIs both failed read-only operations",
+      "action": "Temporary enablement explicitly authorized by the user; native regression repeated",
+      "failedAttemptBeforeWrites": true,
+      "countedAsPassed": false
+    },
+    {
+      "application": "douyin-android",
+      "condition": "A newly displayed informational minor-mode reminder prevented the original home-screen witness",
+      "action": "Parent sent Android Back once, independently confirmed the normal homepage and repeated the unchanged scenario",
+      "modeOrReminderPreferenceChanged": false,
+      "countedAsPassed": false
+    }
+  ]
+}

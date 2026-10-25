@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { mkdtemp,rm,writeFile,chmod,readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { prepareAndroid } from '../lib/generation-session.mjs';
-import { observeWitness } from '../lib/generation-test.mjs';
-import { hash,writeJson } from '../lib/sdk.mjs';
-import { touchSelector,tapSelector } from '../lib/android-ui.mjs';
+import { prepareAndroid } from '../src/generator/session.mjs';
+import { observeWitness } from '../src/verify/resource.mjs';
+import { hash,writeJson } from '../src/sdk.mjs';
+import { touchSelector,tapSelector } from '../src/drivers/android/ui.mjs';
 
 // Protocol fixture, not native Android acceptance. An absent `pm path` exits
 // 1 just as it did on the real device; transport errors must still propagate.

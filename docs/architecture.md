@@ -1,6 +1,6 @@
 # Architecture and evidence boundaries
 
-Agent with REA separates application analysis from application execution. This page describes the implemented prototype. The [product goal and target pipeline](product-goal.md) extend it to automatic capability discovery, application-wide CLI contracts and desktop interfaces; complete coverage must not be inferred from the current drivers. The bounded [application workflow](application-generation.md) now supplies source/network discovery, multi-command generation, and a tested macOS Electron bridge.
+Agent with REA separates application analysis from application execution. This page describes the implemented prototype. The [product goal and target pipeline](product-goal.md) extend it to automatic capability discovery, application-wide CLI contracts and desktop interfaces; complete coverage must not be inferred from the current drivers. The bounded [application workflow](cases/application-generation.md) now supplies source/network discovery, multi-command generation, and a tested macOS Electron bridge.
 
 ```mermaid
 flowchart LR
@@ -31,6 +31,36 @@ flowchart LR
   Test -->|verified effect and restoration| Accepted[Generation report]
 ```
 
+## Repository layout
+
+This is one npm package with four source responsibilities:
+
+```text
+bin/app2cli.mjs       executable bootstrap
+src/cli.mjs          framework command routing
+src/generator/       discovery, REA, agent prompts, generation/repair and builds
+src/runtime/         per-application CLI, execution, manifests and locks
+src/drivers/         HTTP, Web, Electron and Android interaction
+src/verify/          independent observers and scenario runners
+src/sdk.mjs          stable adapter helpers
+src/utils.mjs        shared errors, hashing, JSON and bounded subprocess utilities
+schemas/             adapter JSON Schema
+examples/            curated and generated adapters, with their provenance
+test/               framework and packaging tests
+test/live/          real-application acceptance and negative controls
+docs/cases/         public case reports and sanitized evidence summaries
+lib/                 compatibility exports for previously generated adapters
+.local/              ignored raw evidence, sessions, journals and build output
+```
+
+Runtime code and drivers do not depend on the generator or verification engine. Verification uses drivers, but never imports a generated adapter to establish its independent witness. The generator coordinates these components and feeds actual failures back to the agent. Application and reversible-resource workflows retain their distinct test contracts while sharing agent invocation, prompts, drivers, evidence handling and packaging.
+
+The compiler parses ESM imports without evaluating the adapter, follows the runtime dependency closure, and copies only the required modules, resources and npm dependencies. HTTP CLIs carry no browser/Android driver, REA analysis, prompts or repair loop. The Android Python helper and the runtime schema are explicit resources. Computed adapter imports and imports of generator/verification internals fail packaging rather than creating an incomplete CLI.
+
+New adapters use package imports such as `#app2cli/sdk`, `#app2cli/http-resource` and `#app2cli/application`. Builds retain the used mappings in their own package manifest. Eight `lib/*.mjs` compatibility exports support the imports in accepted historical adapters; their source bytes and digests stay unchanged. The framework CLI recognizes former example directory names when those paths do not exist.
+
+The [refactor regression record](cases/refactor-acceptance.json) separates framework tests, real-application rechecks, installation outside this repository and environment recovery. It records the original and moved adapter hashes; it is a regression summary, not a new model-generation run.
+
 ## What each artifact proves
 
 | Artifact | Producer | Meaning |
@@ -49,7 +79,7 @@ The compiler checks raw-output digests and recipe anchors. It is not a semantic 
 
 ## Reusable kernel
 
-`lib/runtime.mjs` has no website IDs, Android package IDs, business commands or hard-coded account data. It validates schema, identifies the execution surface, locks it across processes, checks the app version, reads state, computes a revision, reserves mutation request IDs, dispatches, verifies and writes a journal.
+`src/runtime/execute.mjs` has no website IDs, Android package IDs, business commands or hard-coded account data. It validates schema, identifies the execution surface, locks it across processes, checks the app version, reads state, computes a revision, reserves mutation request IDs, dispatches, verifies and writes a journal.
 
 The lock is per execution surface rather than per adapter. Two adapters operating one Android device therefore share a lock. Journals are scoped by application and observed principal/session. Audit paths include the scope hash so reused request IDs in different accounts do not overwrite each other.
 
@@ -62,7 +92,7 @@ An outcome reserved before dispatch but not verified stays uncertain. It cannot 
 | Browser native functions | Implemented and tested | Invoke existing application functions through a selected CDP page |
 | Android UI | Implemented and tested | Version-pinned APK, exported launcher, native resource-ID actions and UI readback |
 | Direct HTTP API | Implemented | Observed HAR + owned-resource contract; auth environment binding, schema checks, direct requests, independent GET |
-| Signed-in Web backend | Read-only driver and Douyin example implemented | Original request/signing chain; pinned source bytes, account guard, actual network response proof; still needs browser |
+| Signed-in Web backend | Read-only Douyin bridge and Linkding lifecycle example implemented | Original browser session/request chain, source pins and independent network/server evidence; still needs browser |
 | Android internal methods / Frida | Planned | Requires a separate runtime driver, method mapping and real acceptance evidence |
 | Electron desktop | macOS driver and MarkText example accepted | Actual editor/IPC calls, renderer and file readback; application and workspace retained |
 | Other desktop runtimes, iOS | Planned | These execution transports are not implemented |
@@ -71,9 +101,9 @@ REA supports more analysis targets than this repository currently supports for e
 
 ## Generation loop
 
-A plain URL or `.app` selects the application workflow: source/network discovery, structured agent probes, multi-command adapter, independent lifecycle tests and failure feedback. Its observers reuse the owned session without importing adapter code. `discovery.json` consolidates current-run probes; capability declarations stay separate from accepted scenarios. Details and development interventions are in [application generation](application-generation.md).
+A plain URL or `.app` selects the application workflow: source/network discovery, structured agent probes, multi-command adapter, independent lifecycle tests and failure feedback. Its observers reuse the owned session without importing adapter code. `discovery.json` consolidates current-run probes; capability declarations stay separate from accepted scenarios. Details and development interventions are in [application generation](cases/application-generation.md).
 
-`generate` accepts a URL or APK without selecting a bundled adapter. REA analysis and independent DOM/UI observations provide the input. Codex returns a structured candidate or requests a bounded read-only probe. The framework validates, compiles and tests it in separate processes. Failures are fed back into a new attempt, with the original objective frozen. A failed restoration halts mutation attempts. See [automatic generation](generation.md) for the current reversible-value scope and evidence limitations.
+`generate` accepts a URL or APK without selecting a bundled adapter. REA analysis and independent DOM/UI observations provide the input. Codex returns a structured candidate or requests a bounded read-only probe. The framework validates, compiles and tests it in separate processes. Failures are fed back into a new attempt, with the original objective frozen. A failed restoration halts mutation attempts. See [automatic generation](usage.md) for the current reversible-value scope and evidence limitations.
 
 ## Operational findings
 

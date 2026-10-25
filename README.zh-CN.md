@@ -12,13 +12,13 @@
 
 完整命令和环境准备见 [English README](README.md)。
 
-已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。通用测试可通过 `pnpm test` 运行。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
+已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。通用测试可通过 `pnpm test` 运行。见 [验收摘要](docs/cases/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger/README.md)。
 
-Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收：Agent 发起 3 次 REA 补充探查后生成候选，通过 **8/8 原生检查**；重启 App 后再次完整复验，同样通过 **8/8**。生成代码未经手改。见 [APK 复现步骤](docs/android-generation.md)、[Android 验收记录](docs/android-generation-acceptance.json) 和 [生成适配器](examples/editor-generated/README.md)。故意不执行修改却返回成功的副本被独立观察器拦截；仓库外安装的 CLI 也完成了第二组文本的读取、修改、原生回读和恢复，运行依赖中没有 REA 或 Codex。本例操作当前文本缓冲区，不宣称保存了文件或修改了后端。
+Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收：Agent 发起 3 次 REA 补充探查后生成候选，通过 **8/8 原生检查**；重启 App 后再次完整复验，同样通过 **8/8**。生成代码未经手改。见 [APK 复现步骤](docs/cases/android-generation.md)、[Android 验收记录](docs/cases/android-generation-acceptance.json) 和 [生成适配器](examples/editor/README.md)。故意不执行修改却返回成功的副本被独立观察器拦截；仓库外安装的 CLI 也完成了第二组文本的读取、修改、原生回读和恢复，运行依赖中没有 REA 或 Codex。本例操作当前文本缓冲区，不宣称保存了文件或修改了后端。
 
 开发期间失败的运行和人工恢复步骤在摘要中单独披露，不算入成功验收。最终成功的干净运行没有沿用旧适配器，也没有在执行中修改框架或候选代码。本例验证的是浏览器本地持久化，不是服务端写入。
 
-抖音 Android 也已完成未登录浏览/搜索实验：从官方页面的 APK 经 REA 分析生成基础适配器，再自动扩展为 10 个 CLI 命令，最终多页面场景通过 **23/23 原生检查**。包括中文搜索提交、实际结果读取和首页恢复。一次输入页资源 ID 复用导致的错误验收条件经过显式复核，原始失败和修订记录均保留；这不是全程无人干预或“覆盖抖音所有操作”的证明。见 [抖音实验与边界](docs/douyin-android.md)、[验收摘要](docs/douyin-android-acceptance.json) 和 [生成代码](examples/douyin-generated/README.md)。
+抖音 Android 也已完成未登录浏览/搜索实验：从官方页面的 APK 经 REA 分析生成基础适配器，再自动扩展为 10 个 CLI 命令，最终多页面场景通过 **23/23 原生检查**。包括中文搜索提交、实际结果读取和首页恢复。一次输入页资源 ID 复用导致的错误验收条件经过显式复核，原始失败和修订记录均保留；这不是全程无人干预或“覆盖抖音所有操作”的证明。见 [抖音实验与边界](docs/cases/douyin-android.md)、[验收摘要](docs/cases/douyin-android-acceptance.json) 和 [生成代码](examples/douyin-android/README.md)。
 
 ## 只输入网址或 Electron 应用文件
 
@@ -33,15 +33,15 @@ node bin/app2cli.mjs generate /path/to/Editor.app
 - **MarkText 0.19.1**：生成打开、读取、编辑、保存、重新打开、恢复 6 个命令；三轮验收均通过 **18 项检查**，同时核对真实编辑器和磁盘文件。
 - 两组“返回成功但没有修改”的负例都被独立观察器拦截，清理完成。生成适配器未手改；开发中的框架修正、一次独立清理网站测试数据和 REA 的限制均保留记录。
 
-当前样例限定在隔离测试命名空间内；CLI 运行仍需要原浏览器登录会话或 Electron 进程，但不需要 REA 或模型。见 [复现方法](docs/application-generation.md)、[验收记录](docs/application-generation-acceptance.json)、[网站生成代码](examples/linkding-generated/README.md) 和 [桌面生成代码](examples/marktext-generated/README.md)。
+当前样例限定在隔离测试命名空间内；CLI 运行仍需要原浏览器登录会话或 Electron 进程，但不需要 REA 或模型。见 [复现方法](docs/cases/application-generation.md)、[验收记录](docs/cases/application-generation-acceptance.json)、[网站生成代码](examples/linkding/README.md) 和 [桌面生成代码](examples/marktext/README.md)。
 
 ## API 优先
 
 默认生成策略已改为 API 优先。旧的显式 HTTP 路线仍支持提供真实 HAR 和自有测试资源契约，由 REA 分析网络证据，Agent 生成直接 HTTP CLI，测试器另发 GET 验证修改和恢复。鉴权值只在运行环境中注入。未找到可验证 API 时明确停止；旧的浏览器函数 / Android UI 路线必须显式传 `--allow-ui-fallback`。
 
-已在 Restful Booker 真实公共测试后端完成自动生成：最终运行首个候选通过 8/8 检查，实际执行 PATCH、独立 GET 并恢复原记录。此前公共后端重置导致的恢复失败单独保留，未计作通过。见 [API 验收记录](docs/api-first-acceptance.json) 和 [未经手改的生成契约](examples/booker-api-generated/README.md)。
+已在 Restful Booker 真实公共测试后端完成自动生成：最终运行首个候选通过 8/8 检查，实际执行 PATCH、独立 GET 并恢复原记录。此前公共后端重置导致的恢复失败单独保留，未计作通过。见 [API 验收记录](docs/cases/api-first-acceptance.json) 和 [未经手改的生成契约](examples/booker-api/README.md)。
 
-另有只读的抖音 Web API 桥接样例：调用原客户端请求模块，复用浏览器登录态和签名链，并检查实际后端响应。它依赖浏览器，当前只覆盖账号确认与收藏夹列表读取。详见 [API 路线、复现和边界](docs/api-first.md)。
+另有只读的抖音 Web API 桥接样例：调用原客户端请求模块，复用浏览器登录态和签名链，并检查实际后端响应。它依赖浏览器，当前只覆盖账号确认与收藏夹列表读取。详见 [API 路线、复现和边界](docs/cases/api-first.md)。
 
 ## 工作流程
 
@@ -79,7 +79,7 @@ Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设�
 node bin/app2cli.mjs verify .local/generate/dillinger --out .local/verify/dillinger
 ```
 
-生成器不读取内置适配器来匹配网站；新目标的语义映射来自当次 agent 输出。Web 测试使用每次随机生成且修复期间不可更改的文本，避免以现有页面内容替换预期来通过测试。完整选项和证据边界见 [自动生成说明](docs/generation.md)。
+生成器不读取内置适配器来匹配网站；新目标的语义映射来自当次 agent 输出。Web 测试使用每次随机生成且修复期间不可更改的文本，避免以现有页面内容替换预期来通过测试。完整选项和证据边界见 [自动生成说明](docs/usage.md)。
 
 ## 已实现的样例
 
@@ -112,7 +112,7 @@ pnpm demo:web
 export APP2CLI_CDP=http://127.0.0.1:9377
 export APP2CLI_HOME="$PWD/.local/state"
 node bin/app2cli.mjs inspect web "$APP2CLI_CDP" --out .local/evidence/web
-node bin/app2cli.mjs build adapters/todomvc --evidence .local/evidence/web --out dist/todomvc
+node bin/app2cli.mjs build examples/todomvc --evidence .local/evidence/web --out dist/todomvc
 node dist/todomvc/cli.mjs --schema
 node dist/todomvc/cli.mjs todos list
 ```
@@ -132,3 +132,9 @@ Android 需要已授权的 ADB 设备和完整 JDK。下载脚本会核对 APK /
 当前已有 [OpenCLI](https://github.com/jackwener/OpenCLI)、[CLI-Anything](https://github.com/HKUDS/CLI-Anything) 等相关项目。这里重点验证的是 **REA 证据、跨平台适配契约、独立 CLI 产物、实际执行与回读验证之间的连接**。
 
 本项目代码使用 MIT 许可证；REA 和第三方样例保留各自许可证，详见 [第三方声明](THIRD_PARTY_NOTICES.md)。
+
+## 仓库结构
+
+项目保持单个 npm 包：`src/generator` 负责发现、REA 分析和生成修复，`src/runtime` 负责 CLI 执行，`src/drivers` 连接真实应用，`src/verify` 独立回读验证。样例统一放在 `examples`，真实场景测试放在 `test/live`，公开案例报告放在 `docs/cases`。详见[架构说明](docs/architecture.md#repository-layout)和[样例索引](examples/README.md)。
+
+生成的 CLI 按实际模块依赖打包，包含所需平台驱动及资源。旧样例通过少量 `lib` 兼容导出保持源码和摘要不变；新适配器使用稳定的 `#app2cli/*` 导入。

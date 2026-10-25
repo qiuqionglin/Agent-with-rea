@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import { mkdtemp,rm,readFile,writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname } from 'node:path';
-import { generate as generateRaw } from '../lib/generate.mjs';
+import { generate as generateRaw } from '../src/generator/resource.mjs';
 const generate=(target,flags,deps)=>generateRaw(target,{'allow-ui-fallback':true,...flags},deps);
-import { validatePlan,atPath,replaceValue } from '../lib/generation-test.mjs';
-import { runProcess } from '../lib/process.mjs';
-import { hash,writeJson,readJson,AppError } from '../lib/sdk.mjs';
-import { reaEvidence } from '../lib/rea.mjs';
-import { projectWebCapture } from '../lib/inspect.mjs';
-import { checkBrowser } from '../lib/web.mjs';
+import { validatePlan,atPath,replaceValue } from '../src/verify/resource.mjs';
+import { runProcess } from '../src/utils.mjs';
+import { hash,writeJson,readJson,AppError } from '../src/sdk.mjs';
+import { reaEvidence } from '../src/generator/rea.mjs';
+import { projectWebCapture } from '../src/generator/discover.mjs';
+import { checkBrowser } from '../src/drivers/web/index.mjs';
 
 // Orchestration fixtures only: these deliberately do NOT claim a live app run.
 async function setup(t){

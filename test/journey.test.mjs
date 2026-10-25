@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { mkdtemp,rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { testAndroidJourney,validateJourney } from '../lib/generation-journey.mjs';
-import { selectNode,actionableNode,nativeStateMatches } from '../lib/android-ui.mjs';
-import { AppError } from '../lib/sdk.mjs';
+import { testAndroidJourney,validateJourney } from '../src/verify/android.mjs';
+import { selectNode,actionableNode,nativeStateMatches } from '../src/drivers/android/ui.mjs';
+import { AppError } from '../src/sdk.mjs';
 
 const state=name=>({kind:'android-state',all:[{text:name}]});
 const step=(name,target)=>({name,command:'navigate',input:{target},effect:'navigation',witness:state(target),readback:{path:'screen',value:target}});

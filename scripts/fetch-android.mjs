@@ -1,6 +1,6 @@
 import { mkdir,writeFile,readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { hash } from '../lib/sdk.mjs';
+import { hash } from '../src/sdk.mjs';
 const directory=resolve('.local/android');await mkdir(directory,{recursive:true});
 const assets=[
   {name:'calculator.apk',url:'https://github.com/FossifyOrg/Calculator/releases/download/1.4.0/calculator-10-foss-release.apk',sha256:'7c5443c22d6d62c67dfe80df33ea9161ff0fa440f92590bcb45d7008b57613ed'},

@@ -1,8 +1,8 @@
 // Use a completed run's private session bindings without copying credentials.
 import {resolve} from 'node:path';
 import {spawn} from 'node:child_process';
-import {readJson,AppError} from '../lib/sdk.mjs';
-import {loadAdapter} from '../lib/manifest.mjs';
+import {readJson,AppError} from '../src/sdk.mjs';
+import {loadAdapter} from '../src/runtime/manifest.mjs';
 const [directory,...args]=process.argv.slice(2);
 try{
   if(!directory)throw new AppError('INVALID_INPUT','Usage: node scripts/run-generated.mjs <passed-run-directory> <command> [options]');

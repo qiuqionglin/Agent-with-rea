@@ -34,3 +34,5 @@ Editor 1.98 F-Droid APK (org.billthefarmer.editor_198.apk)
 ```
 
 Adapters are project-authored mappings, not upstream implementation files. Analysis outputs are produced by REA and its configured providers; execution/acceptance summaries are produced by this framework. Raw analysis can contain target code or personal state and is excluded from source control and npm packages.
+
+The generation-time packager uses [es-module-lexer 1.7.0](https://github.com/guybedford/es-module-lexer/tree/1.7.0), MIT licensed, to inspect ESM imports without executing adapter source. Generated application CLIs do not depend on this authoring-time parser.

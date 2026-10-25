@@ -1,9 +1,9 @@
 import http from 'node:http';
-import { mkdir,readFile,writeFile,stat } from 'node:fs/promises';
+import { mkdir,readFile,writeFile } from 'node:fs/promises';
 import { resolve,dirname } from 'node:path';
 import { createRequire } from 'node:module';
 import { chromium } from 'playwright-core';
-import { hash,writeJson,sleep } from '../lib/sdk.mjs';
+import { hash,writeJson,sleep } from '../src/sdk.mjs';
 const root=resolve(import.meta.dirname,'..'),require=createRequire(import.meta.url),store=resolve(root,'.local/web');await mkdir(store,{recursive:true});
 const base='https://raw.githubusercontent.com/tastejs/todomvc/ff43b02e59dfa604386bb382034b2cd07c2bcd8a/';
 const assets=[['index.html','examples/knockoutjs/index.html','6f152959d63c670e9d926a68e977f5bf4865d95fc40765f8072158dd6be56dbb'],['js/app.js','examples/knockoutjs/js/app.js','fc01edc03a90a4e7569755bc3b8ab7b5015768980cdfebfaa4251f55c894a698'],['license.md','license.md','32238c5c6759b589ea768661b6eb0fcb42449b74d57cdf09928743f2e1eb748d']];

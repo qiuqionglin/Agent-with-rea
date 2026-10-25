@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {mkdtemp,rm,writeFile} from 'node:fs/promises';
 import {join,resolve} from 'node:path';
-import {generate} from '../lib/generate.mjs';
-import {hash,writeJson} from '../lib/sdk.mjs';
+import {generate} from '../src/generator/resource.mjs';
+import {hash,writeJson} from '../src/sdk.mjs';
 
 // Explicit local protocol fixture, not REA/model or public-backend evidence.
 test('HTTP generation builds and executes separate CLI processes with independent GET restoration',async t=>{

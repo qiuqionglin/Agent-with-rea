@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import { mkdtemp,writeFile,rm,readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { loadAdapter } from '../lib/manifest.mjs';
-import { execute } from '../lib/runtime.mjs';
-import { withLock } from '../lib/lock.mjs';
-import { hash,readJson,writeJson } from '../lib/sdk.mjs';
-import { build } from '../lib/build.mjs';
-import { runAppCli } from '../lib/app-cli.mjs';
-import { parseArgs,commandInput } from '../lib/arguments.mjs';
+import { loadAdapter } from '../src/runtime/manifest.mjs';
+import { execute } from '../src/runtime/execute.mjs';
+import { withLock } from '../src/runtime/lock.mjs';
+import { hash,readJson,writeJson } from '../src/sdk.mjs';
+import { build } from '../src/generator/build.mjs';
+import { runAppCli } from '../src/runtime/cli.mjs';
+import { parseArgs,commandInput } from '../src/runtime/arguments.mjs';
 
 // This fixture tests kernel guarantees only. It is not native-app evidence.
 async function fixture(t){

@@ -62,6 +62,12 @@ Android controls may change resource IDs when their mode changes. Read a new hie
 
 Exit status 2 denotes invalid input/contract; 3 environment/session problems; 4 state or version conflict; 5 failed verification; 6 uncertain dispatch. Unexpected internal errors use 1. A caller must inspect the error, not retry all nonzero exits indiscriminately.
 
-HTTP helpers live in `lib/http.mjs`: `connectHttp`, `httpTargetKey`, `httpUrl`, `requestHttp`. Auth is an environment-bound header; origin-relative operation paths can use `{parameter}` values from separately declared resource environment variables. Callers must preserve auth/session scope and unrelated resource fields. See [API-first](api-first.md) for the supported case and failure contract.
+HTTP helpers are exported by `#app2cli/http`: `connectHttp`, `httpTargetKey`, `httpUrl`, `requestHttp`. Auth is an environment-bound header; origin-relative operation paths can use `{parameter}` values from separately declared resource environment variables. Callers must preserve auth/session scope and unrelated resource fields. See [API-first](cases/api-first.md) for the supported case and failure contract.
 
-Application adapters receive `ctx.request = {command,input}` before checks/reads. `application-session.mjs` provides owned-session connections, browser requests, original app method invocation and workspace path guards. Electron uses `electron-api` and `native-file-readback`; its actual renderer and file witnesses are independent acceptance evidence. The generated namespace is a runtime binding, not a compiled test identifier. See [multi-command application generation](application-generation.md).
+Application adapters receive `ctx.request = {command,input}` before checks/reads. `application-session.mjs` provides owned-session connections, browser requests, original app method invocation and workspace path guards. Electron uses `electron-api` and `native-file-readback`; its actual renderer and file witnesses are independent acceptance evidence. The generated namespace is a runtime binding, not a compiled test identifier. See [multi-command application generation](cases/application-generation.md).
+
+## SDK imports and packaging
+
+Use `#app2cli/sdk` for `AppError`, hashing and JSON helpers. Platform helpers are available from `#app2cli/web`, `#app2cli/browser-api`, `#app2cli/application`, `#app2cli/http`, `#app2cli/http-resource`, `#app2cli/android` and `#app2cli/android-ui`. These are package-local mappings that the compiler preserves in generated packages. Older `../../lib/*.mjs` imports remain compatible.
+
+Keep the adapter in a single module. Use literal imports of these helpers, Node built-ins or the framework's declared dependencies. Computed adapter imports, undeclared dependencies and generator/verifier imports cannot form a self-contained runtime and are rejected. The compiler reads import syntax without executing the adapter and preserves its original source bytes.

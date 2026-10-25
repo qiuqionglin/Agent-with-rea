@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,readFile,mkdir,rm,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {loadAdapter} from '../lib/manifest.mjs';
-import {workspacePath} from '../lib/application-session.mjs';
-import {readAsar,exportApplicationSources} from '../lib/application-artifact.mjs';
-import {redactObject,safeUrl} from '../lib/application-observation.mjs';
-import {resolveApplicationValue,observeApplicationWitness,validateApplicationPlan} from '../lib/application-test.mjs';
+import {loadAdapter} from '../src/runtime/manifest.mjs';
+import {workspacePath} from '../src/drivers/application.mjs';
+import {readAsar,exportApplicationSources} from '../src/drivers/electron/artifact.mjs';
+import {redactObject,safeUrl} from '../src/drivers/web/observe.mjs';
+import {resolveApplicationValue,observeApplicationWitness,validateApplicationPlan} from '../src/verify/application.mjs';
 async function temp(t){const p=await mkdtemp(join(tmpdir(),'app2cli-application-test-'));t.after(()=>rm(p,{recursive:true,force:true}));return p;}
 function asar(header,data){const text=Buffer.from(JSON.stringify(header)),size=Math.ceil((8+text.length)/4)*4,bytes=Buffer.alloc(8+size+data.length);bytes.writeUInt32LE(4,0);bytes.writeUInt32LE(size,4);bytes.writeUInt32LE(size-4,8);bytes.writeUInt32LE(text.length,12);text.copy(bytes,16);data.copy(bytes,8+size);return bytes;}
 test('ASAR extractor reads actual bounded member bytes and rejects traversal and malformed ranges',async t=>{

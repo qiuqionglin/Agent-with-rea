@@ -4,15 +4,68 @@
   "description": "REA-grounded application adapters compiled into verifiable CLIs for agents",
   "type": "module",
   "license": "MIT",
-  "repository": {"type": "git", "url": "https://github.com/qiuqionglin/Agent-with-rea.git"},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qiuqionglin/Agent-with-rea.git"
+  },
   "packageManager": "pnpm@11.25.0",
-  "engines": {"node": ">=24.11.0"},
-  "bin": {"app2cli": "bin/app2cli.mjs"},
-  "exports": {"./runtime": "./lib/app-cli.mjs", "./sdk": "./lib/sdk.mjs"},
-  "files": ["bin", "lib", "schemas", "adapters", "docs", "llms.txt", "README.md", "README.zh-CN.md", "LICENSE", "THIRD_PARTY_NOTICES.md"],
-  "scripts": {"test": "node --test test/*.test.mjs", "demo:web": "node scripts/web-demo.mjs", "test:live": "node scripts/live-acceptance.mjs", "check:release": "node scripts/check-release.mjs"},
-  "dependencies": {"ajv": "8.20.0", "playwright-core": "1.58.2", "@xmldom/xmldom": "0.9.12"},
-  "peerDependencies": {"rea-agents": "6.7.0"},
-  "peerDependenciesMeta": {"rea-agents": {"optional": true}},
-  "devDependencies": {"director": "1.2.8", "knockout": "3.5.1", "todomvc-app-css": "2.4.3", "todomvc-common": "1.0.5"}
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "bin": {
+    "app2cli": "bin/app2cli.mjs"
+  },
+  "exports": {
+    "./runtime": "./src/runtime/cli.mjs",
+    "./sdk": "./src/sdk.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "lib",
+    "schemas",
+    "examples",
+    "docs",
+    "llms.txt",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "demo:web": "node scripts/web-demo.mjs",
+    "test:live": "node test/live/live-acceptance.mjs",
+    "check:release": "node scripts/check-release.mjs"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "0.9.12",
+    "ajv": "8.20.0",
+    "es-module-lexer": "1.7.0",
+    "playwright-core": "1.58.2"
+  },
+  "peerDependencies": {
+    "rea-agents": "6.7.0"
+  },
+  "peerDependenciesMeta": {
+    "rea-agents": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "director": "1.2.8",
+    "knockout": "3.5.1",
+    "todomvc-app-css": "2.4.3",
+    "todomvc-common": "1.0.5"
+  },
+  "imports": {
+    "#app2cli/sdk": "./src/sdk.mjs",
+    "#app2cli/web": "./src/drivers/web/index.mjs",
+    "#app2cli/browser-api": "./src/drivers/web/api.mjs",
+    "#app2cli/application": "./src/drivers/application.mjs",
+    "#app2cli/http": "./src/drivers/http/index.mjs",
+    "#app2cli/http-resource": "./src/drivers/http/resource.mjs",
+    "#app2cli/android": "./src/drivers/android/index.mjs",
+    "#app2cli/android-ui": "./src/drivers/android/ui.mjs"
+  }
 }
