@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { prepareAndroid } from '../lib/generation-session.mjs';
 import { observeWitness } from '../lib/generation-test.mjs';
 import { hash,writeJson } from '../lib/sdk.mjs';
+import { touchSelector,tapSelector } from '../lib/android-ui.mjs';
 
 // Protocol fixture, not native Android acceptance. An absent `pm path` exits
 // 1 just as it did on the real device; transport errors must still propagate.
@@ -28,8 +29,9 @@ else if(command.includes("'sha256sum'"))console.log(${JSON.stringify(wrongHash?'
 else if(command.includes("'resolve-activity'"))console.log('org.example.app/.MainActivity');
 else if(command.includes("'am' 'start'"))console.log('Starting: Intent');
 else if(command.includes("'uiautomator' 'dump'"))console.log('UI hierchary dumped to temporary XML');
-else if(args[2]==='exec-out'&&args[3]==='cat')console.log('<hierarchy><node resource-id="org.example.app:id/text" package="org.example.app" text="actual device value" class="android.widget.EditText" focused="true"/></hierarchy>');
+else if(args[2]==='exec-out'&&args[3]==='cat')console.log('<hierarchy><node resource-id="org.example.app:id/text" package="org.example.app" text="actual device value" class="android.widget.EditText" focused="true" enabled="true" clickable="false" bounds="[10,20][110,80]"/></hierarchy>');
 else if(command.includes("'rm' '-f'"))process.exit(0);
+else if(command.includes("'input' 'tap'"))process.exit(0);
 else process.exit(2);
 `);await chmod(adb,0o700);
   const previous=process.env.REA_ADB_PATH;process.env.REA_ADB_PATH=adb;
@@ -68,4 +70,26 @@ test('independent Android observer retains native evidence and rejects a forged 
   const record=JSON.parse(await readFile(join(d.dir,'native.json'),'utf8'));
   assert.equal(record.hierarchy.nodes[0].class,'android.widget.EditText');assert.equal(record.hierarchy.nodes[0].focused,'true');
   await assert.rejects(observeWitness(session,w,{timeoutMs:0}),{code:'INDEPENDENT_WITNESS_FAILED'});
+});
+
+test('stored native backend works without shell environment and foreign overlays cannot satisfy a witness',async t=>{
+  const d=await device(t),helper=join(d.dir,'native-helper');
+  await writeFile(helper,`#!${process.execPath}
+let input='';process.stdin.on('data',b=>input+=b);process.stdin.on('end',()=>{
+const request=JSON.parse(input);if(request.mode!=='dump'||request.package!=='org.example.app')process.exit(1);
+console.log(JSON.stringify({ok:true,xml:'<hierarchy><node package="org.example.app" text="Home"/><node package="other.overlay" text="Search"/></hierarchy>'}));
+});\n`);await chmod(helper,0o700);
+  const session={platform:'android',environment:{APP2CLI_UIAUTOMATOR_PYTHON:helper},android:{adb:process.env.REA_ADB_PATH,serial:'fixture-device',config:{package:'org.example.app'}}};
+  const valid={kind:'android-state',all:[{text:'Home'}]};
+  assert.equal((await observeWitness(session,valid,{timeoutMs:0})).matched,true);
+  await assert.rejects(observeWitness(session,{kind:'android-state',all:[{text:'Search'}]},{timeoutMs:0}),{code:'INDEPENDENT_WITNESS_FAILED'});
+});
+
+
+test('explicit touch uses current unique bounds without fabricating a clickable flag',async t=>{
+  const d=await device(t),ctx={adb:process.env.REA_ADB_PATH,serial:'fixture-device',config:{package:'org.example.app'}};
+  await assert.rejects(tapSelector(ctx,{'resource-id':'org.example.app:id/text'}),{code:'UI_CHANGED'});
+  await touchSelector(ctx,{'resource-id':'org.example.app:id/text'});
+  assert.ok((await d.calls()).some(args=>args.join(' ').includes("'input' 'tap' '60' '50'")));
+  await assert.rejects(touchSelector(ctx,{text:'missing'}),{code:'UI_CHANGED'});
 });

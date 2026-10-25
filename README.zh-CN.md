@@ -4,15 +4,17 @@
 
 现在可以输入网址或 APK，让实际的 coding agent 根据 REA 证据生成适配器、编译 CLI、执行真实应用测试，并根据失败自动修复。命令名是 `app2cli`，仓库名是 Agent-with-rea。
 
-**当前自动验收覆盖可恢复的内容或数值修改，不保证任意网站、任意 App 的所有功能都能生成。** 登录、设备权限、源码可见性和业务语义仍会影响结果；无法验证时会明确失败。
+**当前自动验收覆盖可恢复的内容或数值修改，以及 Android 多页面导航；不保证任意网站、任意 App 的所有功能都能生成。** 登录、设备权限、源码可见性和业务语义仍会影响结果；无法验证时会明确失败。
 
 完整命令和环境准备见 [English README](README.md)。
 
-已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。当前通用测试为 **26/26**。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
+已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。通用测试可通过 `pnpm test` 运行。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
 
 Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收：Agent 发起 3 次 REA 补充探查后生成候选，通过 **8/8 原生检查**；重启 App 后再次完整复验，同样通过 **8/8**。生成代码未经手改。见 [APK 复现步骤](docs/android-generation.md)、[Android 验收记录](docs/android-generation-acceptance.json) 和 [生成适配器](examples/editor-generated/README.md)。故意不执行修改却返回成功的副本被独立观察器拦截；仓库外安装的 CLI 也完成了第二组文本的读取、修改、原生回读和恢复，运行依赖中没有 REA 或 Codex。本例操作当前文本缓冲区，不宣称保存了文件或修改了后端。
 
 开发期间失败的运行和人工恢复步骤在摘要中单独披露，不算入成功验收。最终成功的干净运行没有沿用旧适配器，也没有在执行中修改框架或候选代码。本例验证的是浏览器本地持久化，不是服务端写入。
+
+抖音 Android 也已完成未登录浏览/搜索实验：从官方页面的 APK 经 REA 分析生成基础适配器，再自动扩展为 10 个 CLI 命令，最终多页面场景通过 **23/23 原生检查**。包括中文搜索提交、实际结果读取和首页恢复。一次输入页资源 ID 复用导致的错误验收条件经过显式复核，原始失败和修订记录均保留；这不是全程无人干预或“覆盖抖音所有操作”的证明。见 [抖音实验与边界](docs/douyin-android.md)、[验收摘要](docs/douyin-android-acceptance.json) 和 [生成代码](examples/douyin-generated/README.md)。
 
 ## 工作流程
 
@@ -22,7 +24,7 @@ Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收�
 - **适配包**：描述命令、输入 Schema、版本约束、执行入口和后置条件。
 - **CLI 生成器**：核对证据与适配包，生成可单独安装的 npm 包。
 - **通用运行时**：参数检查、会话范围、状态版本、跨进程锁、请求去重、私有审计和结果验证。
-- **自动生成循环**：实际调用已登录的 Codex CLI；生成过程只读证据，测试器运行候选代码。每轮保存输入、原始输出和真实失败，默认最多 4 轮。
+- **自动生成循环**：实际调用已登录的 Codex CLI；Agent 进程只读证据，运行器执行调用方允许的导航探查和候选代码测试。每轮保存输入、原始输出和真实失败，默认最多 4 轮。
 - **独立测试器**：Web 刷新页面后直接读取 DOM，Android 重新抓取原生 UI 层级；观察过程不调用适配器的结果函数。恢复原始状态失败时停止继续修改。
 
 ## 自动生成
@@ -44,7 +46,7 @@ node bin/app2cli.mjs generate /path/to/application.apk \
 
 Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设备中不存在的包；现有安装包哈希不一致时会拒绝覆盖。未适配的 Editor APK 已完成真实自动生成验收；这仍不能推断为覆盖任意 APK、任意功能。
 
-成功后，`result.json` 给出 CLI 路径、调用所需环境、适配器哈希和验证报告。先用 `--schema` 查看实际生成的命令。无需再次消耗模型调用即可复验：
+成功后，`result.json` 给出 CLI 路径、调用所需环境、适配器哈希和验证报告。先用 `--schema` 查看实际生成的命令，用 `--capabilities` 查看功能清单及具体已验收场景。无需再次消耗模型调用即可复验：
 
 ```bash
 node bin/app2cli.mjs verify .local/generate/dillinger --out .local/verify/dillinger
@@ -59,6 +61,7 @@ node bin/app2cli.mjs verify .local/generate/dillinger --out .local/verify/dillin
 | Knockout TodoMVC | 调用原页面 view model 的增删改函数 | 模型、DOM、localStorage 一致，并通过页面刷新确认 |
 | Fossify Calculator 1.4.0 | 通过 ADB 操作原生控件，使用当前层级定位坐标 | 两次独立 UI 层级回读；不声称服务端确认或重启持久化 |
 | Editor 1.98，APK 自动生成 | 原生文本输入、编辑模式切换和模式恢复 | 独立 UI 回读、原文恢复、重启 App 后完整复验 |
+| 抖音 Android 32.2.6，APK 生成并扩展 | 原生中文输入、搜索提交、结果和页面导航 | 多页面独立回读；仅验证未登录范围，不宣称私有 API 或全功能覆盖 |
 
 ```bash
 todomvc-cli todos create --title "Agent 创建的任务" --request-id task-001

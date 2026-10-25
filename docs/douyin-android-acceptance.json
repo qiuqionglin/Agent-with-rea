@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 1,
+  "producer": "sanitized parent acceptance summary; raw REA/model/native evidence retained privately",
+  "target": {
+    "application": "Douyin Android",
+    "package": "com.ss.android.ugc.aweme.mobile",
+    "version": "32.2.6",
+    "apkSha256": "46a3ebd3cf4b9a5020ebcea3aee02facaa80a7baae492b2c12090e5e0999baf0",
+    "sourcePage": "https://www.douyin.com/downloadpage/app",
+    "sourceApk": "https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/android-32.2.6/douyin.apk",
+    "authentication": "User selected logged-out browsing and search; no Android account login completed"
+  },
+  "authoring": {
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "globalConfigurationChanged": false,
+    "adapterSourceManuallyEdited": false,
+    "extensionOfPreviouslyPassedAdapter": true,
+    "seedAdapterDigest": "62ca953d82cf3526b88eaf222aecea2d179bf0742625f3c84beb4a79da005e9f",
+    "frameworkUnchangedDuringFinalReviewedRun": true,
+    "finalCandidateRound": 9,
+    "adapterDigest": "5619a0e81ca95e8f70b3ecb87b93c89ab66631ae63df0e4133714976f9aea1a5",
+    "adapterSourceSha256": "2a3c32c0150e614dea92ec710f9228d1381e11aef853dc5af527c4c5f66f5683",
+    "rawModelAnswerSha256": "b71bc07ae68e87b60bad2d5f28a44511f762e22fca44d7744c982067a90dc455",
+    "rawModelTraceSha256": "4af85219938f527d13b3c70c863e88c47ed77143add1bc5ea7f3955bc99c07fa",
+    "reviewedPlanSha256": "a62ab87c5a453f506f1695c50f276e14aecff281b86788f534caef10ce9c16d8"
+  },
+  "analysis": {
+    "reaVersion": "6.7.0",
+    "jadxVersion": "0.7.1",
+    "heapMiB": 7168,
+    "execution": "remote analysis of exact hash-matching APK; unmodified stdout copied back",
+    "records": [
+      {
+        "sha256": "3fe0b6ed06072c59959f35bb6307bf60abd02b4be84dc99f669077d5dc4709c1",
+        "operation": "inspect_android_package",
+        "evidenceId": "ev_9563c58d553b2b7748973162a98dddf8cac245f61eb6659c448af6df5ba88d90"
+      },
+      {
+        "sha256": "351f2b77c6ef842cdf168af8dcc867f9e19be64f09b59b76d15e86032cddab3e",
+        "operation": "inspect_android_class",
+        "evidenceId": "ev_cea5bfca1635838f1b908fc8f71cce40aaa09445da3d3d73c1346ce57eb1f14b"
+      },
+      {
+        "sha256": "15fa1f3a16ee158e4593b25a2d596b1ef8fab4dc51cf39e29cb603e8616889c3",
+        "operation": "inspect_android_method",
+        "evidenceId": "ev_18585c4901212e9ae39f4981fd9382101d94f8bf7b26e40169e695488b4f33b3"
+      }
+    ]
+  },
+  "runtime": {
+    "androidVersion": 13,
+    "architecture": "arm64-v8a",
+    "root": false,
+    "nativeDriver": "uiautomator2==3.7.1 plus ADB",
+    "inputMethodReplaced": false,
+    "verification": "native-ui-readback",
+    "privateApiRecovered": false,
+    "serverReadbackVerified": false
+  },
+  "acceptance": {
+    "status": "passed",
+    "checksPassed": 23,
+    "checks": [
+      {
+        "name": "Declared initial screen observed",
+        "passed": true
+      },
+      {
+        "name": "open-search: dry run preserves starting screen",
+        "passed": true
+      },
+      {
+        "name": "open-search: independent native postcondition",
+        "passed": true
+      },
+      {
+        "name": "open-search: separate CLI read and native reread",
+        "passed": true
+      },
+      {
+        "name": "open-search: replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "submit-public-search: dry run preserves starting screen",
+        "passed": true
+      },
+      {
+        "name": "submit-public-search: independent native postcondition",
+        "passed": true
+      },
+      {
+        "name": "submit-public-search: separate CLI read and native reread",
+        "passed": true
+      },
+      {
+        "name": "submit-public-search: replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "results-to-home: dry run preserves starting screen",
+        "passed": true
+      },
+      {
+        "name": "results-to-home: independent native postcondition",
+        "passed": true
+      },
+      {
+        "name": "results-to-home: separate CLI read and native reread",
+        "passed": true
+      },
+      {
+        "name": "results-to-home: replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "open-sidebar: dry run preserves starting screen",
+        "passed": true
+      },
+      {
+        "name": "open-sidebar: independent native postcondition",
+        "passed": true
+      },
+      {
+        "name": "open-sidebar: separate CLI read and native reread",
+        "passed": true
+      },
+      {
+        "name": "open-sidebar: replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "close-sidebar: dry run preserves starting screen",
+        "passed": true
+      },
+      {
+        "name": "close-sidebar: independent native postcondition",
+        "passed": true
+      },
+      {
+        "name": "close-sidebar: separate CLI read and native reread",
+        "passed": true
+      },
+      {
+        "name": "close-sidebar: replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "Stale revision rejected before navigation",
+        "passed": true
+      },
+      {
+        "name": "Declared landing screen restored",
+        "passed": true
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "open-search",
+        "command": "search.open",
+        "input": {},
+        "readback": {
+          "path": "screen",
+          "value": "search"
+        },
+        "verified": true,
+        "witness": {
+          "kind": "android-state",
+          "all": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+              "class": "android.widget.EditText"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+              "content-desc": "返回",
+              "clickable": "true"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/xc2",
+              "text": "搜索",
+              "enabled": "true"
+            }
+          ],
+          "none": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+              "text": "常用功能"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+              "content-desc": "单双列切换图标"
+            },
+            {
+              "resource-id": "android:id/text1",
+              "text": "综合",
+              "class": "android.widget.Button"
+            }
+          ]
+        }
+      },
+      {
+        "name": "submit-public-search",
+        "command": "search.submit",
+        "input": {
+          "query": "西湖风景"
+        },
+        "readback": {
+          "path": "screen",
+          "value": "results"
+        },
+        "verified": true,
+        "witness": {
+          "kind": "android-state",
+          "all": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+              "class": "android.widget.EditText",
+              "text": "西湖风景"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+              "content-desc": "返回",
+              "clickable": "true"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+              "content-desc": "单双列切换图标",
+              "clickable": "true"
+            },
+            {
+              "resource-id": "android:id/text1",
+              "text": "综合",
+              "class": "android.widget.Button"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/lfp",
+              "class": "androidx.recyclerview.widget.RecyclerView",
+              "scrollable": "true"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/desc",
+              "class": "android.widget.TextView"
+            }
+          ],
+          "none": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+              "text": "常用功能"
+            },
+            {
+              "content-desc": "关闭，按钮",
+              "clickable": "true"
+            }
+          ]
+        }
+      },
+      {
+        "name": "results-to-home",
+        "command": "home.open",
+        "input": {},
+        "readback": {
+          "path": "screen",
+          "value": "home"
+        },
+        "verified": true,
+        "witness": {
+          "kind": "android-state",
+          "all": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+              "text": "首页"
+            },
+            {
+              "content-desc": "搜索",
+              "clickable": "true"
+            },
+            {
+              "content-desc": "侧边栏",
+              "clickable": "true"
+            }
+          ],
+          "none": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+              "text": "常用功能"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+              "class": "android.widget.EditText"
+            },
+            {
+              "content-desc": "关闭，按钮",
+              "clickable": "true"
+            }
+          ]
+        }
+      },
+      {
+        "name": "open-sidebar",
+        "command": "sidebar.open",
+        "input": {},
+        "readback": {
+          "path": "screen",
+          "value": "sidebar"
+        },
+        "verified": true,
+        "witness": {
+          "kind": "android-state",
+          "all": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+              "text": "常用功能"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/hfy",
+              "text": "观看历史"
+            },
+            {
+              "content-desc": "关闭，按钮",
+              "clickable": "true"
+            }
+          ],
+          "none": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+              "class": "android.widget.EditText"
+            }
+          ]
+        }
+      },
+      {
+        "name": "close-sidebar",
+        "command": "sidebar.close",
+        "input": {},
+        "readback": {
+          "path": "screen",
+          "value": "home"
+        },
+        "verified": true,
+        "witness": {
+          "kind": "android-state",
+          "all": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+              "text": "首页"
+            },
+            {
+              "content-desc": "搜索",
+              "clickable": "true"
+            },
+            {
+              "content-desc": "侧边栏",
+              "clickable": "true"
+            }
+          ],
+          "none": [
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+              "text": "常用功能"
+            },
+            {
+              "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+              "class": "android.widget.EditText"
+            },
+            {
+              "content-desc": "关闭，按钮",
+              "clickable": "true"
+            }
+          ]
+        }
+      }
+    ],
+    "restored": true,
+    "restorationScope": "declared landing screen only; feed item, history and server state are not restored",
+    "finishedAt": "2026-10-25T04:00:15.038Z"
+  },
+  "negativeControl": {
+    "producer": "Deliberately faulty test copy, not model output",
+    "fault": "dispatch returns success without effect and matches always returns true",
+    "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+    "restored": true
+  },
+  "frameworkTests": {
+    "passed": 40,
+    "kind": "unit and protocol fixtures, not real-device evidence"
+  },
+  "commands": [
+    "screen.read",
+    "feed.read",
+    "feed.next",
+    "home.open",
+    "search.open",
+    "search.input",
+    "search.submit",
+    "search.results",
+    "sidebar.open",
+    "sidebar.close"
+  ],
+  "capabilities": [
+    {
+      "id": "screen.read",
+      "description": "Current native screen and accessible text",
+      "commands": [
+        "screen.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Fresh package-scoped hierarchy projection; revised acceptance pending."
+    },
+    {
+      "id": "feed.view",
+      "description": "Public feed text",
+      "commands": [
+        "feed.read",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains observed title, desc and xao labels; exposed content only."
+    },
+    {
+      "id": "feed.next",
+      "description": "Bounded public feed advancement",
+      "commands": [
+        "feed.next",
+        "feed.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "One swipe on fresh mgg bounds requires both changed author and caption. May reject a same-author next item; no backend identity claim. Not exercised by this search journey."
+    },
+    {
+      "id": "home.navigation",
+      "description": "Return to native home",
+      "commands": [
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains bounded re-observation and extends cleanup to results screens; revised acceptance pending."
+    },
+    {
+      "id": "search.open",
+      "description": "Public search navigation",
+      "commands": [
+        "search.open",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed search button, input and back arrow; input excludes distinct results chrome."
+    },
+    {
+      "id": "search.input",
+      "description": "Unicode query entry",
+      "commands": [
+        "search.open",
+        "search.input"
+      ],
+      "status": "implemented-unverified",
+      "reason": "SDK inputText with exact native readback; suggestions/history are not restored."
+    },
+    {
+      "id": "search.results",
+      "description": "Submit public search and read visible results",
+      "commands": [
+        "search.submit",
+        "search.results",
+        "screen.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed query, submission control and distinct results controls/captions support mapping. Revised journey acceptance pending; service/login barriers fail with actual observed text."
+    },
+    {
+      "id": "sidebar.navigation",
+      "description": "Open and close sidebar",
+      "commands": [
+        "sidebar.open",
+        "sidebar.close",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains native title/history/close witnesses and bounded BACK cleanup."
+    },
+    {
+      "id": "profiles",
+      "description": "Public profile browsing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Profile navigation and target witnesses are not established."
+    },
+    {
+      "id": "comments",
+      "description": "Comment reading and writing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Comment-screen reading is unmapped; writing is excluded."
+    },
+    {
+      "id": "likes",
+      "description": "Likes and account likes",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Mutations excluded; account reads unmapped and user reports logged out."
+    },
+    {
+      "id": "favorites",
+      "description": "Favorites and collections",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Favorite mutations excluded; account collections unmapped."
+    },
+    {
+      "id": "following",
+      "description": "Follow users and browse following",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Follow mutations excluded; following-feed behavior unmapped."
+    },
+    {
+      "id": "messages",
+      "description": "Account messaging",
+      "commands": [],
+      "status": "requires-login",
+      "reason": "User reports logged out; messaging unmapped and sending excluded."
+    },
+    {
+      "id": "publishing",
+      "description": "Capture, upload and publish",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Publishing, uploads and permission grants excluded and unmapped."
+    },
+    {
+      "id": "live",
+      "description": "Live-stream browsing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "No live navigation or target witness established."
+    },
+    {
+      "id": "downloads",
+      "description": "Download content",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Saving files and granting permissions excluded."
+    },
+    {
+      "id": "settings",
+      "description": "Settings",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Settings navigation unimplemented; changes excluded."
+    },
+    {
+      "id": "commerce",
+      "description": "Commerce and purchases",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Commerce actions excluded and screens unmapped."
+    },
+    {
+      "id": "account.login",
+      "description": "Account authentication",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Login, credentials and agreements require native user interaction; no automatic command exposed."
+    },
+    {
+      "id": "native.lowlevel",
+      "description": "Generic tap, swipe and back",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "No generic escape hatch exposed; mapped controls do not imply universal coverage."
+    }
+  ],
+  "interventions": [
+    {
+      "kind": "environment",
+      "detail": "Local 120-second analysis timed out; 4 GiB retry stopped under memory pressure; exact APK analyzed remotely with 7 GiB heap."
+    },
+    {
+      "kind": "interrupted-run-recovery",
+      "detail": "Initial navigation runner interrupted after failed return-home operation. Parent independently re-read home restoration before resuming. Agent repaired bounded back navigation; later run passed 19 checks."
+    },
+    {
+      "kind": "sdk-extension",
+      "detail": "Added explicit fresh-bounds touch for observed custom controls and caller-approved search-label probe after clickable-ancestor refusal."
+    },
+    {
+      "kind": "reviewed-test-oracle",
+      "detail": "Input page reused lfp RecyclerView. Model correction was rejected by immutable-objective guard; parent reviewed replacement of that negative selector with the distinct comprehensive-results tab. All other steps, inputs, positive witnesses, readback and cleanup were unchanged."
+    },
+    {
+      "kind": "authoring-stop",
+      "detail": "An in-progress model authoring round was stopped to resume with the explicitly reviewed plan. This was not a provider-authentication failure."
+    }
+  ],
+  "limitations": [
+    "Not all Douyin operations are implemented or verified.",
+    "Only the pinned APK and observed native screens are supported.",
+    "No account collections, likes/follows, messages, posting, live-stream, download, settings or commerce acceptance.",
+    "Current visible native captions are not an exhaustive API result set.",
+    "Feed advancement requires different exposed author and caption; no server video identity proof.",
+    "Landing-screen cleanup does not restore feed item, playback position or search history.",
+    "Generated adapters are executable code, not a sandbox."
+  ],
+  "installedPackageAcceptance": {
+    "status": "passed",
+    "checksPassed": 7,
+    "checks": [
+      {
+        "name": "Installed runtime has no REA dependency",
+        "passed": true
+      },
+      {
+        "name": "Installed CLI feed read matches independent native text",
+        "passed": true
+      },
+      {
+        "name": "Feed dry run preserves native item",
+        "passed": true
+      },
+      {
+        "name": "One native feed advance changes author and caption",
+        "passed": true,
+        "beforeHash": "2d90b309b1242bfdcd3c9f05e4de9095f236e8a47801216c3e95b9a671293a01",
+        "afterHash": "709a01f5c33b0ca777fc7b202045f686792ffef5b80c5b0f68f01743b8db6cb5"
+      },
+      {
+        "name": "Feed replay does not advance twice",
+        "passed": true
+      },
+      {
+        "name": "Different Chinese query submitted; result captions match independent native read",
+        "passed": true,
+        "query": "杭州西湖",
+        "captionCount": 2,
+        "nativeSha256": "95724a12bec79846965d2650fb670fd15b945f076629731928e1ee9b0ed6cc5f"
+      },
+      {
+        "name": "Home landing screen independently confirmed",
+        "passed": true
+      }
+    ],
+    "query": "杭州西湖",
+    "restored": true,
+    "restorationScope": "home screen only; feed item and search history not restored",
+    "producer": "parent-authored installed-package acceptance, not model output",
+    "tarballSha256": "827fbb694a70608480f38f664ee030a67b3eaf8a38df8e7058593e390f7a04ae",
+    "tarballBytes": 42607,
+    "installedOutsideRepository": true,
+    "reaDependencyInstalled": false,
+    "codexRequiredAtRuntime": false,
+    "nativeDriverRequired": true,
+    "screenshotSha256": "9322af0d93b208e66dc1542ec0371fbe92eeede9cc9f7081f4db3c080d559924"
+  },
+  "environmentCleanup": {
+    "emulatorClosed": true,
+    "adbSettingRestoredToDisabled": true,
+    "rootWasNeverEnabled": true,
+    "port5555ListenerPresent": false,
+    "remoteTemporaryAnalysisDirectoryRemoved": true
+  }
+}

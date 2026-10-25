@@ -1,0 +1,319 @@
+{
+  "producer": "app2cli actual independent test runner",
+  "adapterDigest": "5619a0e81ca95e8f70b3ecb87b93c89ab66631ae63df0e4133714976f9aea1a5",
+  "status": "passed",
+  "semantics": "android-journey",
+  "checks": [
+    {
+      "name": "Declared initial screen observed",
+      "passed": true
+    },
+    {
+      "name": "open-search: dry run preserves starting screen",
+      "passed": true
+    },
+    {
+      "name": "open-search: independent native postcondition",
+      "passed": true
+    },
+    {
+      "name": "open-search: separate CLI read and native reread",
+      "passed": true
+    },
+    {
+      "name": "open-search: replay is deduplicated",
+      "passed": true
+    },
+    {
+      "name": "submit-public-search: dry run preserves starting screen",
+      "passed": true
+    },
+    {
+      "name": "submit-public-search: independent native postcondition",
+      "passed": true
+    },
+    {
+      "name": "submit-public-search: separate CLI read and native reread",
+      "passed": true
+    },
+    {
+      "name": "submit-public-search: replay is deduplicated",
+      "passed": true
+    },
+    {
+      "name": "results-to-home: dry run preserves starting screen",
+      "passed": true
+    },
+    {
+      "name": "results-to-home: independent native postcondition",
+      "passed": true
+    },
+    {
+      "name": "results-to-home: separate CLI read and native reread",
+      "passed": true
+    },
+    {
+      "name": "results-to-home: replay is deduplicated",
+      "passed": true
+    },
+    {
+      "name": "open-sidebar: dry run preserves starting screen",
+      "passed": true
+    },
+    {
+      "name": "open-sidebar: independent native postcondition",
+      "passed": true
+    },
+    {
+      "name": "open-sidebar: separate CLI read and native reread",
+      "passed": true
+    },
+    {
+      "name": "open-sidebar: replay is deduplicated",
+      "passed": true
+    },
+    {
+      "name": "close-sidebar: dry run preserves starting screen",
+      "passed": true
+    },
+    {
+      "name": "close-sidebar: independent native postcondition",
+      "passed": true
+    },
+    {
+      "name": "close-sidebar: separate CLI read and native reread",
+      "passed": true
+    },
+    {
+      "name": "close-sidebar: replay is deduplicated",
+      "passed": true
+    },
+    {
+      "name": "Stale revision rejected before navigation",
+      "passed": true
+    },
+    {
+      "name": "Declared landing screen restored",
+      "passed": true
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "open-search",
+      "command": "search.open",
+      "input": {},
+      "readback": {
+        "path": "screen",
+        "value": "search"
+      },
+      "verified": true,
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+            "content-desc": "返回",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/xc2",
+            "text": "搜索",
+            "enabled": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+            "content-desc": "单双列切换图标"
+          },
+          {
+            "resource-id": "android:id/text1",
+            "text": "综合",
+            "class": "android.widget.Button"
+          }
+        ]
+      }
+    },
+    {
+      "name": "submit-public-search",
+      "command": "search.submit",
+      "input": {
+        "query": "西湖风景"
+      },
+      "readback": {
+        "path": "screen",
+        "value": "results"
+      },
+      "verified": true,
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText",
+            "text": "西湖风景"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+            "content-desc": "返回",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+            "content-desc": "单双列切换图标",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "android:id/text1",
+            "text": "综合",
+            "class": "android.widget.Button"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/lfp",
+            "class": "androidx.recyclerview.widget.RecyclerView",
+            "scrollable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/desc",
+            "class": "android.widget.TextView"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "results-to-home",
+      "command": "home.open",
+      "input": {},
+      "readback": {
+        "path": "screen",
+        "value": "home"
+      },
+      "verified": true,
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+            "text": "首页"
+          },
+          {
+            "content-desc": "搜索",
+            "clickable": "true"
+          },
+          {
+            "content-desc": "侧边栏",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      }
+    },
+    {
+      "name": "open-sidebar",
+      "command": "sidebar.open",
+      "input": {},
+      "readback": {
+        "path": "screen",
+        "value": "sidebar"
+      },
+      "verified": true,
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/hfy",
+            "text": "观看历史"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          }
+        ]
+      }
+    },
+    {
+      "name": "close-sidebar",
+      "command": "sidebar.close",
+      "input": {},
+      "readback": {
+        "path": "screen",
+        "value": "home"
+      },
+      "verified": true,
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+            "text": "首页"
+          },
+          {
+            "content-desc": "搜索",
+            "clickable": "true"
+          },
+          {
+            "content-desc": "侧边栏",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      }
+    }
+  ],
+  "restorationScope": "declared landing screen only; feed item, history and server state are not restored",
+  "verifiedAt": "2026-10-25T04:00:15.038Z"
+}

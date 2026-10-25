@@ -12,7 +12,7 @@ URL / APK → REA evidence → agent → adapter → CLI → real-app test + ind
                             └──── failure feedback ─────┘
 ```
 
-The generator does not look up an application in the bundled adapter list. It currently tests a reversible value/content replacement, not every capability of an arbitrary app. An application may require login, lack accessible source/UI, or have no supported reversible operation; those cases fail explicitly. Analysis candidates and successful builds alone are not execution proof.
+The generator does not look up an application in the bundled adapter list. It tests reversible value/content replacement and Android navigation journeys with independent native predicates. These bounded tests do not cover every capability of an arbitrary app. An application may require login, lack accessible source/UI, or have no supported reversible operation; those cases fail explicitly. Analysis candidates and successful builds alone are not execution proof.
 
 ## What works today
 
@@ -27,11 +27,13 @@ The recorded local run passed **13/13 real-app checks** and **10/10 kernel/compi
 
 The original Web and Android examples have been exercised on real applications. The Android example reads `84` from the installed app; it does not return a locally calculated answer. Local arithmetic is only a postcondition used to check the app's output. Android UI readback does not claim backend confirmation or persistence across process restarts.
 
-The later automatic-generation experiment used **Dillinger without a pre-existing adapter**. After framework development fixes, a fresh URL-to-CLI run passed **8/8 real-app checks on its first candidate**, followed by another 8/8 recheck. A deliberately lying no-op adapter was rejected by the independent observer. The generated tarball also ran outside this repository without REA installed. That experiment used 22 fixture tests; the current suite passes **26/26**. See [generation acceptance](docs/generation-acceptance.json), including earlier failures and evidence boundaries, and the [unmodified generated example](examples/dillinger-generated/README.md).
+The later automatic-generation experiment used **Dillinger without a pre-existing adapter**. After framework development fixes, a fresh URL-to-CLI run passed **8/8 real-app checks on its first candidate**, followed by another 8/8 recheck. A deliberately lying no-op adapter was rejected by the independent observer. The generated tarball also ran outside this repository without REA installed. That experiment used 22 fixture tests; the expanded suite can be run with `pnpm test`. See [generation acceptance](docs/generation-acceptance.json), including earlier failures and evidence boundaries, and the [unmodified generated example](examples/dillinger-generated/README.md).
 
 ![Independent readback after reload](docs/generation-witness.png)
 
 The unseen Android target is **Editor 1.98**, supplied directly as an APK. A fresh generation run made three REA source probes and produced an unchanged agent-authored candidate that passed **8/8 native checks**. A repeated scenario after restarting the app also passed **8/8**. See the [APK walkthrough](docs/android-generation.md), [Android acceptance record](docs/android-generation-acceptance.json), and [generated source](examples/editor-generated/README.md). These checks establish native buffer contents and mode restoration, not saved-file or backend persistence. Earlier failed candidates and the single parent-side recovery are disclosed separately. A lying no-op copy was independently rejected. The generated tarball was installed outside the repository without REA or Codex dependencies, then read, wrote a different text value, passed native readback and restored the original buffer.
+
+The **Douyin Android 32.2.6** experiment starts from the official-page APK and extends a generated navigation adapter into ten commands. The final logged-out browsing/search journey passed **23/23 native checks**, including Chinese query submission and actual result captions. One incorrect test predicate caused by a reused native resource ID required explicit reviewer correction; the original failure and revised oracle are retained. This is not fully unattended or whole-app acceptance. See the [experiment](docs/douyin-android.md), [sanitized evidence summary](docs/douyin-android-acceptance.json), and [unchanged generated source](examples/douyin-generated/README.md).
 
 ## Install from this repository
 

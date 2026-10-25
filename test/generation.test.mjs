@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp,rm,readFile,writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join,dirname } from 'node:path';
 import { generate } from '../lib/generate.mjs';
 import { validatePlan,atPath,replaceValue } from '../lib/generation-test.mjs';
 import { runProcess } from '../lib/process.mjs';
@@ -37,6 +37,20 @@ test('real validator failures are fed to a new generation round, then success is
   const result=await generate('https://fixture.invalid/',{id:'unseen-fixture',out:f.out},f.deps);
   assert.equal(result.rounds,2);assert.equal(result.repairs,1);assert.match(f.calls[1],/Native display is unchanged/);
   assert.equal((await readJson(join(f.out,'generation.json'))).attempts[0].status,'failed');
+});
+test('successful navigation probes refresh the next observation and probe failures are not adapter repairs',async t=>{
+  const f=await setup(t),author=f.deps.agent;let calls=0,screen='before';
+  f.deps.snapshot=async()=>({screen});
+  f.deps.probe=async()=>{screen='after';};
+  f.deps.agent=async(...args)=>{
+    if(++calls===1)return {decision:'probe',reason:'fixture navigation',probe:{kind:'fixture'}};
+    assert.equal((await readJson(join(f.out,'observation.json'))).screen,'after');
+    if(calls===2)return {decision:'probe',reason:'fixture failure',probe:{kind:'fixture-failure'}};
+    return author(...args);
+  };
+  f.deps.probe=async request=>{if(request.kind==='fixture-failure')throw new AppError('UI_CHANGED','Native selector moved');screen='after';};
+  const result=await generate('https://fixture.invalid/',{id:'unseen-fixture',out:f.out},f.deps);
+  assert.equal(result.rounds,3);assert.equal(result.repairs,0);assert.equal(result.failedRounds,1);
 });
 test('repair attempts cannot replace the immutable test value with observed stale data',async t=>{
   const f=await setup(t),agent=f.deps.agent;let checks=0;
@@ -106,4 +120,45 @@ test('browser source checks use the selected session and reject a different orig
   await assert.rejects(checkBrowser(ctx,{...config,origin:'https://different.invalid'}),{code:'SESSION_CHANGED'});
   await assert.rejects(checkBrowser(ctx,{...config,pins:[{path:'https://other.invalid/app.js',sha256:hash(bytes)}]}),{code:'INVALID_ADAPTER'});
   await assert.rejects(checkBrowser(ctx,{...config,pins:[{path:'/app.js',sha256:hash('changed')}]}),{code:'VERSION_DRIFT'});
+});
+
+async function androidFixture(t){
+  const f=await setup(t),apk=join(dirname(f.out),'fixture.apk');await writeFile(apk,'fixture bytes');
+  f.manifest.platform='android';f.manifest.verification='native-ui-readback';f.manifest.config={apkSha256:hash('fixture bytes')};
+  f.deps.prepare=async({evidence,out})=>{
+    const raw={operation:'fixture_analysis',subject:{digest:{sha256:hash('fixture bytes')}},normalized_result:{note:'fixture-only'}},bytes=JSON.stringify(raw);
+    await writeJson(join(evidence,'evidence.json'),{platform:'android',records:[{file:'raw.json',operation:raw.operation,sha256:hash(bytes)}]});await writeFile(join(evidence,'raw.json'),bytes);
+    const session={platform:'android',apk,android:{config:f.manifest.config},environment:{}};await writeJson(join(out,'session.json'),session);return session;
+  };
+  f.deps.agent=async(prompt,attempt)=>{
+    f.calls.push(prompt);
+    const step=(name,value)=>({name,command:'set',input:{text:value},effect:'navigation',witness:{kind:'android-state',all:[{text:value}]},readback:{path:'screen',value}});
+    const plan={schemaVersion:2,semantics:'android-journey',read:{command:'read',input:{}},start:step('start','home'),steps:[step('search','search'),step('home','home')],cleanup:step('cleanup','home')};
+    const candidate={decision:'candidate',reason:'fixture',manifest:JSON.stringify(f.manifest),module:'export default {};',testPlan:JSON.stringify(plan)};await writeJson(join(attempt,'agent-response.json'),candidate);return candidate;
+  };
+  return {...f,apk};
+}
+test('required journey commands cannot pass by being omitted from execution',async t=>{
+  const f=await androidFixture(t);let tests=0;f.deps.test=async()=>{tests++;return {status:'passed',checks:[]};};
+  await assert.rejects(generate(f.apk,{id:'unseen-fixture',out:f.out,scenario:'android-journey','require-step':'search.submit','max-attempts':1},f.deps),{code:'GENERATION_EXHAUSTED'});
+  assert.equal(tests,0);assert.equal((await readJson(join(f.out,'generation.json'))).attempts[0].error.code,'REQUIRED_STEP_MISSING');
+});
+test('explicit extensions retain prior provenance and reject a modified seed',async t=>{
+  const f=await androidFixture(t),flags={id:'unseen-fixture',out:f.out,scenario:'android-journey'};
+  const first=await generate(f.apk,flags,f.deps),next=join(dirname(f.out),'extension');
+  await generate(f.apk,{...flags,out:next,seed:f.out},f.deps);
+  assert.equal((await readJson(join(next,'seed-provenance.json'))).adapterDigest,first.adapterDigest);assert.match(f.calls.at(-1),/explicitly requested extension/);
+  await writeFile(join(f.out,'package/adapters/unseen-fixture/adapter.mjs'),'export default {changed:true};');
+  await assert.rejects(generate(f.apk,{...flags,out:join(dirname(f.out),'tampered'),seed:f.out},f.deps),{code:'SEED_MISMATCH'});
+});
+test('caller-reviewed oracle is pinned and an agent cannot alter it',async t=>{
+  const f=await androidFixture(t),author=f.deps.agent,review=join(dirname(f.out),'reviewed.json');
+  const original=await author('fixture only',dirname(f.out));await writeJson(review,JSON.parse(original.testPlan));let tests=0;
+  f.deps.agent=async(...args)=>{const result=await author(...args),plan=JSON.parse(result.testPlan);plan.steps[0].witness.all=[{text:'different'}];result.testPlan=JSON.stringify(plan);return result;};
+  f.deps.test=async()=>{tests++;return {status:'passed',checks:[]};};
+  const flags={id:'unseen-fixture',out:f.out,scenario:'android-journey','reviewed-plan':review,'max-attempts':1};
+  await assert.rejects(generate(f.apk,flags,f.deps),{code:'GENERATION_EXHAUSTED'});assert.equal(tests,0);
+  assert.equal((await readJson(join(f.out,'generation.json'))).attempts[0].error.code,'REVIEWED_PLAN_CHANGED');
+  const changed=await readJson(review);changed.steps[0].readback.value='changed';await writeJson(review,changed);
+  await assert.rejects(generate(f.apk,{...flags,resume:true,'max-attempts':2},f.deps),{code:'RESUME_REJECTED'});
 });

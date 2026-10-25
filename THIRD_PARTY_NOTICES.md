@@ -7,6 +7,8 @@ Project-authored code in this repository is licensed under MIT. Dependencies ret
 | REA | [morluto/rea](https://github.com/morluto/rea), npm `rea-agents@6.7.0` | REA-authored code MIT; its third-party notices apply separately. Dependency, not copied source |
 | Ajv | npm `ajv@8.20.0` | MIT; runtime dependency |
 | Playwright Core | npm `playwright-core@1.58.2` | Apache-2.0; runtime dependency, browser supplied separately |
+| uiautomator2 | [openatx/uiautomator2](https://github.com/openatx/uiautomator2), PyPI `uiautomator2==3.7.1` | MIT; optional caller-installed native observation and Unicode input backend; original package assets/licenses remain with that dependency |
+| Douyin Android | [official download page](https://www.douyin.com/downloadpage/app), package `com.ss.android.ugc.aweme.mobile` version `32.2.6` | Proprietary test target; APK, decompiled methods, account state and raw captures are not distributed |
 | xmldom | npm `@xmldom/xmldom@0.9.12` | MIT; runtime dependency |
 | TodoMVC | [upstream commit](https://github.com/tastejs/todomvc/tree/ff43b02e59dfa604386bb382034b2cd07c2bcd8a) | MIT; original application and license downloaded unchanged for the local example |
 | Knockout, Director, TodoMVC styles/common | Pinned development dependencies in package/lock files | Original licenses retained by their packages |

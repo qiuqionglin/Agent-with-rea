@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 2,
+  "semantics": "android-journey",
+  "read": {
+    "command": "screen.read",
+    "input": {}
+  },
+  "start": {
+    "name": "start-home",
+    "command": "home.open",
+    "input": {},
+    "effect": "navigation",
+    "witness": {
+      "kind": "android-state",
+      "all": [
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+          "text": "首页"
+        },
+        {
+          "content-desc": "搜索",
+          "clickable": "true"
+        },
+        {
+          "content-desc": "侧边栏",
+          "clickable": "true"
+        }
+      ],
+      "none": [
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+          "text": "常用功能"
+        },
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+          "class": "android.widget.EditText"
+        },
+        {
+          "content-desc": "关闭，按钮",
+          "clickable": "true"
+        }
+      ]
+    },
+    "readback": {
+      "path": "screen",
+      "value": "home"
+    }
+  },
+  "steps": [
+    {
+      "name": "open-search",
+      "command": "search.open",
+      "input": {},
+      "effect": "navigation",
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+            "content-desc": "返回",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/xc2",
+            "text": "搜索",
+            "enabled": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+            "content-desc": "单双列切换图标"
+          },
+          {
+            "resource-id": "android:id/text1",
+            "text": "综合",
+            "class": "android.widget.Button"
+          }
+        ]
+      },
+      "readback": {
+        "path": "screen",
+        "value": "search"
+      }
+    },
+    {
+      "name": "submit-public-search",
+      "command": "search.submit",
+      "input": {
+        "query": "西湖风景"
+      },
+      "effect": "navigation",
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText",
+            "text": "西湖风景"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/amh",
+            "content-desc": "返回",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/ump",
+            "content-desc": "单双列切换图标",
+            "clickable": "true"
+          },
+          {
+            "resource-id": "android:id/text1",
+            "text": "综合",
+            "class": "android.widget.Button"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/lfp",
+            "class": "androidx.recyclerview.widget.RecyclerView",
+            "scrollable": "true"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/desc",
+            "class": "android.widget.TextView"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      },
+      "readback": {
+        "path": "screen",
+        "value": "results"
+      }
+    },
+    {
+      "name": "results-to-home",
+      "command": "home.open",
+      "input": {},
+      "effect": "navigation",
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+            "text": "首页"
+          },
+          {
+            "content-desc": "搜索",
+            "clickable": "true"
+          },
+          {
+            "content-desc": "侧边栏",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      },
+      "readback": {
+        "path": "screen",
+        "value": "home"
+      }
+    },
+    {
+      "name": "open-sidebar",
+      "command": "sidebar.open",
+      "input": {},
+      "effect": "navigation",
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/hfy",
+            "text": "观看历史"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          }
+        ]
+      },
+      "readback": {
+        "path": "screen",
+        "value": "sidebar"
+      }
+    },
+    {
+      "name": "close-sidebar",
+      "command": "sidebar.close",
+      "input": {},
+      "effect": "navigation",
+      "witness": {
+        "kind": "android-state",
+        "all": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+            "text": "首页"
+          },
+          {
+            "content-desc": "搜索",
+            "clickable": "true"
+          },
+          {
+            "content-desc": "侧边栏",
+            "clickable": "true"
+          }
+        ],
+        "none": [
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+            "text": "常用功能"
+          },
+          {
+            "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+            "class": "android.widget.EditText"
+          },
+          {
+            "content-desc": "关闭，按钮",
+            "clickable": "true"
+          }
+        ]
+      },
+      "readback": {
+        "path": "screen",
+        "value": "home"
+      }
+    }
+  ],
+  "cleanup": {
+    "name": "cleanup-home",
+    "command": "home.open",
+    "input": {},
+    "effect": "navigation",
+    "witness": {
+      "kind": "android-state",
+      "all": [
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/urj",
+          "text": "首页"
+        },
+        {
+          "content-desc": "搜索",
+          "clickable": "true"
+        },
+        {
+          "content-desc": "侧边栏",
+          "clickable": "true"
+        }
+      ],
+      "none": [
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/n9s",
+          "text": "常用功能"
+        },
+        {
+          "resource-id": "com.ss.android.ugc.aweme.mobile:id/et_search_kw",
+          "class": "android.widget.EditText"
+        },
+        {
+          "content-desc": "关闭，按钮",
+          "clickable": "true"
+        }
+      ]
+    },
+    "readback": {
+      "path": "screen",
+      "value": "home"
+    }
+  }
+}

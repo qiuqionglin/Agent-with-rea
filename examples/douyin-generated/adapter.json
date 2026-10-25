@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "id": "douyin",
+  "description": "Pinned Douyin Android CLI using native UI for public search submission, visible results, feed text and bounded navigation.",
+  "platform": "android",
+  "verification": "native-ui-readback",
+  "config": {
+    "package": "com.ss.android.ugc.aweme.mobile",
+    "component": "com.ss.android.ugc.aweme.mobile/com.ss.android.ugc.aweme.splash.SplashActivity",
+    "apkSha256": "46a3ebd3cf4b9a5020ebcea3aee02facaa80a7baae492b2c12090e5e0999baf0",
+    "versionName": "32.2.6"
+  },
+  "analysis": {
+    "recipe": "Extend the retained adapter using existing REA evidence and retained native observations. Actual SearchResultActivity.onBackPressed source contains SearchBackServiceImpl interception, searchResultFragment.Bq(true), and other early returns before super.onBackPressed(). Preserve bounded navigation with fresh observation after each action and extend it to results. Retained native results expose query 西湖风景, 综合, ump layout control, scrollable lfp list, desc captions, aca authors and wbl dates. The failed independent input-page observation also contains lfp, so input classification excludes results-specific layout/tab controls instead of that shared container. Keep scrollable in native projections for independent matches against the results-list predicate. search.submit uses SDK inputText, then touchSelector on enabled xc2 搜索 because its observed clickable attribute is false with no clickable ancestor. Wait for exact query, distinct results controls, scrollable list and actual nonempty caption text. Project only freshly observed native result text. Native home exposes mgg video view, title author and desc caption. feed.next performs one bounds-derived upward swipe and requires both author and caption to change; no backend video identity is claimed. Runtime uses native UI only; no private backend API or signature bypass was recovered. User reports logged out; runtime authentication remains independently unconfirmed. Service/login barriers cause failure with actual observed text. Home cleanup restores the landing screen only, not feed identity, suggestions or history. The caller explicitly replaced the earlier erroneous test oracle; the reviewed journey is retained unchanged and acceptance remains for the outer runner.",
+    "claims": [
+      {
+        "operation": "inspect_android_package",
+        "contains": "com.ss.android.ugc.aweme.mobile",
+        "sha256": "46a3ebd3cf4b9a5020ebcea3aee02facaa80a7baae492b2c12090e5e0999baf0"
+      },
+      {
+        "operation": "inspect_android_package",
+        "contains": "32.2.6"
+      },
+      {
+        "operation": "inspect_android_package",
+        "contains": "com.ss.android.ugc.aweme.splash.SplashActivity"
+      },
+      {
+        "operation": "inspect_android_class",
+        "contains": "com.ss.android.ugc.aweme.search.activity.SearchResultActivity"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "SearchBackServiceImpl.LIZLLL().LIZ(this)"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "searchResultFragment.Bq(true)"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "super.onBackPressed();"
+      }
+    ]
+  },
+  "commands": {
+    "screen.read": {
+      "description": "Read the active native screen and visible text without navigation.",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "feed.read": {
+      "description": "Read exposed home feed author, caption and declaration labels.",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "feed.next": {
+      "description": "Swipe upward once on the observed video view; require fresh nonempty author and caption that both differ.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "home.open": {
+      "description": "Idempotently return home from mapped home, search input, results or sidebar using bounded navigation and fresh observations. Restores navigation only.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "search.open": {
+      "description": "Open public search input from home, optionally replacing its query without submitting.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "search.input": {
+      "description": "Replace and read back the native non-password query without submitting.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "search.submit": {
+      "description": "Enter query using inputText, touch native 搜索 once and await distinct results controls and actual captions. May affect suggestions/history.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "search.results": {
+      "description": "Read currently exposed result captions, authors, dates and visible text from a submitted results screen.",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "sidebar.open": {
+      "description": "Open sidebar from home and verify native title, history and close controls.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "sidebar.close": {
+      "description": "Return from sidebar to verified home; idempotent on home.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  "capabilities": [
+    {
+      "id": "screen.read",
+      "description": "Current native screen and accessible text",
+      "commands": [
+        "screen.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Fresh package-scoped hierarchy projection; revised acceptance pending."
+    },
+    {
+      "id": "feed.view",
+      "description": "Public feed text",
+      "commands": [
+        "feed.read",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains observed title, desc and xao labels; exposed content only."
+    },
+    {
+      "id": "feed.next",
+      "description": "Bounded public feed advancement",
+      "commands": [
+        "feed.next",
+        "feed.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "One swipe on fresh mgg bounds requires both changed author and caption. May reject a same-author next item; no backend identity claim. Not exercised by this search journey."
+    },
+    {
+      "id": "home.navigation",
+      "description": "Return to native home",
+      "commands": [
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains bounded re-observation and extends cleanup to results screens; revised acceptance pending."
+    },
+    {
+      "id": "search.open",
+      "description": "Public search navigation",
+      "commands": [
+        "search.open",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed search button, input and back arrow; input excludes distinct results chrome."
+    },
+    {
+      "id": "search.input",
+      "description": "Unicode query entry",
+      "commands": [
+        "search.open",
+        "search.input"
+      ],
+      "status": "implemented-unverified",
+      "reason": "SDK inputText with exact native readback; suggestions/history are not restored."
+    },
+    {
+      "id": "search.results",
+      "description": "Submit public search and read visible results",
+      "commands": [
+        "search.submit",
+        "search.results",
+        "screen.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed query, submission control and distinct results controls/captions support mapping. Revised journey acceptance pending; service/login barriers fail with actual observed text."
+    },
+    {
+      "id": "sidebar.navigation",
+      "description": "Open and close sidebar",
+      "commands": [
+        "sidebar.open",
+        "sidebar.close",
+        "home.open"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Retains native title/history/close witnesses and bounded BACK cleanup."
+    },
+    {
+      "id": "profiles",
+      "description": "Public profile browsing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Profile navigation and target witnesses are not established."
+    },
+    {
+      "id": "comments",
+      "description": "Comment reading and writing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Comment-screen reading is unmapped; writing is excluded."
+    },
+    {
+      "id": "likes",
+      "description": "Likes and account likes",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Mutations excluded; account reads unmapped and user reports logged out."
+    },
+    {
+      "id": "favorites",
+      "description": "Favorites and collections",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Favorite mutations excluded; account collections unmapped."
+    },
+    {
+      "id": "following",
+      "description": "Follow users and browse following",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Follow mutations excluded; following-feed behavior unmapped."
+    },
+    {
+      "id": "messages",
+      "description": "Account messaging",
+      "commands": [],
+      "status": "requires-login",
+      "reason": "User reports logged out; messaging unmapped and sending excluded."
+    },
+    {
+      "id": "publishing",
+      "description": "Capture, upload and publish",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Publishing, uploads and permission grants excluded and unmapped."
+    },
+    {
+      "id": "live",
+      "description": "Live-stream browsing",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "No live navigation or target witness established."
+    },
+    {
+      "id": "downloads",
+      "description": "Download content",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Saving files and granting permissions excluded."
+    },
+    {
+      "id": "settings",
+      "description": "Settings",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Settings navigation unimplemented; changes excluded."
+    },
+    {
+      "id": "commerce",
+      "description": "Commerce and purchases",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Commerce actions excluded and screens unmapped."
+    },
+    {
+      "id": "account.login",
+      "description": "Account authentication",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Login, credentials and agreements require native user interaction; no automatic command exposed."
+    },
+    {
+      "id": "native.lowlevel",
+      "description": "Generic tap, swipe and back",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "No generic escape hatch exposed; mapped controls do not imply universal coverage."
+    }
+  ]
+}

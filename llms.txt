@@ -2,8 +2,8 @@
 
 Purpose: analyze applications with REA, author semantic adapters, compile per-app CLIs, execute and verify.
 
-Discover: `app2cli --help`, `app2cli list`, `<app>-cli --schema`.
-Generate: `app2cli generate <url|apk> --out <new-run-dir> [--id name] [--goal text]`. Requires authenticated Codex CLI and REA. Performs real tests and bounded repairs; no bundled adapter lookup. Current test contract is reversible value/content replacement. See docs/generation.md.
+Discover: `app2cli --help`, `app2cli list`, `<app>-cli --schema`, `<app>-cli --capabilities`.
+Generate: `app2cli generate <url|apk> --out <new-run-dir> [--id name] [--goal text]`. Requires authenticated Codex CLI and REA. Performs real tests and bounded repairs; no bundled adapter lookup. Test contracts: reversible value/content replacement, or Android multi-screen navigation with --scenario android-journey. Navigation restores a declared screen, not exact feed/history state. Capability declarations and actual accepted scenarios are separate. See docs/generation.md.
 Reverify: `app2cli verify <completed-run-dir> --out <new-report-dir>` against the original live session, without another model call.
 Analyze: `app2cli inspect web <owned-cdp-url> --target <id> --out <evidence-dir>` or `app2cli inspect android <apk> --class <class> --method <method> --out <evidence-dir>`.
 Draft: `app2cli scaffold --id <id> --evidence <dir> --out <new-adapter-dir>`.
@@ -16,3 +16,5 @@ All command results are JSON on stdout; progress is stderr. Read schemas before 
 Build success does not prove runtime success. Verify actual application effects and preserve unrelated data. Report verification levels accurately: native-ui-readback, reload-persisted, and server-confirmed are different evidence standards. Current bundled examples: TodoMVC Web and Fossify Calculator Android. The generator is not guaranteed to cover arbitrary apps; iOS, desktop and Android internal-method invocation are not implemented.
 
 Recorded unseen-app generations: Dillinger from a live URL and Editor 1.98 from an APK. See docs/generation-acceptance.json and docs/android-generation-acceptance.json. Generated source is preserved under examples/, not selected by the generator. The independent observer checks the native baseline, dry-run, mutation and restoration; Android snapshots include hierarchy hashes and a supporting screenshot. Android buffer readback is not file persistence.
+
+Douyin Android experiment: docs/douyin-android.md and docs/douyin-android-acceptance.json. Generated extension source: examples/douyin-generated/. Logged-out browsing/search only, pinned APK 32.2.6. Use --capabilities to distinguish declared features from concrete accepted scenarios. Native UI execution does not establish a recovered private API or complete app coverage. One test-oracle correction was explicitly reviewed, not hidden as automatic repair.

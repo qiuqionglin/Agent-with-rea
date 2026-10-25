@@ -30,3 +30,20 @@ test('cross-process lock ownership is exclusive',async t=>{const f=await fixture
 test('compiler rejects tampered evidence bytes',async t=>{const f=await fixture(t);await writeFile(join(f.root,'raw.json'),'{}');await assert.rejects(build(f.root,{evidence:f.root,out:join(f.root,'package')}),{code:'EVIDENCE_MISMATCH'});});
 test('compiler emits an independent CLI with a frozen adapter digest',async t=>{const f=await fixture(t);const result=await build(f.root,{evidence:f.root,out:join(f.root,'package')});assert.equal(result.runtimeVerified,false);const help=await runAppCli(join(result.output,'adapters/fixture'),['--schema'],result.adapterDigest);assert.equal(help.app,'fixture');await writeFile(join(result.output,'adapters/fixture/adapter.mjs'),'export default {};');await assert.rejects(runAppCli(join(result.output,'adapters/fixture'),['--schema'],result.adapterDigest),{code:'ADAPTER_CHANGED'});});
 test('schema-driven flags preserve types and reject duplicate values',()=>{const {positional,flags}=parseArgs(['--dry-run','set','--value','3']);assert.deepEqual(positional,['set']);assert.equal(flags['dry-run'],true);const c={inputSchema:{properties:{value:{type:'integer'}}}};assert.deepEqual(commandInput(c,flags),{value:3});assert.throws(()=>parseArgs(['--value','2','--value','3']),{code:'INVALID_INPUT'});});
+test('capability inventory stays separate from concrete acceptance and rejects a mismatched digest',async t=>{
+  const f=await fixture(t);f.manifest.capabilities=[{id:'read-value',description:'Fixture read',commands:['read'],status:'implemented-unverified',reason:'Declaration only'}];
+  await writeJson(join(f.root,'adapter.json'),f.manifest);
+  const result=await build(f.root,{evidence:f.root,out:join(f.root,'package')}),dir=join(result.output,'adapters/fixture');
+  const before=await runAppCli(dir,['--capabilities']);assert.equal(before.acceptance,null);assert.equal(before.capabilities[0].status,'implemented-unverified');
+  await writeJson(join(result.output,'acceptance.json'),{adapterDigest:result.adapterDigest,scenarios:[{command:'read',input:{},verified:true}]});
+  const after=await runAppCli(dir,['--capabilities']);assert.equal(after.acceptance.scenarios.length,1);assert.equal(after.capabilities[0].status,'implemented-unverified');
+  await writeJson(join(result.output,'acceptance.json'),{adapterDigest:'wrong'});
+  await assert.rejects(runAppCli(dir,['--capabilities']),{code:'ADAPTER_CHANGED'});
+});
+test('capabilities cannot invent commands or promote themselves to tested',async t=>{
+  const f=await fixture(t);
+  f.manifest.capabilities=[{id:'fake-command',description:'No implementation',commands:['missing'],status:'implemented-unverified',reason:'Fixture'}];
+  await writeJson(join(f.root,'adapter.json'),f.manifest);await assert.rejects(loadAdapter(f.root),{code:'INVALID_ADAPTER'});
+  f.manifest.capabilities[0].commands=['read'];f.manifest.capabilities[0].status='verified';
+  await writeJson(join(f.root,'adapter.json'),f.manifest);await assert.rejects(loadAdapter(f.root),{code:'INVALID_ADAPTER'});
+});

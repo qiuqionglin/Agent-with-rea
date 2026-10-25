@@ -71,12 +71,12 @@ It creates a separate test copy whose dispatch does nothing and whose postcondit
 
 ## Bounds and failures
 
-- `--max-attempts` defaults to 4 and accepts 1–8 rounds. Read-only probes consume rounds too.
+- `--max-attempts` defaults to 4 and accepts 1–8 rounds for value replacement or 1–16 for Android journeys. Source and navigation probes consume rounds too.
 - `--agent-timeout` defaults to 600000 milliseconds per call and is bounded to 30 minutes.
 - `--agent-model` and `--agent-effort` optionally select this run's Codex model and reasoning effort. Omit them to keep configured defaults. `--codex-ignore-config` skips the user Codex configuration for this invocation while still using its existing login; it can help isolate a broken custom provider/proxy. These options never edit global configuration. Invocation metadata is saved per attempt.
 - CLI subprocesses, independent observations and REA analyses have separate time bounds.
 - An existing output directory is rejected. Every run/attempt preserves its own evidence, candidate and raw subprocess outputs.
-- A stopped run can continue with the same command plus `--resume`. The target and evidence hashes must match, and the run must have no restoration uncertainty. Prior attempts and the random challenge remain unchanged. Increase `--max-attempts` if its earlier budget was exhausted (maximum 8).
+- A stopped run can continue with the same command plus `--resume`. The target, scenario type and evidence hashes must match, and the run must have no restoration uncertainty. Prior attempts and the random challenge remain unchanged. Increase `--max-attempts` if its earlier budget was exhausted (maximum 8, or 16 for Android journeys).
 - Repair cannot change the frozen objective or lower the witness comparison. Failure to restore the baseline stops automatic mutations.
 - Auth/provider failures, unavailable devices, mapping blockers and exhausted attempts return nonzero exit codes and retain a failure report. No automatic account/model switching occurs.
 - A timed-out authoring call feeds its saved native trace into the next bounded attempt. Syntax checks run in the outer runner, not in agent-authored shell commands.
@@ -90,3 +90,88 @@ REA 6.7.0 can return a browser script whose retained text fails its own declared
 On macOS, REA's Swift process helper requires a compatible installed SDK. If the current command-line tool SDK fails to compile the helper, explicitly select a compatible installed SDK with `SDKROOT` for the invocation. The generator does not change system-wide Xcode settings or disable process-ownership checks.
 
 Keep `.local/` private. It can contain application content, source captures, agent traces, browser profiles, device details and execution journals. Only sanitized acceptance summaries should be committed. Do not upload an entire run directory to a public repository.
+
+## Android navigation journeys
+
+Use `--scenario android-journey` for a multi-screen Android application. The
+agent returns a v2 plan with a declared starting screen, 2–20 navigation steps,
+and a cleanup screen. Every step has exact native attribute predicates. The
+runner checks that the target is initially absent, that dry-run preserves the
+prior screen, and that independent Android dumps confirm the transition,
+fresh-process read and replay. It rejects a deliberately lying no-op adapter.
+Cleanup returns to the declared screen; it does not restore the feed item,
+search history or backend state. Automatic journeys exercise navigation only.
+
+The author can request `android-observe` and `android-navigate` probes. Navigation
+is restricted to a caller-owned JSON allowlist passed with `--navigation-probes`:
+
+```json
+[
+  {"action":"tap","selector":{"content-desc":"Search"}},
+  {"action":"back"}
+]
+```
+
+Use exact labels from the current UI. This allowlist is authorization for a
+bounded exploration, not a reusable application recipe or test result. A new
+label must be reviewed in context before adding it. Login, agreement acceptance,
+permissions, posting, messaging and transactions are outside automatic probes.
+The generator cannot add actions to its own allowlist.
+
+`--analysis-evidence <dir>` reuses successful REA output only after checking every
+raw output digest and matching its subject SHA-256 to the input APK. It does not
+skip version checks on the installed app. Large APKs can use
+`REA_JADX_HEAP_MIB`, `REA_JADX_OPERATION_TIMEOUT_MS` and
+`APP2CLI_REA_TIMEOUT_MS` (outer deadline, 1000–1800000 ms). Increase these per run
+within the host's memory budget; no universal APK-size bound is claimed.
+
+Generated CLIs accept `--capabilities` without a device connection. The returned
+catalog distinguishes implemented but unverified features, login/user-action
+requirements and unsupported features. The separate digest-bound
+`acceptance.json` lists only the scenarios actually exercised by the runner.
+Neither a command name nor one passing input establishes complete feature coverage.
+
+For optional Unicode EditText input, create a Python environment with
+`uiautomator2==3.7.1` and set `APP2CLI_UIAUTOMATOR_PYTHON` to its Python executable.
+`inputText()` selects one enabled non-password native EditText, uses accessibility
+text input, stops its helper server and independently reads the resulting text.
+It does not switch keyboards. It requires an already authorized ADB device;
+helper installation/first startup is a separate environment prerequisite. This
+backend extends the runtime prerequisites of CLIs that use text input; it is not
+needed by the existing Editor/Calculator examples.
+
+With the optional native backend selected, hierarchy reads also use a short-lived
+UiAutomator2 connection with idle waiting disabled. This handles continuously
+animated screens such as playing video feeds. Both adapter reads and the
+independent observer share the native driver, but the observer never imports the
+adapter, its result function or its asserted state.
+
+
+To extend a successfully generated Android adapter, pass `--seed <passed-run>`
+with the same APK and app ID. The runner verifies its original result, adapter
+digest and APK hash, then exposes an unchanged copy as explicit extension input.
+This is not a new unseen-app experiment. `--require-step search.submit` requires
+the new journey to exercise that command, so merely declaring it or opening an
+input cannot satisfy the requested scope. The command's native postcondition
+still needs review: a command name alone is not semantic proof.
+
+The exploration allowlist also accepts fixed text actions such as
+`{"action":"text","selector":{"resource-id":"app:id/query"},"text":"西湖风景"}`.
+Only that exact literal and selector are permitted by a probe; the native helper
+rejects password fields. The caller should only list non-sensitive public search
+queries. Each successful probe refreshes the observation used in the next round.
+Journey tests retain a separate `test-progress.json` after each completed step;
+an interrupted progress file is never a passing result.
+
+
+If independent evidence proves that the generated test oracle itself was wrong,
+`--reviewed-plan <file>` accepts a caller-reviewed v2 plan explicitly. It archives
+the previous objective, hashes the reviewed plan, and requires exact preservation
+in every later candidate/resume. This is a recorded reviewer intervention, not
+automatic repair. Do not use it to remove a failed product requirement. A changed
+selector must retain the intended operation, native result and content checks.
+
+Custom touch controls can be allowlisted with `action: "touch"`. Unlike `tap`,
+this explicit operation uses an enabled unique element's freshly read bounds
+without requiring its `clickable` accessibility flag; native postconditions are
+still required. Updated caller allowlists on resume are recorded separately.

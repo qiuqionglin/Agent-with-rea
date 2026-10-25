@@ -8,6 +8,7 @@ An adapter directory contains `adapter.json` and `adapter.mjs`. Use `app2cli sca
 - `platform`: `web` or `android` in v1.
 - `config`: application pins and driver settings; do not store account credentials or personal device settings here.
 - `commands`: description, `readOnly` and an object JSON Schema for each command.
+- Optional `capabilities`: feature descriptions, declared command IDs and explicit implementation/login/user-action/unsupported status. Authors cannot label a capability verified; a separate digest-bound `acceptance.json` records the concrete tests that actually passed.
 - `analysis`: authored recipe description and exact claims to find in raw REA evidence.
 - `verification`: the strongest level the adapter actually implements. Current example levels are `reload-persisted` and `native-ui-readback`. `server-confirmed` is reserved for implementations that inspect real backend responses and perform independent backend reads.
 
