@@ -8,7 +8,9 @@
     "schemaVersion": {"const": 1},
     "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,48}$"},
     "description": {"type": "string", "minLength": 1},
-    "platform": {"enum": ["web", "android"]},
+    "platform": {"enum": ["web", "android", "api"]},
+    "transport": {"enum": ["http", "browser-api", "browser-function", "native-ui"]},
+    "fallbackReason": {"type":"string","minLength":1},
     "verification": {"enum": ["reload-persisted", "native-ui-readback", "server-confirmed"]},
     "config": {"type": "object"},
     "capabilities": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["id","description","commands","status","reason"],"properties":{"id":{"type":"string","pattern":"^[a-z][a-z0-9.-]+$"},"description":{"type":"string"},"commands":{"type":"array","uniqueItems":true,"items":{"type":"string"}},"status":{"enum":["implemented-unverified","requires-login","requires-user-action","unsupported"]},"reason":{"type":"string","minLength":1}}}},
@@ -19,7 +21,7 @@
       "additionalProperties": {
         "type": "object", "additionalProperties": false,
         "required": ["description", "readOnly", "inputSchema"],
-        "properties": {"description": {"type": "string"}, "readOnly": {"type": "boolean"}, "inputSchema": {"type": "object"}}
+        "properties": {"description": {"type": "string"}, "readOnly": {"type": "boolean"}, "inputSchema": {"type": "object"}, "transport":{"enum":["http","browser-api","browser-function","native-ui"]}}
       }
     }
   }

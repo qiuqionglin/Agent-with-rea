@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "producer": "Public projection of actual local acceptance; not raw REA or model trajectory",
+  "verifiedAt": "2026-10-25T08:35:37.478Z",
+  "unitAndProtocolTests": {
+    "passed": 47,
+    "liveBackendEvidence": false
+  },
+  "http": {
+    "target": "https://restful-booker.herokuapp.com",
+    "targetType": "Public API testing playground, not production reservations",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "transport": "http",
+    "browserUsed": false,
+    "finalGeneration": {
+      "status": "passed",
+      "rounds": 1,
+      "checks": [
+        {
+          "name": "Generated CLI schema",
+          "passed": true
+        },
+        {
+          "name": "Dry run preserves application state",
+          "passed": true
+        },
+        {
+          "name": "Mutation and runtime fresh readback",
+          "passed": true
+        },
+        {
+          "name": "Independent server GET and unrelated-field preservation",
+          "passed": true
+        },
+        {
+          "name": "Separate CLI process reads actual value",
+          "passed": true
+        },
+        {
+          "name": "Request replay is deduplicated",
+          "passed": true
+        },
+        {
+          "name": "Stale revision is rejected",
+          "passed": true
+        },
+        {
+          "name": "Original application content restored",
+          "passed": true
+        }
+      ],
+      "restored": true,
+      "adapterDigest": "d9bbc02a8aba14a90b8836a374927656a0b1103577ff715649ee14cab374c308",
+      "manualAdapterEdits": false,
+      "authoring": "Agent inferred declarative API contract and selected shared HTTP resource adapter factory"
+    },
+    "repeatVerification": {
+      "status": "passed",
+      "checks": 8,
+      "restored": true
+    },
+    "negativeControl": {
+      "fault": "dispatch returns success without effect and matches always returns true",
+      "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+      "restored": true
+    },
+    "outsideRepositoryInstall": {
+      "ok": true,
+      "packageSha256": "483502b2e80b7493ed5a8491d14069e641ed72f064a56dac06d1819d41cf5d59",
+      "checks": [
+        "Standalone package installation",
+        "CLI read matches independent server GET",
+        "CLI update confirmed by independent server GET including unchanged fields",
+        "Full resource restoration confirmed"
+      ],
+      "restored": true,
+      "reaInstalled": false,
+      "browserUsed": false
+    },
+    "developmentFailures": {
+      "firstAuthoringAttemptTimeouts": 2,
+      "thirdAuthoringAttemptStoppedToUseSharedFactory": true,
+      "earlierCompactRun": {
+        "status": "failed",
+        "passedChecksBeforeFailure": 7,
+        "restorationConfirmed": false,
+        "failure": "Shared playground reset the resource during restoration; subsequent independent GET returned 404. Original failure retained, no automatic repair/resume after restoration failure."
+      },
+      "resolution": "Created a new owned test resource and ran a new complete generation; no candidate source was manually patched."
+    },
+    "limitations": [
+      "One top-level string-field resource replacement",
+      "Environment-bound header auth; no token refresh or generic pagination",
+      "Captured HAR and owned-resource API case are caller inputs; arbitrary URL/APK-only API discovery is not implemented",
+      "Shared public backend can reset or reuse IDs; ownership guards are retained"
+    ]
+  },
+  "douyinBrowserApi": {
+    "ok": true,
+    "adapterDigest": "e7a9e5f0ef7b9d1d6a5ceca763e3afc0a2983dcdf551d9cc18d94eb670cf3702",
+    "transport": "browser-api",
+    "authoring": "reviewed migration, not automatic generation",
+    "authenticated": true,
+    "itemCount": 0,
+    "cliReads": 2,
+    "independentNetworkHashMatch": true,
+    "networkResponses": 4,
+    "uiActions": 0,
+    "mutations": 0,
+    "requiresBrowser": true,
+    "verifiedAt": "2026-10-25T08:25:23.044Z"
+  },
+  "douyinLimits": [
+    "Read-only account confirmation and bounded collections list",
+    "Live collection list was empty; nonempty parsing and pagination are not accepted coverage",
+    "Uses original browser client request chain; no independent signature reimplementation",
+    "No Android API transport or all-operations coverage claimed"
+  ],
+  "cleanup": {
+    "ok": true,
+    "reports": [
+      {
+        "label": "initial",
+        "state": "already-absent",
+        "deleted": false
+      },
+      {
+        "label": "expired-generation",
+        "state": "already-absent",
+        "deleted": false
+      },
+      {
+        "label": "driver",
+        "state": "already-absent",
+        "deleted": false
+      },
+      {
+        "label": "final-generation",
+        "state": "deleted-own-restored-fixture",
+        "deleted": true,
+        "readbackStatus": 404
+      }
+    ],
+    "verifiedAt": "2026-10-25T08:36:17.573Z"
+  },
+  "privacy": "No credentials, account IDs, cookies, signed query strings, personal responses, raw HAR or private model traces included"
+}

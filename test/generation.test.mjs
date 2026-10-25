@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp,rm,readFile,writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname } from 'node:path';
-import { generate } from '../lib/generate.mjs';
+import { generate as generateRaw } from '../lib/generate.mjs';
+const generate=(target,flags,deps)=>generateRaw(target,{'allow-ui-fallback':true,...flags},deps);
 import { validatePlan,atPath,replaceValue } from '../lib/generation-test.mjs';
 import { runProcess } from '../lib/process.mjs';
 import { hash,writeJson,readJson,AppError } from '../lib/sdk.mjs';
@@ -15,7 +16,7 @@ import { checkBrowser } from '../lib/web.mjs';
 async function setup(t){
   const directory=await mkdtemp(join(tmpdir(),'app2cli-generation-test-'));t.after(()=>rm(directory,{recursive:true,force:true}));
   const out=join(directory,'run'),calls=[];
-  const manifest={schemaVersion:1,id:'unseen-fixture',description:'Generation fixture',platform:'web',verification:'reload-persisted',config:{},analysis:{recipe:'Fixture only',claims:[{operation:'fixture_analysis',contains:'fixture-only'}]},commands:{read:{description:'Read',readOnly:true,inputSchema:{type:'object',properties:{},additionalProperties:false}},set:{description:'Set',readOnly:false,inputSchema:{type:'object',properties:{text:{type:'string'}},required:['text'],additionalProperties:false}}}};
+  const manifest={schemaVersion:1,id:'unseen-fixture',description:'Generation fixture',fallbackReason:'Protocol fixture uses an explicit fallback, not API evidence',platform:'web',verification:'reload-persisted',config:{},analysis:{recipe:'Fixture only',claims:[{operation:'fixture_analysis',contains:'fixture-only'}]},commands:{read:{description:'Read',readOnly:true,inputSchema:{type:'object',properties:{},additionalProperties:false}},set:{description:'Set',readOnly:false,inputSchema:{type:'object',properties:{text:{type:'string'}},required:['text'],additionalProperties:false}}}};
   const deps={
     prepare:async({evidence,out})=>{
       const raw={operation:'fixture_analysis',normalized_result:{note:'fixture-only'}},bytes=JSON.stringify(raw);
@@ -37,6 +38,14 @@ test('real validator failures are fed to a new generation round, then success is
   const result=await generate('https://fixture.invalid/',{id:'unseen-fixture',out:f.out},f.deps);
   assert.equal(result.rounds,2);assert.equal(result.repairs,1);assert.match(f.calls[1],/Native display is unchanged/);
   assert.equal((await readJson(join(f.out,'generation.json'))).attempts[0].status,'failed');
+});
+test('API-first policy refuses silent UI fallback and an unsupported API label',async t=>{
+  const f=await setup(t);let tests=0;f.deps.test=async()=>{tests++;return {status:'passed',checks:[]};};
+  await assert.rejects(generateRaw('https://fixture.invalid/',{id:'unseen-fixture',out:f.out,'max-attempts':1},f.deps),{code:'GENERATION_EXHAUSTED'});
+  assert.equal(tests,0);assert.equal((await readJson(join(f.out,'generation.json'))).attempts[0].error.code,'API_MAPPING_REQUIRED');
+  const g=await setup(t);g.manifest.transport='browser-api';
+  await assert.rejects(generateRaw('https://fixture.invalid/',{id:'unseen-fixture',out:g.out,'max-attempts':1},g.deps),{code:'GENERATION_EXHAUSTED'});
+  assert.equal((await readJson(join(g.out,'generation.json'))).attempts[0].error.code,'API_EVIDENCE_REQUIRED');
 });
 test('successful navigation probes refresh the next observation and probe failures are not adapter repairs',async t=>{
   const f=await setup(t),author=f.deps.agent;let calls=0,screen='before';

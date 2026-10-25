@@ -12,8 +12,14 @@ flowchart LR
   Raw --> Build
   Build --> CLI[Independent application CLI]
   CLI --> Runtime[Shared runtime]
-  Runtime --> Web[Native browser functions]
+  Runtime --> HTTP[Direct HTTP API]
+  Runtime --> Bridge[Original client API bridge]
+  Runtime --> Web[Explicit browser-function fallback]
   Runtime --> Android[Android native UI]
+  HTTP --> Server[Independent server GET]
+  Bridge --> Network[Observed backend response]
+  Server --> Audit
+  Network --> Audit
   Web --> Readback[Application readback]
   Android --> Readback
   Readback --> Audit[Private audit and request journal]
@@ -52,9 +58,10 @@ An outcome reserved before dispatch but not verified stays uncertain. It cannot 
 | --- | --- | --- |
 | Browser native functions | Implemented and tested | Invoke existing application functions through a selected CDP page |
 | Android UI | Implemented and tested | Version-pinned APK, exported launcher, native resource-ID actions and UI readback |
-| Signed-in Web backend | Proven in an earlier local Douyin experiment, not packaged here | Browser retains authentication and the original request chain; server responses need dedicated verification |
+| Direct HTTP API | Implemented | Observed HAR + owned-resource contract; auth environment binding, schema checks, direct requests, independent GET |
+| Signed-in Web backend | Read-only driver and Douyin example implemented | Original request/signing chain; pinned source bytes, account guard, actual network response proof; still needs browser |
 | Android internal methods / Frida | Planned | Requires a separate runtime driver, method mapping and real acceptance evidence |
-| Official HTTP API, desktop, iOS | Planned | Interface permits plugins; these transports are not implemented |
+| Desktop, iOS | Planned | Interface permits plugins; these transports are not implemented |
 
 REA supports more analysis targets than this repository currently supports for execution. Analysis coverage and operational coverage must be reported separately.
 

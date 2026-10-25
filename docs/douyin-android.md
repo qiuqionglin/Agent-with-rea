@@ -52,7 +52,7 @@ export APP2CLI_REA_TIMEOUT_MS=630000
 
 Choose memory limits appropriate to the host. The experiment used remote REA analysis and local native execution; remote execution is an environment transport, not a requirement of the generated CLI. Do not put server credentials, cookies or account tokens in adapter configuration.
 
-Use `app2cli generate <apk> --scenario android-journey` and a reviewed navigation-probe allowlist. See [generation](generation.md) for `--analysis-evidence`, `--seed` and `--require-step`. A new first-time run still needs to discover its own controls; the generator does not choose this example by package name.
+Use `app2cli generate <apk> --allow-ui-fallback --scenario android-journey` and a reviewed navigation-probe allowlist. See [generation](generation.md) for `--analysis-evidence`, `--seed` and `--require-step`. A new first-time run still needs to discover its own controls; the generator does not choose this example by package name.
 
 APK bytes, decompiled methods, raw model logs, native dumps, account state and test runtime directories are excluded from the repository. Only generated adapter source and sanitized acceptance metadata are intended for publication.
 

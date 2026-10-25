@@ -20,7 +20,7 @@ Then supply that APK to the common generator. Set `JAVA_HOME`, `REA_JADX_MCP_JAR
 
 ```bash
 node bin/app2cli.mjs generate .local/android/editor-1.98.apk \
-  --id editor --out .local/generate/editor \
+  --allow-ui-fallback --id editor --out .local/generate/editor \
   --serial emulator-5554 --install --max-attempts 8 \
   --agent-model gpt-6.1-sol --agent-effort high \
   --goal "Read and replace the current text buffer through the original native app controls, verify the actual native editor text, and restore the original content. Choose a nontrivial ASCII test value, preserve unrelated state, and ground the mapping in REA class or method source."

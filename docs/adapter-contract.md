@@ -5,12 +5,12 @@ An adapter directory contains `adapter.json` and `adapter.mjs`. Use `app2cli sca
 ## Manifest
 
 - `id`: portable lowercase CLI/package identifier.
-- `platform`: `web` or `android` in v1.
+- `platform`: `web`, `android`, or `api` in v1. `api` requires `transport: "http"`.
 - `config`: application pins and driver settings; do not store account credentials or personal device settings here.
 - `commands`: description, `readOnly` and an object JSON Schema for each command.
 - Optional `capabilities`: feature descriptions, declared command IDs and explicit implementation/login/user-action/unsupported status. Authors cannot label a capability verified; a separate digest-bound `acceptance.json` records the concrete tests that actually passed.
 - `analysis`: authored recipe description and exact claims to find in raw REA evidence.
-- `verification`: the strongest level the adapter actually implements. Current example levels are `reload-persisted` and `native-ui-readback`. `server-confirmed` is reserved for implementations that inspect real backend responses and perform independent backend reads.
+- `verification`: the strongest level the adapter actually implements. Current example levels are `reload-persisted` and `native-ui-readback`. `server-confirmed` is used by the direct HTTP driver with fresh server reads and the reviewed browser API bridge with real response observation. Generation acceptance separately requires independent GET for HTTP writes.
 
 Command IDs can contain dots. `todos.create` is exposed as either `todos.create` or `todos create`. Simple inputs become named flags; use `--input` for nested JSON. Every compiled adapter carries a frozen digest checked before execution.
 
@@ -49,7 +49,7 @@ Android controls may change resource IDs when their mode changes. Read a new hie
 1. Inspect the selected page/APK with REA and retain original evidence.
 2. Read the relevant source, manifest, method and runtime findings. Record uncertainty.
 3. Select a small meaningful capability and define its input and output semantics.
-4. Map to existing native functions, exported interfaces, or native controls. Declare the chosen transport.
+4. Prefer observed HTTP endpoints or original client request exports. Declare `transport` on the adapter and commands; API generation requires REA-inspected network evidence. UI/native-function generation needs explicit caller fallback and a `fallbackReason`.
 5. Pin the source/APK and verify the current session before each invocation.
 6. Write readback conditions that distinguish an acknowledgement from an actual effect.
 7. Build against the original analysis; the generated package remains runtime-unverified.
@@ -61,3 +61,5 @@ Android controls may change resource IDs when their mode changes. Read a new hie
 `INVALID_INPUT`, `UNKNOWN_COMMAND`, `SESSION_REQUIRED`, `SESSION_BUSY`, `SESSION_CHANGED`, `VERSION_DRIFT`, `STALE_STATE`, `IDEMPOTENCY_CONFLICT`, `OUTCOME_UNCERTAIN`, `VERIFICATION_FAILED`, `CONFIRMATION_FAILED`, `EVIDENCE_MISMATCH`, `MAPPING_REQUIRED` and `ADAPTER_CHANGED` are machine-readable recovery signals.
 
 Exit status 2 denotes invalid input/contract; 3 environment/session problems; 4 state or version conflict; 5 failed verification; 6 uncertain dispatch. Unexpected internal errors use 1. A caller must inspect the error, not retry all nonzero exits indiscriminately.
+
+HTTP helpers live in `lib/http.mjs`: `connectHttp`, `httpTargetKey`, `httpUrl`, `requestHttp`. Auth is an environment-bound header; origin-relative operation paths can use `{parameter}` values from separately declared resource environment variables. Callers must preserve auth/session scope and unrelated resource fields. See [API-first](api-first.md) for the supported case and failure contract.

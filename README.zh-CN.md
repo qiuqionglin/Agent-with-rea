@@ -16,6 +16,14 @@ Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收�
 
 抖音 Android 也已完成未登录浏览/搜索实验：从官方页面的 APK 经 REA 分析生成基础适配器，再自动扩展为 10 个 CLI 命令，最终多页面场景通过 **23/23 原生检查**。包括中文搜索提交、实际结果读取和首页恢复。一次输入页资源 ID 复用导致的错误验收条件经过显式复核，原始失败和修订记录均保留；这不是全程无人干预或“覆盖抖音所有操作”的证明。见 [抖音实验与边界](docs/douyin-android.md)、[验收摘要](docs/douyin-android-acceptance.json) 和 [生成代码](examples/douyin-generated/README.md)。
 
+## API 优先
+
+默认生成策略已改为 API 优先。提供真实 HAR 和调用方拥有的测试资源契约时，REA 分析网络证据，Agent 生成直接 HTTP CLI，测试器另发 GET 验证修改和恢复。鉴权值只在运行环境中注入。未找到可验证 API 时明确停止；旧的浏览器函数 / Android UI 路线必须显式传 `--allow-ui-fallback`。
+
+已在 Restful Booker 真实公共测试后端完成自动生成：最终运行首个候选通过 8/8 检查，实际执行 PATCH、独立 GET 并恢复原记录。此前公共后端重置导致的恢复失败单独保留，未计作通过。见 [API 验收记录](docs/api-first-acceptance.json) 和 [未经手改的生成契约](examples/booker-api-generated/README.md)。
+
+另有只读的抖音 Web API 桥接样例：调用原客户端请求模块，复用浏览器登录态和签名链，并检查实际后端响应。它依赖浏览器，当前只覆盖账号确认与收藏夹列表读取。详见 [API 路线、复现和边界](docs/api-first.md)。
+
 ## 工作流程
 
 `网址 / APK → REA 分析 → Agent 生成适配器 → 独立 CLI → 真实调用和独立回读 → 失败反馈给 Agent 修复`
@@ -25,7 +33,7 @@ Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收�
 - **CLI 生成器**：核对证据与适配包，生成可单独安装的 npm 包。
 - **通用运行时**：参数检查、会话范围、状态版本、跨进程锁、请求去重、私有审计和结果验证。
 - **自动生成循环**：实际调用已登录的 Codex CLI；Agent 进程只读证据，运行器执行调用方允许的导航探查和候选代码测试。每轮保存输入、原始输出和真实失败，默认最多 4 轮。
-- **独立测试器**：Web 刷新页面后直接读取 DOM，Android 重新抓取原生 UI 层级；观察过程不调用适配器的结果函数。恢复原始状态失败时停止继续修改。
+- **独立测试器**：HTTP 另发 GET 并核对非目标字段、原始资源恢复；Web 刷新页面后直接读取 DOM，Android 重新抓取原生 UI 层级；观察过程不调用适配器的结果函数。恢复原始状态失败时停止继续修改。
 
 ## 自动生成
 
@@ -33,7 +41,7 @@ Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收�
 
 ```bash
 node bin/app2cli.mjs generate https://dillinger.io/ \
-  --id dillinger --out .local/generate/dillinger \
+  --allow-ui-fallback --id dillinger --out .local/generate/dillinger \
   --goal "读取和替换当前 Markdown 文档，刷新后检查预览并恢复原文"
 ```
 
@@ -41,7 +49,7 @@ node bin/app2cli.mjs generate https://dillinger.io/ \
 
 ```bash
 node bin/app2cli.mjs generate /path/to/application.apk \
-  --id my-app --serial emulator-5554 --install --out .local/generate/android
+  --allow-ui-fallback --id my-app --serial emulator-5554 --install --out .local/generate/android
 ```
 
 Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设备中不存在的包；现有安装包哈希不一致时会拒绝覆盖。未适配的 Editor APK 已完成真实自动生成验收；这仍不能推断为覆盖任意 APK、任意功能。

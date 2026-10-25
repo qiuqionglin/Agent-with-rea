@@ -21,6 +21,6 @@ node bin/app2cli.mjs build examples/dillinger-generated --evidence .local/eviden
 node dist/dillinger/cli.mjs --schema
 ```
 
-For a new automatic attempt, use `app2cli generate https://dillinger.io/ --out .local/new-dillinger`; no existing recipe is selected. The recorded acceptance covers a particular random plain-text replacement and restoration of the initial Markdown document. It is not exhaustive testing of arbitrary Markdown edge cases or all Dillinger features.
+For a new automatic attempt, use `app2cli generate https://dillinger.io/ --allow-ui-fallback --out .local/new-dillinger`; no existing recipe is selected. The recorded acceptance covers a particular random plain-text replacement and restoration of the initial Markdown document. It is not exhaustive testing of arbitrary Markdown edge cases or all Dillinger features.
 
 See [generation acceptance](../../docs/generation-acceptance.json) and [generation guide](../../docs/generation.md). Private raw REA output, model traces, browser profiles and journals remain outside the published repository. `provenance.json` records their hashes without claiming that this summary is a native trace.

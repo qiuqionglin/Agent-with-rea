@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "id": "booker-api",
+  "description": "Read and replace additionalneeds on the caller-owned booking resource.",
+  "platform": "api",
+  "transport": "http",
+  "verification": "server-confirmed",
+  "commands": {
+    "resource.read": {
+      "description": "Read the current resource with a fresh HTTP GET.",
+      "readOnly": true,
+      "transport": "http",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "resource.set": {
+      "description": "Replace additionalneeds while preserving all other server fields.",
+      "readOnly": false,
+      "transport": "http",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "analysis": {
+    "recipe": "Capture ordinals 1–5 show GET, field-only PATCH, confirming GET, restoring PATCH and confirming GET. Use the caller's origin, credential environment binding, resource parameter mapping and ownership assertions. The shared HTTP factory checks a fresh baseline, dispatches once and verifies the complete expected resource through fresh GETs. Scope is the configured HTTP session and resource; user identity is not established.",
+    "claims": [
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "PATCH"
+      },
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "observed-api-update"
+      },
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "additionalneeds"
+      }
+    ]
+  },
+  "config": {
+    "baseUrl": "https://restful-booker.herokuapp.com",
+    "auth": {
+      "type": "header",
+      "header": "cookie",
+      "env": "APP2CLI_API_TOKEN",
+      "prefix": "token="
+    },
+    "parameters": {
+      "bookingId": "APP2CLI_BOOKING_ID"
+    },
+    "field": "additionalneeds",
+    "owner": {
+      "firstname": "REAAPI",
+      "lastname": "test-d9b24dd4-a6f"
+    },
+    "updateMode": "field-patch",
+    "operations": {
+      "observe": {
+        "method": "GET",
+        "path": "/booking/{bookingId}",
+        "statuses": [
+          200
+        ],
+        "responseSchema": {
+          "type": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "additionalneeds"
+          ],
+          "properties": {
+            "firstname": {
+              "type": "string"
+            },
+            "lastname": {
+              "type": "string"
+            },
+            "additionalneeds": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "update": {
+        "method": "PATCH",
+        "path": "/booking/{bookingId}",
+        "statuses": [
+          200
+        ],
+        "responseSchema": {
+          "type": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "totalprice",
+            "depositpaid",
+            "bookingdates",
+            "additionalneeds"
+          ],
+          "properties": {
+            "firstname": {
+              "type": "string"
+            },
+            "lastname": {
+              "type": "string"
+            },
+            "totalprice": {
+              "type": "number"
+            },
+            "depositpaid": {
+              "type": "boolean"
+            },
+            "bookingdates": {
+              "type": "object",
+              "required": [
+                "checkin",
+                "checkout"
+              ],
+              "properties": {
+                "checkin": {
+                  "type": "string"
+                },
+                "checkout": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalneeds": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -14,6 +14,10 @@ URL / APK → REA evidence → agent → adapter → CLI → real-app test + ind
 
 The generator does not look up an application in the bundled adapter list. It tests reversible value/content replacement and Android navigation journeys with independent native predicates. These bounded tests do not cover every capability of an arbitrary app. An application may require login, lack accessible source/UI, or have no supported reversible operation; those cases fail explicitly. Analysis candidates and successful builds alone are not execution proof.
 
+## API-first generation
+
+Generation now defaults to refusing implicit UI fallback. A captured HAR plus an owned-resource API case enables REA-grounded **direct HTTP** generation and fresh, independent server GET verification. Credentials are environment bindings, not generated source. Existing browser-function and Android UI examples require `--allow-ui-fallback`. A separately reviewed read-only Douyin client API bridge reuses the browser's original authentication/signing chain and verifies actual network responses. It is not browser-independent HTTP or automatic APK API recovery. The final Restful Booker public-backend generation run passed 8/8 checks on its first candidate, including actual PATCH, independent GET and restoration. Prior authoring timeouts and a shared-backend reset failure are retained separately. See [API-first implementation and limitations](docs/api-first.md), [acceptance](docs/api-first-acceptance.json) and the [unchanged generated contract](examples/booker-api-generated/README.md).
+
 ## What works today
 
 | Example | Execution | Verification | Generated command |
@@ -55,7 +59,7 @@ With an authenticated Codex CLI and Chrome installed:
 
 ```bash
 node bin/app2cli.mjs generate https://dillinger.io/ \
-  --id dillinger --out .local/generate/dillinger \
+  --allow-ui-fallback --id dillinger --out .local/generate/dillinger \
   --goal "Read and replace the current Markdown document; verify the preview after reload"
 ```
 
@@ -63,7 +67,7 @@ For Android, prepare REA's JADX provider and an authorized test device:
 
 ```bash
 node bin/app2cli.mjs generate /path/to/application.apk \
-  --id my-app --serial emulator-5554 --install --out .local/generate/android
+  --allow-ui-fallback --id my-app --serial emulator-5554 --install --out .local/generate/android
 ```
 
 The agent gets actual REA evidence, source files, a live UI observation and the adapter contract. It returns a candidate or requests another read-only probe. The runner compiles and executes the CLI, checks a separate native witness, and supplies real failures for repair. Web tests use a random marker that repair attempts cannot change. Failed restoration stops further mutations.

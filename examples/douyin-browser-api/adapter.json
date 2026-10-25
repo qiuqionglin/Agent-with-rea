@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "id": "douyin-browser-api",
+  "description": "Read account status and collections through the original signed client API, with observed backend responses",
+  "platform": "web",
+  "transport": "browser-api",
+  "verification": "server-confirmed",
+  "commands": {
+    "profile.status": {
+      "description": "Verify the pinned signed-in account",
+      "readOnly": true,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    "collections.list": {
+      "description": "Read one complete bounded collection page, rejecting pagination",
+      "readOnly": true,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  },
+  "analysis": {
+    "recipe": "Reviewed migration of earlier REA-analyzed Webpack API bindings, not a new automatic-generation run",
+    "claims": [
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "284055"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "199927"
+      },
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "/aweme/v1/web/collects/list/"
+      }
+    ]
+  },
+  "config": {
+    "origin": "https://www.douyin.com",
+    "pathname": "/user/self",
+    "queueName": "webpackChunkdouyin_web",
+    "sourceOrigins": [
+      "https://lf-douyin-pc-web.douyinstatic.com"
+    ],
+    "sourcePins": [
+      {
+        "url": "https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/ies/douyin_web/client-entry~6f4ee80d.40c52456.js",
+        "sha256": "0a25490508b36cd1897194e05b557c98c62521e143f8c7e47e4f670e292d6ea6"
+      },
+      {
+        "url": "https://lf-douyin-pc-web.douyinstatic.com/obj/douyin-pc-web/ies/douyin_web/client-entry~2.a5a52241.js",
+        "sha256": "be37c12aa3799491aa03bad827e5ae616916faad76f5df1241d36346a967c6fa"
+      }
+    ],
+    "apiOrigins": [
+      "https://www.douyin.com",
+      "https://www-hj.douyin.com"
+    ],
+    "operations": {
+      "profile": {
+        "method": "GET",
+        "path": "/aweme/v1/web/user/profile/self/",
+        "moduleId": 199927,
+        "exportName": "fetchUserProfileSelf",
+        "successField": "status_code",
+        "successValue": 0
+      },
+      "collections": {
+        "method": "GET",
+        "path": "/aweme/v1/web/collects/list/",
+        "moduleId": 284055,
+        "exportName": "So",
+        "successField": "status_code",
+        "successValue": 0
+      }
+    }
+  }
+}

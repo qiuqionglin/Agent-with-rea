@@ -1,0 +1,1 @@
+import {createHttpResourceAdapter} from '../../lib/http-adapter.mjs'; export default createHttpResourceAdapter();

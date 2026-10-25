@@ -2,13 +2,17 @@
 
 `app2cli generate` runs an actual coding agent, not a lookup table of bundled adapters. The initial inputs are an application URL or APK, an output directory, and optionally a description of the capability. The runner invokes REA, gives the agent the captured source and live UI observations, compiles the returned adapter, and executes a bounded real-application acceptance scenario. Test failures become the next agent prompt.
 
+## API-first policy
+
+Use `generate <backend-origin> --transport http --capture requests.har --api-case owned-resource.json` for direct HTTP generation. Providing both `--capture` and `--api-case` also selects HTTP by default. See [API-first](api-first.md). A URL or APK alone does not establish a replayable API contract. Without network evidence, default generation fails rather than silently claiming UI commands are APIs. The legacy examples below explicitly opt into fallback. `--transport browser-api` automatic write generation is not yet supported; the reviewed read-only driver is separately callable.
+
 ## Run from a URL
 
 Install dependencies as described in the README. Install Codex CLI and complete `codex login` using your own account. The runner uses the configured Codex model; it does not copy credentials or change global configuration. See the [official non-interactive documentation](https://developers.openai.com/codex/noninteractive/) for `codex exec`.
 
 ```bash
 node bin/app2cli.mjs generate https://dillinger.io/ \
-  --id dillinger --out .local/generate/dillinger \
+  --allow-ui-fallback --id dillinger --out .local/generate/dillinger \
   --goal "Read and replace the current Markdown document; verify the preview after reload"
 ```
 
@@ -41,7 +45,7 @@ This reruns the mutation, independent readback and restoration against the recor
 export JAVA_HOME=/path/to/jdk
 export REA_JADX_MCP_JAR=/path/to/jadx.jar
 node bin/app2cli.mjs generate /path/to/application.apk \
-  --id my-android-app --out .local/generate/android \
+  --allow-ui-fallback --id my-android-app --out .local/generate/android \
   --serial emulator-5554 --install
 ```
 
