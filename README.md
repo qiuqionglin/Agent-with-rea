@@ -2,6 +2,10 @@
 
 **Turn application knowledge into verifiable CLIs for agents.**
 
+**Product goal:** supply a website or application artifact; automatically discover its capabilities, use REA to recover interfaces and call chains, and compile an application-wide CLI verified through real operations. The intended normal workflow does not require the user to supply HAR files, API contracts, or adapter code. Execution may use HTTP, original client request modules, IPC, or local methods.
+
+The current repository is a bounded prototype of that goal. Automatic whole-application discovery and desktop execution are not implemented. See the [product goal, coverage definition, and implementation order](docs/product-goal.md).
+
 `app2cli` uses [REA](https://github.com/morluto/rea) to inspect an application, runs a coding agent to generate a semantic adapter, compiles it into a separate CLI package, and tests it against the actual app. Failures feed a bounded repair loop. Each generated CLI exposes typed commands, JSON output, request deduplication, version checks, and execution evidence.
 
 [中文说明](README.zh-CN.md) · [Automatic generation](docs/generation.md) · [Adapter contract](docs/adapter-contract.md) · [Architecture and scope](docs/architecture.md)

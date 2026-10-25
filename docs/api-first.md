@@ -1,5 +1,7 @@
 # API-first execution
 
+The [product goal](product-goal.md) is automatic application-to-CLI compilation from a URL or application artifact. The HAR and API case inputs below describe the current bounded implementation and remain useful advanced inputs; supplying them manually is not the intended normal product workflow.
+
 The preferred route is **observed requests → REA analysis → generated HTTP adapter → CLI execution → independent server GET**. Existing browser-function and Android UI drivers are explicit fallbacks. Discovering a client symbol does not by itself establish a replayable API.
 
 ## Implemented transports

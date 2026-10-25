@@ -1,6 +1,6 @@
 # Architecture and evidence boundaries
 
-Agent with REA separates application analysis from application execution.
+Agent with REA separates application analysis from application execution. This page describes the implemented prototype. The [product goal and target pipeline](product-goal.md) extend it to automatic capability discovery, application-wide CLI contracts and desktop interfaces; those planned stages must not be inferred from the current drivers.
 
 ```mermaid
 flowchart LR
