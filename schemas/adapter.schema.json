@@ -3,25 +3,174 @@
   "title": "app2cli adapter v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "description", "platform", "verification", "commands", "analysis", "config"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "description",
+    "platform",
+    "verification",
+    "commands",
+    "analysis",
+    "config"
+  ],
   "properties": {
-    "schemaVersion": {"const": 1},
-    "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]{1,48}$"},
-    "description": {"type": "string", "minLength": 1},
-    "platform": {"enum": ["web", "android", "api"]},
-    "transport": {"enum": ["http", "browser-api", "browser-function", "native-ui"]},
-    "fallbackReason": {"type":"string","minLength":1},
-    "verification": {"enum": ["reload-persisted", "native-ui-readback", "server-confirmed"]},
-    "config": {"type": "object"},
-    "capabilities": {"type":"array","items":{"type":"object","additionalProperties":false,"required":["id","description","commands","status","reason"],"properties":{"id":{"type":"string","pattern":"^[a-z][a-z0-9.-]+$"},"description":{"type":"string"},"commands":{"type":"array","uniqueItems":true,"items":{"type":"string"}},"status":{"enum":["implemented-unverified","requires-login","requires-user-action","unsupported"]},"reason":{"type":"string","minLength":1}}}},
-    "analysis": {"type": "object", "required": ["recipe", "claims"], "properties": {"recipe": {"type": "string"}, "claims": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["operation"], "additionalProperties": false, "properties": {"operation": {"type": "string", "minLength": 1}, "contains": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}}}, "additionalProperties": false},
+    "schemaVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,48}$"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "platform": {
+      "enum": [
+        "web",
+        "android",
+        "api",
+        "electron"
+      ]
+    },
+    "transport": {
+      "enum": [
+        "http",
+        "browser-api",
+        "browser-function",
+        "native-ui",
+        "electron-api"
+      ]
+    },
+    "fallbackReason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verification": {
+      "enum": [
+        "reload-persisted",
+        "native-ui-readback",
+        "server-confirmed",
+        "native-file-readback"
+      ]
+    },
+    "config": {
+      "type": "object"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "commands",
+          "status",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]+$"
+          },
+          "description": {
+            "type": "string"
+          },
+          "commands": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "enum": [
+              "implemented-unverified",
+              "requires-login",
+              "requires-user-action",
+              "unsupported"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "required": [
+        "recipe",
+        "claims"
+      ],
+      "properties": {
+        "recipe": {
+          "type": "string"
+        },
+        "claims": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "operation"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "operation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "contains": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "commands": {
-      "type": "object", "minProperties": 1,
-      "propertyNames": {"pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$"},
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$"
+      },
       "additionalProperties": {
-        "type": "object", "additionalProperties": false,
-        "required": ["description", "readOnly", "inputSchema"],
-        "properties": {"description": {"type": "string"}, "readOnly": {"type": "boolean"}, "inputSchema": {"type": "object"}, "transport":{"enum":["http","browser-api","browser-function","native-ui"]}}
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "description",
+          "readOnly",
+          "inputSchema"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "readOnly": {
+            "type": "boolean"
+          },
+          "inputSchema": {
+            "type": "object"
+          },
+          "transport": {
+            "enum": [
+              "http",
+              "browser-api",
+              "browser-function",
+              "native-ui",
+              "electron-api"
+            ]
+          }
+        }
       }
     }
   }

@@ -4,7 +4,7 @@
 
 **Product goal:** supply a website or application artifact; automatically discover its capabilities, use REA to recover interfaces and call chains, and compile an application-wide CLI verified through real operations. The intended normal workflow does not require the user to supply HAR files, API contracts, or adapter code. Execution may use HTTP, original client request modules, IPC, or local methods.
 
-The current repository is a bounded prototype of that goal. Automatic whole-application discovery and desktop execution are not implemented. See the [product goal, coverage definition, and implementation order](docs/product-goal.md).
+The current repository is a bounded prototype of that goal. A bounded automatic discovery loop and a macOS Electron driver now have real application acceptance. Complete coverage of arbitrary applications is not established. See the [product goal, coverage definition, and implementation order](docs/product-goal.md).
 
 `app2cli` uses [REA](https://github.com/morluto/rea) to inspect an application, runs a coding agent to generate a semantic adapter, compiles it into a separate CLI package, and tests it against the actual app. Failures feed a bounded repair loop. Each generated CLI exposes typed commands, JSON output, request deduplication, version checks, and execution evidence.
 
@@ -18,9 +18,20 @@ URL / APK → REA evidence → agent → adapter → CLI → real-app test + ind
 
 The generator does not look up an application in the bundled adapter list. It tests reversible value/content replacement and Android navigation journeys with independent native predicates. These bounded tests do not cover every capability of an arbitrary app. An application may require login, lack accessible source/UI, or have no supported reversible operation; those cases fail explicitly. Analysis candidates and successful builds alone are not execution proof.
 
+## URL and Electron application discovery
+
+Input a URL or `.app` file without supplying a HAR, API list or adapter. The generator retains source/network evidence, runs REA, requests runtime probes, generates multiple business commands, and tests them with independent observers. The default URL route and `.app` route use this workflow; `--out` is optional.
+
+```bash
+node bin/app2cli.mjs generate https://demo.linkding.link/
+node bin/app2cli.mjs generate /path/to/Editor.app
+```
+
+The **Linkding** six-command CLI passed **13 checks**, repeat verification and independent installation. The **MarkText** six-command CLI passed **18 checks**, repeat verification and independent installation. Both no-op mutation controls were caught. Adapter files are unchanged model outputs. Development fixes and one separate Linkding cleanup are retained, so these results are not described as an uninterrupted development run. The examples use isolated test namespaces, not unrestricted personal data. See [workflow and boundaries](docs/application-generation.md), [acceptance](docs/application-generation-acceptance.json), [Linkding](examples/linkding-generated/README.md), and [MarkText](examples/marktext-generated/README.md).
+
 ## API-first generation
 
-Generation now defaults to refusing implicit UI fallback. A captured HAR plus an owned-resource API case enables REA-grounded **direct HTTP** generation and fresh, independent server GET verification. Credentials are environment bindings, not generated source. Existing browser-function and Android UI examples require `--allow-ui-fallback`. A separately reviewed read-only Douyin client API bridge reuses the browser's original authentication/signing chain and verifies actual network responses. It is not browser-independent HTTP or automatic APK API recovery. The final Restful Booker public-backend generation run passed 8/8 checks on its first candidate, including actual PATCH, independent GET and restoration. Prior authoring timeouts and a shared-backend reset failure are retained separately. See [API-first implementation and limitations](docs/api-first.md), [acceptance](docs/api-first-acceptance.json) and the [unchanged generated contract](examples/booker-api-generated/README.md).
+Generation now defaults to refusing implicit UI fallback. The older explicit HTTP route accepts a captured HAR plus an owned-resource API case for REA-grounded **direct HTTP** generation and fresh, independent server GET verification. Credentials are environment bindings, not generated source. Existing browser-function and Android UI examples require `--allow-ui-fallback`. A separately reviewed read-only Douyin client API bridge reuses the browser's original authentication/signing chain and verifies actual network responses. It is not browser-independent HTTP or automatic APK API recovery. The final Restful Booker public-backend generation run passed 8/8 checks on its first candidate, including actual PATCH, independent GET and restoration. Prior authoring timeouts and a shared-backend reset failure are retained separately. See [API-first implementation and limitations](docs/api-first.md), [acceptance](docs/api-first-acceptance.json) and the [unchanged generated contract](examples/booker-api-generated/README.md).
 
 ## What works today
 

@@ -5,7 +5,7 @@ An adapter directory contains `adapter.json` and `adapter.mjs`. Use `app2cli sca
 ## Manifest
 
 - `id`: portable lowercase CLI/package identifier.
-- `platform`: `web`, `android`, or `api` in v1. `api` requires `transport: "http"`.
+- `platform`: `web`, `android`, `api`, or `electron` in v1. `api` requires `transport: "http"`.
 - `config`: application pins and driver settings; do not store account credentials or personal device settings here.
 - `commands`: description, `readOnly` and an object JSON Schema for each command.
 - Optional `capabilities`: feature descriptions, declared command IDs and explicit implementation/login/user-action/unsupported status. Authors cannot label a capability verified; a separate digest-bound `acceptance.json` records the concrete tests that actually passed.
@@ -63,3 +63,5 @@ Android controls may change resource IDs when their mode changes. Read a new hie
 Exit status 2 denotes invalid input/contract; 3 environment/session problems; 4 state or version conflict; 5 failed verification; 6 uncertain dispatch. Unexpected internal errors use 1. A caller must inspect the error, not retry all nonzero exits indiscriminately.
 
 HTTP helpers live in `lib/http.mjs`: `connectHttp`, `httpTargetKey`, `httpUrl`, `requestHttp`. Auth is an environment-bound header; origin-relative operation paths can use `{parameter}` values from separately declared resource environment variables. Callers must preserve auth/session scope and unrelated resource fields. See [API-first](api-first.md) for the supported case and failure contract.
+
+Application adapters receive `ctx.request = {command,input}` before checks/reads. `application-session.mjs` provides owned-session connections, browser requests, original app method invocation and workspace path guards. Electron uses `electron-api` and `native-file-readback`; its actual renderer and file witnesses are independent acceptance evidence. The generated namespace is a runtime binding, not a compiled test identifier. See [multi-command application generation](application-generation.md).

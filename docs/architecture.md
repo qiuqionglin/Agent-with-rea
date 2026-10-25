@@ -1,10 +1,10 @@
 # Architecture and evidence boundaries
 
-Agent with REA separates application analysis from application execution. This page describes the implemented prototype. The [product goal and target pipeline](product-goal.md) extend it to automatic capability discovery, application-wide CLI contracts and desktop interfaces; those planned stages must not be inferred from the current drivers.
+Agent with REA separates application analysis from application execution. This page describes the implemented prototype. The [product goal and target pipeline](product-goal.md) extend it to automatic capability discovery, application-wide CLI contracts and desktop interfaces; complete coverage must not be inferred from the current drivers. The bounded [application workflow](application-generation.md) now supplies source/network discovery, multi-command generation, and a tested macOS Electron bridge.
 
 ```mermaid
 flowchart LR
-  Target[Web page or Android APK] --> REA[REA analysis]
+  Target[Web URL, Electron app or Android APK] --> REA[REA analysis]
   REA --> Raw[Private raw evidence]
   Raw --> Draft[Candidate projection and draft]
   Draft --> Agent[Agent-authored semantic mapping]
@@ -15,12 +15,15 @@ flowchart LR
   Runtime --> HTTP[Direct HTTP API]
   Runtime --> Bridge[Original client API bridge]
   Runtime --> Web[Explicit browser-function fallback]
+  Runtime --> Electron[Electron methods and IPC]
   Runtime --> Android[Android native UI]
   HTTP --> Server[Independent server GET]
   Bridge --> Network[Observed backend response]
   Server --> Audit
   Network --> Audit
   Web --> Readback[Application readback]
+  Electron --> Files[Independent renderer and file observers]
+  Files --> Audit
   Android --> Readback
   Readback --> Audit[Private audit and request journal]
   CLI --> Test[Independent native observer]
@@ -61,11 +64,14 @@ An outcome reserved before dispatch but not verified stays uncertain. It cannot 
 | Direct HTTP API | Implemented | Observed HAR + owned-resource contract; auth environment binding, schema checks, direct requests, independent GET |
 | Signed-in Web backend | Read-only driver and Douyin example implemented | Original request/signing chain; pinned source bytes, account guard, actual network response proof; still needs browser |
 | Android internal methods / Frida | Planned | Requires a separate runtime driver, method mapping and real acceptance evidence |
-| Desktop, iOS | Planned | Interface permits plugins; these transports are not implemented |
+| Electron desktop | macOS driver and MarkText example accepted | Actual editor/IPC calls, renderer and file readback; application and workspace retained |
+| Other desktop runtimes, iOS | Planned | These execution transports are not implemented |
 
 REA supports more analysis targets than this repository currently supports for execution. Analysis coverage and operational coverage must be reported separately.
 
 ## Generation loop
+
+A plain URL or `.app` selects the application workflow: source/network discovery, structured agent probes, multi-command adapter, independent lifecycle tests and failure feedback. Its observers reuse the owned session without importing adapter code. `discovery.json` consolidates current-run probes; capability declarations stay separate from accepted scenarios. Details and development interventions are in [application generation](application-generation.md).
 
 `generate` accepts a URL or APK without selecting a bundled adapter. REA analysis and independent DOM/UI observations provide the input. Codex returns a structured candidate or requests a bounded read-only probe. The framework validates, compiles and tests it in separate processes. Failures are fed back into a new attempt, with the original objective frozen. A failed restoration halts mutation attempts. See [automatic generation](generation.md) for the current reversible-value scope and evidence limitations.
 

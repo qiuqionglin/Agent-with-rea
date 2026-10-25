@@ -4,7 +4,7 @@
 
 **产品目标：用户给出网站或应用文件，系统自动探索功能、用 REA 分析接口及调用链，生成覆盖该应用业务操作的 CLI，并通过真实调用验证。** 最终正常流程不要求用户手工提供 HAR、接口说明或适配器。网站、桌面应用和 Android 共用能力契约；底层接口包含 HTTP、原客户端请求模块、IPC 和本地方法。
 
-这是产品目标，当前实现仍是有限场景原型，桌面执行器和完整功能发现尚未实现。见 [产品目标、完整性定义与实现顺序](docs/product-goal.md)。
+当前已跑通一个真实网站和一个 Electron 应用的自动发现、多命令 CLI 与独立验收；任意应用的完整功能覆盖仍未实现。见 [产品目标、完整性定义与实现顺序](docs/product-goal.md)。
 
 现在可以输入网址或 APK，让实际的 coding agent 根据 REA 证据生成适配器、编译 CLI、执行真实应用测试，并根据失败自动修复。命令名是 `app2cli`，仓库名是 Agent-with-rea。
 
@@ -20,9 +20,24 @@ Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收�
 
 抖音 Android 也已完成未登录浏览/搜索实验：从官方页面的 APK 经 REA 分析生成基础适配器，再自动扩展为 10 个 CLI 命令，最终多页面场景通过 **23/23 原生检查**。包括中文搜索提交、实际结果读取和首页恢复。一次输入页资源 ID 复用导致的错误验收条件经过显式复核，原始失败和修订记录均保留；这不是全程无人干预或“覆盖抖音所有操作”的证明。见 [抖音实验与边界](docs/douyin-android.md)、[验收摘要](docs/douyin-android-acceptance.json) 和 [生成代码](examples/douyin-generated/README.md)。
 
+## 只输入网址或 Electron 应用文件
+
+```bash
+node bin/app2cli.mjs generate https://demo.linkding.link/
+node bin/app2cli.mjs generate /path/to/Editor.app
+```
+
+无需提供 HAR、接口清单或适配器。系统创建独立会话，采集源码与请求，执行 REA 分析，由 Agent 探查并生成业务命令，再通过真实调用、独立回读和失败反馈完成验收。网址默认走此流程；省略输出目录时自动创建私有运行目录。
+
+- **Linkding 官方演示站**：生成列表、搜索、读取、创建、修改、删除 6 个命令；生成验收、重复验证、仓库外安装均通过 **13 项检查**。
+- **MarkText 0.19.1**：生成打开、读取、编辑、保存、重新打开、恢复 6 个命令；三轮验收均通过 **18 项检查**，同时核对真实编辑器和磁盘文件。
+- 两组“返回成功但没有修改”的负例都被独立观察器拦截，清理完成。生成适配器未手改；开发中的框架修正、一次独立清理网站测试数据和 REA 的限制均保留记录。
+
+当前样例限定在隔离测试命名空间内；CLI 运行仍需要原浏览器登录会话或 Electron 进程，但不需要 REA 或模型。见 [复现方法](docs/application-generation.md)、[验收记录](docs/application-generation-acceptance.json)、[网站生成代码](examples/linkding-generated/README.md) 和 [桌面生成代码](examples/marktext-generated/README.md)。
+
 ## API 优先
 
-默认生成策略已改为 API 优先。提供真实 HAR 和调用方拥有的测试资源契约时，REA 分析网络证据，Agent 生成直接 HTTP CLI，测试器另发 GET 验证修改和恢复。鉴权值只在运行环境中注入。未找到可验证 API 时明确停止；旧的浏览器函数 / Android UI 路线必须显式传 `--allow-ui-fallback`。
+默认生成策略已改为 API 优先。旧的显式 HTTP 路线仍支持提供真实 HAR 和自有测试资源契约，由 REA 分析网络证据，Agent 生成直接 HTTP CLI，测试器另发 GET 验证修改和恢复。鉴权值只在运行环境中注入。未找到可验证 API 时明确停止；旧的浏览器函数 / Android UI 路线必须显式传 `--allow-ui-fallback`。
 
 已在 Restful Booker 真实公共测试后端完成自动生成：最终运行首个候选通过 8/8 检查，实际执行 PATCH、独立 GET 并恢复原记录。此前公共后端重置导致的恢复失败单独保留，未计作通过。见 [API 验收记录](docs/api-first-acceptance.json) 和 [未经手改的生成契约](examples/booker-api-generated/README.md)。
 

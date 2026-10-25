@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "id": "linkding",
+  "description": "Manage namespace-owned Linkding bookmarks through observed server HTML forms.",
+  "platform": "web",
+  "transport": "browser-api",
+  "verification": "server-confirmed",
+  "config": {
+    "origin": "https://demo.linkding.link",
+    "sourcePins": [
+      {
+        "url": "https://demo.linkding.link/static/bundle.js?v=1.47.0",
+        "sha256": "bd4869b67d89d4b8e96861c99a4ba9065b8c3833676b2e492701237dbe0925da"
+      }
+    ]
+  },
+  "analysis": {
+    "recipe": "Use retained authenticated form metadata from probes 6 and 12, the development cleanup capture, and original same-origin requests. Read bookmark lists and edit forms; submit fresh native forms for create/update and the owned row's remove button for deletion. Normalize edit navigation context out of snapshots. Preserve native form action queries. Verify persisted fields with independent fresh GETs.",
+    "claims": [
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "/bookmarks/new"
+      },
+      {
+        "operation": "inspect_web_network_capture",
+        "contains": "/bookmarks/action"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "sha256": "bd4869b67d89d4b8e96861c99a4ba9065b8c3833676b2e492701237dbe0925da"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "bookmarks.read",
+      "description": "List, search and read active bookmarks belonging to the runtime namespace.",
+      "commands": [
+        "bookmarks.list",
+        "bookmarks.search",
+        "bookmarks.get"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Uses fresh server HTML and persisted edit-form fields; repaired candidate awaits execution."
+    },
+    {
+      "id": "bookmarks.write",
+      "description": "Create, update and delete exact namespace-owned scratch bookmarks.",
+      "commands": [
+        "bookmarks.create",
+        "bookmarks.update",
+        "bookmarks.delete"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed forms, ownership checks, preserved fields and fresh server readback are implemented; journey has not passed yet."
+    },
+    {
+      "id": "bookmarks.archive",
+      "description": "Archive and restore bookmarks.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Archive controls were observed; archive and restore have no implemented commands."
+    },
+    {
+      "id": "bookmarks.tags",
+      "description": "Manage tags, sharing and attachments.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Existing tag values are preserved; these areas have no implemented commands."
+    },
+    {
+      "id": "account.settings",
+      "description": "Account administration, settings, import and export.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Outside the marked-resource scope. Complete application coverage is not claimed."
+    },
+    {
+      "id": "session.login",
+      "description": "Establish authentication.",
+      "commands": [],
+      "status": "requires-user-action",
+      "reason": "Reuses the retained browser session and reports expired authentication without collecting credentials."
+    }
+  ],
+  "commands": {
+    "bookmarks.list": {
+      "description": "List namespace-owned active bookmarks.",
+      "readOnly": true,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "bookmarks.search": {
+      "description": "Search native server results and return namespace-owned matches.",
+      "readOnly": true,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "query"
+        ],
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        }
+      }
+    },
+    "bookmarks.get": {
+      "description": "Read persisted bookmark fields by immutable ownership key.",
+      "readOnly": true,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+$",
+            "maxLength": 180
+          }
+        }
+      }
+    },
+    "bookmarks.create": {
+      "description": "Create a scratch bookmark with an immutable example.com URL derived from its ownership key. Title must begin with the key.",
+      "readOnly": false,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "title"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+$",
+            "maxLength": 180
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "bookmarks.update": {
+      "description": "Update title, description and notes while preserving URL, tags and unread state. Title must begin with the ownership key.",
+      "readOnly": false,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "title",
+          "description",
+          "notes"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+$",
+            "maxLength": 180
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 240
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "bookmarks.delete": {
+      "description": "Delete the exact namespace-owned active bookmark, or independently confirm its absence.",
+      "readOnly": false,
+      "transport": "browser-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+$",
+            "maxLength": 180
+          }
+        }
+      }
+    }
+  }
+}

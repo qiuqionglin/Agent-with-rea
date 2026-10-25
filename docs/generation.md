@@ -1,10 +1,12 @@
 # Automatic adapter generation
 
+For the new default URL and Electron workflow, see [application discovery and multi-command generation](application-generation.md). The examples below cover the retained bounded value-replacement and Android workflows.
+
 `app2cli generate` runs an actual coding agent, not a lookup table of bundled adapters. The initial inputs are an application URL or APK, an output directory, and optionally a description of the capability. The runner invokes REA, gives the agent the captured source and live UI observations, compiles the returned adapter, and executes a bounded real-application acceptance scenario. Test failures become the next agent prompt.
 
 ## API-first policy
 
-Use `generate <backend-origin> --transport http --capture requests.har --api-case owned-resource.json` for direct HTTP generation. Providing both `--capture` and `--api-case` also selects HTTP by default. See [API-first](api-first.md). A URL or APK alone does not establish a replayable API contract. Without network evidence, default generation fails rather than silently claiming UI commands are APIs. The legacy examples below explicitly opt into fallback. `--transport browser-api` automatic write generation is not yet supported; the reviewed read-only driver is separately callable.
+Use `generate <backend-origin> --transport http --capture requests.har --api-case owned-resource.json` for direct HTTP generation. Providing both `--capture` and `--api-case` also selects HTTP by default. See [API-first](api-first.md). A URL or APK alone does not establish a replayable API contract. Without network evidence, default generation fails rather than silently claiming UI commands are APIs. The legacy examples below explicitly opt into fallback. The new application workflow can generate browser-session HTTP/form mutations. The reviewed Douyin signed-client helper remains read-only; it is a separate execution mechanism.
 
 ## Run from a URL
 

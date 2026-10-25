@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "id": "marktext",
+  "description": "Scoped Markdown document CLI for the pinned MarkText application.",
+  "platform": "electron",
+  "transport": "electron-api",
+  "verification": "native-file-readback",
+  "config": {
+    "artifactSha256": "e2e3811dcb295a51a8c01421a75f7d66951c4c69bd13f4b9117f0b4f9db8f14f"
+  },
+  "analysis": {
+    "recipe": "Retained REA source analysis, bounded main/preload/renderer inspection, and current-run editor-store probes establish native mappings. Module: adapters/marktext/adapter.mjs. Journey execution remains pending; complete application coverage is not claimed.",
+    "claims": [
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "mt::open-file"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "mt::response-file-save"
+      },
+      {
+        "operation": "analyze_javascript_application",
+        "contains": "mt::fs::read-file"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "documents.read-open",
+      "description": "Open owned Markdown files and read persisted content, native buffers, and editor text.",
+      "commands": [
+        "document.open",
+        "document.read"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Native IPC, preload reads, and editor-store access are established; journey execution is pending."
+    },
+    {
+      "id": "documents.edit-save",
+      "description": "Replace active document content through loadChange and persist through FILE_SAVE.",
+      "commands": [
+        "document.edit",
+        "document.save"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Observed application actions provide separate buffer and persisted-file mutations."
+    },
+    {
+      "id": "documents.reopen-restore",
+      "description": "Reopen saved documents and restore supplied scratch content through application actions.",
+      "commands": [
+        "document.reopen",
+        "document.restore"
+      ],
+      "status": "implemented-unverified",
+      "reason": "Uses native tab closure, opening, content loading, and saving; unrelated owned documents are checked."
+    },
+    {
+      "id": "documents.create-delete",
+      "description": "Create or delete persisted documents.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "This adapter operates on existing fixture inputs; destination selection and deletion are not implemented."
+    },
+    {
+      "id": "documents.search-export",
+      "description": "Application search and HTML/PDF export.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Complete destination and result mappings are outside this bounded implementation."
+    },
+    {
+      "id": "application.other",
+      "description": "Projects, settings, uploads, publishing, and other application areas.",
+      "commands": [],
+      "status": "unsupported",
+      "reason": "Excluded from this document adapter; complete application coverage is not claimed."
+    }
+  ],
+  "commands": {
+    "document.open": {
+      "description": "Open or select an existing owned Markdown document.",
+      "readOnly": false,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          }
+        }
+      }
+    },
+    "document.read": {
+      "description": "Read persisted content and any open native buffer without changing selection.",
+      "readOnly": true,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          }
+        }
+      }
+    },
+    "document.edit": {
+      "description": "Replace the active owned UTF-8/LF document buffer through the editor action.",
+      "readOnly": false,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "content"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 65536
+          }
+        }
+      }
+    },
+    "document.save": {
+      "description": "Persist the active owned UTF-8/LF buffer through native saving.",
+      "readOnly": false,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          }
+        }
+      }
+    },
+    "document.reopen": {
+      "description": "Close only the saved target tab and reload its persisted document.",
+      "readOnly": false,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          }
+        }
+      }
+    },
+    "document.restore": {
+      "description": "Open the owned scratch document, restore supplied content, and save natively; repeatable cleanup.",
+      "readOnly": false,
+      "transport": "electron-api",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "content"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^APP2CLI_[A-Za-z0-9_-]+\\.md$"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 65536
+          }
+        }
+      }
+    }
+  }
+}

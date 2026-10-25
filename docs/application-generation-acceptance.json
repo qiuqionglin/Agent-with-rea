@@ -1,0 +1,766 @@
+{
+  "schemaVersion": 1,
+  "producer": "Public projection of actual generation, independent tests and installation reports; not raw model output or REA evidence",
+  "inputContract": {
+    "website": "URL only",
+    "desktop": "Existing macOS Electron .app only",
+    "callerSuppliedHar": false,
+    "callerSuppliedApiList": false,
+    "callerSuppliedAdapter": false,
+    "fixtureContractSupplied": false
+  },
+  "authoring": {
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "globalConfigChanged": false
+  },
+  "unitAndProtocolTests": {
+    "passed": 53,
+    "liveApplicationEvidence": false
+  },
+  "targets": {
+    "linkding": {
+      "target": "https://demo.linkding.link/",
+      "platform": "web",
+      "transport": "browser-api",
+      "commands": [
+        "bookmarks.list",
+        "bookmarks.search",
+        "bookmarks.get",
+        "bookmarks.create",
+        "bookmarks.update",
+        "bookmarks.delete"
+      ],
+      "adapterDigest": "34819f7fbbd77439a7e92bdae04ba40fe5e16552af6bb2684f927fb713373a8f",
+      "adapterFilesHandEdited": false,
+      "roundsIncludingProbesFailuresAndInterruptedAuthoring": 15,
+      "acceptedCandidateRound": 15,
+      "generation": {
+        "status": "passed",
+        "checks": [
+          {
+            "name": "Generated multi-command CLI schema",
+            "passed": true
+          },
+          {
+            "name": "Dry run preserves independently observed state",
+            "passed": true
+          },
+          {
+            "name": "Mutation replay is deduplicated",
+            "passed": true
+          },
+          {
+            "name": "Stale revision rejected",
+            "passed": true
+          },
+          {
+            "name": "create independent readback",
+            "passed": true
+          },
+          {
+            "name": "list independent readback",
+            "passed": true
+          },
+          {
+            "name": "read independent readback",
+            "passed": true
+          },
+          {
+            "name": "search independent readback",
+            "passed": true
+          },
+          {
+            "name": "update independent readback",
+            "passed": true
+          },
+          {
+            "name": "reread independent readback",
+            "passed": true
+          },
+          {
+            "name": "delete independent readback",
+            "passed": true
+          },
+          {
+            "name": "cleanup_owned independent readback",
+            "passed": true
+          },
+          {
+            "name": "Declared cleanup independently confirmed",
+            "passed": true
+          }
+        ],
+        "cleanupComplete": true,
+        "verifiedAt": "2026-10-25T10:12:34.282Z"
+      },
+      "scenarios": [
+        {
+          "name": "create",
+          "command": "bookmarks.create",
+          "effect": "create",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "list",
+          "command": "bookmarks.list",
+          "effect": "read",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "read",
+          "command": "bookmarks.get",
+          "effect": "read",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "search",
+          "command": "bookmarks.search",
+          "effect": "read",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "update",
+          "command": "bookmarks.update",
+          "effect": "update",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "reread",
+          "command": "bookmarks.get",
+          "effect": "read",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "delete",
+          "command": "bookmarks.delete",
+          "effect": "delete",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "cleanup_owned",
+          "command": "bookmarks.delete",
+          "effect": "delete",
+          "observer": "server-html",
+          "transitionObserved": null,
+          "passed": true
+        }
+      ],
+      "repeat": {
+        "status": "passed",
+        "checks": 13,
+        "cleanupComplete": true
+      },
+      "negativeControl": {
+        "ok": true,
+        "producer": "Deliberately faulty copy, never presented as generated code",
+        "faultCommand": "bookmarks.update",
+        "fault": "Acknowledge an actual content mutation without performing it, and lie about matches",
+        "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+        "cleanupComplete": true
+      },
+      "outsideRepositoryInstall": {
+        "status": "passed",
+        "tarballSha256": "98c65eae146a9bf33c34d4e69c5b8464096482bdd6944b70f25236bfceaa5518",
+        "checks": 13,
+        "cleanupComplete": true,
+        "reaInstalled": false,
+        "authoringRequired": false
+      },
+      "capabilityInventory": [
+        {
+          "id": "bookmarks.read",
+          "description": "List, search and read active bookmarks belonging to the runtime namespace.",
+          "commands": [
+            "bookmarks.list",
+            "bookmarks.search",
+            "bookmarks.get"
+          ],
+          "status": "implemented-unverified",
+          "reason": "Uses fresh server HTML and persisted edit-form fields; repaired candidate awaits execution."
+        },
+        {
+          "id": "bookmarks.write",
+          "description": "Create, update and delete exact namespace-owned scratch bookmarks.",
+          "commands": [
+            "bookmarks.create",
+            "bookmarks.update",
+            "bookmarks.delete"
+          ],
+          "status": "implemented-unverified",
+          "reason": "Observed forms, ownership checks, preserved fields and fresh server readback are implemented; journey has not passed yet."
+        },
+        {
+          "id": "bookmarks.archive",
+          "description": "Archive and restore bookmarks.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "Archive controls were observed; archive and restore have no implemented commands."
+        },
+        {
+          "id": "bookmarks.tags",
+          "description": "Manage tags, sharing and attachments.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "Existing tag values are preserved; these areas have no implemented commands."
+        },
+        {
+          "id": "account.settings",
+          "description": "Account administration, settings, import and export.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "Outside the marked-resource scope. Complete application coverage is not claimed."
+        },
+        {
+          "id": "session.login",
+          "description": "Establish authentication.",
+          "commands": [],
+          "status": "requires-user-action",
+          "reason": "Reuses the retained browser session and reports expired authentication without collecting credentials."
+        }
+      ],
+      "evidence": [
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "b654848d3bc1166998d54a2bfbe4d8e35a880fecdd98f77338b936b6d303ca67"
+        },
+        {
+          "operation": "analyze_javascript_application",
+          "sha256": "2c4db18e2804ce3505680c4f6be960809f259953c6ba1c5cc9ecdb35d0b2111a"
+        },
+        {
+          "operation": "inspect_web_page",
+          "sha256": "151c19c1bd2f49c22bf2d03448d7acba14edf36168bb73830d698d25d65d4e13"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "cf344026c9ecb51ffcff81a57a30e67f3d8f53fe4afa55d77a5e082595960637"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "e9447ecb69df677b752a4f43bfd85ec23994b00538179659af5f5acd23302850"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "d60879f2c70054aa38728d13f9867c9b6b249507cbb5233aedaec113834458c6"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "c3f5a1900b95a49e031e99d2b6acdf12d1282399263814354db286c35d6cf780"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "37a1a5c5f40d197dad65dd719f6193c10cc33c595eaf3b74e20ec1df47640705"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "142465a7f2bbcb6385c3a84a4f3cb52e5b0e27450ecf023642e5ab94b056f3da"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "bfd291f92e0bb72f72c5e1fc16f2da43b7a0186ea0396abafcfd4c7d8cd05a95"
+        },
+        {
+          "operation": "inspect_web_network_capture",
+          "sha256": "f6f937d035e1899c3aca8ec50951a3ef2c4cee99158b730c6717519ae0a7fa9e"
+        }
+      ],
+      "attemptHistory": [
+        {
+          "round": 1,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 2,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 3,
+          "decision": "authoring",
+          "status": "failed",
+          "errorCode": "AGENT_FAILED"
+        },
+        {
+          "round": 4,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 5,
+          "decision": "probe",
+          "status": "failed",
+          "errorCode": null
+        },
+        {
+          "round": 6,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 7,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "EVIDENCE_MISMATCH"
+        },
+        {
+          "round": 8,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 9,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 10,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "TEST_WEAKENED"
+        },
+        {
+          "round": 11,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 12,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 13,
+          "decision": "authoring",
+          "status": "failed",
+          "errorCode": "AGENT_FAILED"
+        },
+        {
+          "round": 14,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "CLI_TEST_FAILED"
+        },
+        {
+          "round": 15,
+          "decision": "candidate",
+          "status": "passed",
+          "errorCode": null
+        }
+      ]
+    },
+    "marktext": {
+      "target": "Existing MarkText 0.19.1 macOS application bundle",
+      "platform": "electron",
+      "transport": "electron-api",
+      "commands": [
+        "document.open",
+        "document.read",
+        "document.edit",
+        "document.save",
+        "document.reopen",
+        "document.restore"
+      ],
+      "adapterDigest": "a70ed16bcdb7954193a985c127af5ef830692f517b586bec8cafef595850c44e",
+      "adapterFilesHandEdited": false,
+      "roundsIncludingProbesFailuresAndInterruptedAuthoring": 9,
+      "acceptedCandidateRound": 9,
+      "generation": {
+        "status": "passed",
+        "checks": [
+          {
+            "name": "Generated multi-command CLI schema",
+            "passed": true
+          },
+          {
+            "name": "Dry run preserves independently observed state",
+            "passed": true
+          },
+          {
+            "name": "Mutation replay is deduplicated",
+            "passed": true
+          },
+          {
+            "name": "Stale revision rejected",
+            "passed": true
+          },
+          {
+            "name": "open_document independent readback",
+            "passed": true
+          },
+          {
+            "name": "read_original independent readback",
+            "passed": true
+          },
+          {
+            "name": "edit_document independent readback",
+            "passed": true
+          },
+          {
+            "name": "save_revision independent readback",
+            "passed": true
+          },
+          {
+            "name": "open_control independent readback",
+            "passed": true
+          },
+          {
+            "name": "reopen_document independent readback",
+            "passed": true
+          },
+          {
+            "name": "read_revision independent readback",
+            "passed": true
+          },
+          {
+            "name": "edit_final independent readback",
+            "passed": true
+          },
+          {
+            "name": "save_final independent readback",
+            "passed": true
+          },
+          {
+            "name": "read_control independent readback",
+            "passed": true
+          },
+          {
+            "name": "restore_original independent readback",
+            "passed": true
+          },
+          {
+            "name": "verify_restored_editor independent readback",
+            "passed": true
+          },
+          {
+            "name": "verify_control independent readback",
+            "passed": true
+          },
+          {
+            "name": "Declared cleanup independently confirmed",
+            "passed": true
+          }
+        ],
+        "cleanupComplete": true,
+        "verifiedAt": "2026-10-25T10:06:14.998Z"
+      },
+      "scenarios": [
+        {
+          "name": "open_document",
+          "command": "document.open",
+          "effect": "navigation",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "read_original",
+          "command": "document.read",
+          "effect": "read",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "edit_document",
+          "command": "document.edit",
+          "effect": "update",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "save_revision",
+          "command": "document.save",
+          "effect": "update",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "open_control",
+          "command": "document.open",
+          "effect": "navigation",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "reopen_document",
+          "command": "document.reopen",
+          "effect": "navigation",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "read_revision",
+          "command": "document.read",
+          "effect": "read",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "edit_final",
+          "command": "document.edit",
+          "effect": "update",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "save_final",
+          "command": "document.save",
+          "effect": "update",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "read_control",
+          "command": "document.read",
+          "effect": "read",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "restore_original",
+          "command": "document.restore",
+          "effect": "update",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "verify_restored_editor",
+          "command": "document.read",
+          "effect": "read",
+          "observer": "page-text",
+          "transitionObserved": null,
+          "passed": true
+        },
+        {
+          "name": "verify_control",
+          "command": "document.read",
+          "effect": "read",
+          "observer": "file",
+          "transitionObserved": null,
+          "passed": true
+        }
+      ],
+      "repeat": {
+        "status": "passed",
+        "checks": 18,
+        "cleanupComplete": true
+      },
+      "negativeControl": {
+        "ok": true,
+        "producer": "Deliberately faulty copy, never presented as generated code",
+        "faultCommand": "document.edit",
+        "fault": "Acknowledge an actual content mutation without performing it, and lie about matches",
+        "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+        "cleanupComplete": true
+      },
+      "outsideRepositoryInstall": {
+        "status": "passed",
+        "tarballSha256": "6c87978d292e28dc353f9413e7ca153a3145413400c4696667f5576b5cafd560",
+        "checks": 18,
+        "cleanupComplete": true,
+        "reaInstalled": false,
+        "authoringRequired": false
+      },
+      "capabilityInventory": [
+        {
+          "id": "documents.read-open",
+          "description": "Open owned Markdown files and read persisted content, native buffers, and editor text.",
+          "commands": [
+            "document.open",
+            "document.read"
+          ],
+          "status": "implemented-unverified",
+          "reason": "Native IPC, preload reads, and editor-store access are established; journey execution is pending."
+        },
+        {
+          "id": "documents.edit-save",
+          "description": "Replace active document content through loadChange and persist through FILE_SAVE.",
+          "commands": [
+            "document.edit",
+            "document.save"
+          ],
+          "status": "implemented-unverified",
+          "reason": "Observed application actions provide separate buffer and persisted-file mutations."
+        },
+        {
+          "id": "documents.reopen-restore",
+          "description": "Reopen saved documents and restore supplied scratch content through application actions.",
+          "commands": [
+            "document.reopen",
+            "document.restore"
+          ],
+          "status": "implemented-unverified",
+          "reason": "Uses native tab closure, opening, content loading, and saving; unrelated owned documents are checked."
+        },
+        {
+          "id": "documents.create-delete",
+          "description": "Create or delete persisted documents.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "This adapter operates on existing fixture inputs; destination selection and deletion are not implemented."
+        },
+        {
+          "id": "documents.search-export",
+          "description": "Application search and HTML/PDF export.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "Complete destination and result mappings are outside this bounded implementation."
+        },
+        {
+          "id": "application.other",
+          "description": "Projects, settings, uploads, publishing, and other application areas.",
+          "commands": [],
+          "status": "unsupported",
+          "reason": "Excluded from this document adapter; complete application coverage is not claimed."
+        }
+      ],
+      "evidence": [
+        {
+          "operation": "analyze_javascript_application",
+          "sha256": "0577ca83d3a60ce86aa4daa508e40c691abe1bda601f4770216fc3cd3d94cd92"
+        },
+        {
+          "operation": "inspect_electron_fuses",
+          "sha256": "f3201e89bad7b600834299feb1ebba5300bec072bbb05a7b907e1ad96a35a81f"
+        }
+      ],
+      "attemptHistory": [
+        {
+          "round": 1,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 2,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 3,
+          "decision": "probe",
+          "status": "probe-recorded",
+          "errorCode": null
+        },
+        {
+          "round": 4,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "INVALID_ADAPTER"
+        },
+        {
+          "round": 5,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "INVALID_ADAPTER"
+        },
+        {
+          "round": 6,
+          "decision": "authoring",
+          "status": "failed",
+          "errorCode": "AGENT_FAILED"
+        },
+        {
+          "round": 7,
+          "decision": "candidate",
+          "status": "failed",
+          "errorCode": "INVALID_ADAPTER"
+        },
+        {
+          "round": 8,
+          "decision": "blocked",
+          "status": "failed",
+          "errorCode": "MAPPING_BLOCKED"
+        },
+        {
+          "round": 9,
+          "decision": "candidate",
+          "status": "passed",
+          "errorCode": null
+        }
+      ],
+      "staticReaScope": {
+        "selectedPaths": [
+          "out/main/index.js",
+          "out/preload/index.js",
+          "package.json"
+        ],
+        "unselectedFiles": 9572,
+        "literalIpcChannels": 131,
+        "exposedMembers": 58,
+        "integrityContradictions": 8,
+        "integrityPolicy": "record-and-continue; contradictions retained as untrusted observations",
+        "runtimeReaPageInspection": "Not available for this renderer URL; original failure retained. Separate owned-session observations supplied runtime proof.",
+        "artifactAuthenticityClaim": false
+      }
+    }
+  },
+  "verifiedAt": "2026-10-25T10:18:22.238Z",
+  "developmentInterventions": [
+    {
+      "kind": "framework-fix",
+      "description": "Function-expression discovery probes initially returned undefined instead of invoking the function. Original outputs retained; invocation fixed and run resumed."
+    },
+    {
+      "kind": "framework-fix",
+      "description": "Current-run probe history was consolidated and explicitly reusable; runtime namespaces replaced compiled test UUIDs; an untested build failure no longer prematurely freezes the journey."
+    },
+    {
+      "kind": "framework-fix",
+      "description": "Electron command transport enum and artifact-identity diagnostics were corrected. Invalid candidates remained rejected."
+    },
+    {
+      "kind": "orchestrator-recovery",
+      "description": "A Linkding candidate created one owned bookmark, then failed pagination consistency and cleanup. The orchestrator used its already-discovered native delete form to remove only that marked resource; independent GET confirmed absence before resume. This is not a generated-CLI pass.",
+      "beforeCount": 1,
+      "afterCount": 0,
+      "deleteStatus": 200
+    },
+    {
+      "kind": "framework-fix",
+      "description": "A repeated MarkText journey began with the already-open document. Navigation may now be idempotent and reports whether it transitioned; content writes must still change independently observed state. The unchanged adapter subsequently repeated all 18 checks."
+    }
+  ],
+  "scopeLimits": [
+    "The development runs were stopped/resumed with framework corrections; not an uninterrupted intervention-free run.",
+    "Only the listed application lifecycles are accepted; static candidates and command existence do not prove full app coverage.",
+    "Generated example operations are limited to the isolated runtime namespace/workspace.",
+    "Web execution requires the retained browser login session; Electron execution requires the owned application process. Neither installed CLI needs REA or the authoring model.",
+    "The first Electron driver accepts macOS .app bundles. Other Electron apps/platforms require separate acceptance.",
+    "Raw captures, credentials, application source, browser profiles and native model trajectories remain private."
+  ]
+}

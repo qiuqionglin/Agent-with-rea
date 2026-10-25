@@ -1,6 +1,6 @@
 # API-first execution
 
-The [product goal](product-goal.md) is automatic application-to-CLI compilation from a URL or application artifact. The HAR and API case inputs below describe the current bounded implementation and remain useful advanced inputs; supplying them manually is not the intended normal product workflow.
+The [product goal](product-goal.md) is automatic application-to-CLI compilation from a URL or application artifact. The [URL/Electron application workflow](application-generation.md) now acquires its own discovery evidence. The HAR and API case inputs below describe the older explicit HTTP implementation and remain useful advanced inputs; supplying them manually is not the intended normal product workflow.
 
 The preferred route is **observed requests → REA analysis → generated HTTP adapter → CLI execution → independent server GET**. Existing browser-function and Android UI drivers are explicit fallbacks. Discovering a client symbol does not by itself establish a replayable API.
 
@@ -53,7 +53,7 @@ Ordinary generated HTTP commands use neither a browser nor REA/Codex. A build cu
 
 [The Douyin example](../examples/douyin-browser-api/README.md) migrates the earlier REA-derived client binding into `lib/browser-api.mjs`. Public source bytes are pinned; factory `toString()` hashes are not used. The bridge calls declared GET exports while observing the original request chain. Cookies and signatures remain in the browser; proof contains origin/path/status/body hash, never the signed query or credential headers. Its account guard uses a previously verified account hash.
 
-This is a reviewed migration, not a fresh automatically generated adapter. `--transport browser-api` automatic write generation currently reports an explicit limitation: no independent signed-write observer has been implemented. The example does not expose posting, messages, follows, collection writes or unbounded pagination.
+This is a reviewed migration, not a fresh automatically generated adapter. Automatic generation of private signed-client SDK writes still lacks an independent signed-write observer. The separate application workflow supports discovered same-origin HTTP/form mutations, as verified on Linkding; that does not establish signed SDK write coverage. The example does not expose posting, messages, follows, collection writes or unbounded pagination.
 
 ## Failure behavior and limits
 
