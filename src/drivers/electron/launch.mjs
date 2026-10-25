@@ -7,8 +7,10 @@ import {AppError,sleep,writeJson,runProcess} from '../../utils.mjs';
 import {identifyElectron} from './artifact.mjs';
 async function freePort(){const s=createServer();await new Promise(r=>s.listen(0,'127.0.0.1',r));const port=s.address().port;await new Promise(r=>s.close(r));return port;}
 export async function prepareElectron(target,out,{workspace=resolve(out,'workspace')}={}){
+  const identity=await identifyElectron(target);
+  if(!identity.execution.supported)throw new AppError('DESKTOP_BRIDGE_REQUIRED','This application needs an additional desktop execution bridge; static inspection alone cannot produce callable APIs',{blockers:identity.execution.blockers,archive:identity.asarRelativePath,entrypoint:identity.entrypoint,next:'Use inspect electron <app> --out <new-directory> for read-only REA diagnostics'},3);
   await mkdir(workspace,{recursive:true,mode:0o700});
-  const identity=await identifyElectron(target),profile=resolve(out,'electron-profile');await mkdir(profile,{mode:0o700});
+  const profile=resolve(out,'electron-profile');await mkdir(profile,{mode:0o700});
   const exe=await runProcess('/usr/bin/plutil',['-extract','CFBundleExecutable','raw',identity.path+'/Contents/Info.plist']);
   if(exe.code!==0||!exe.stdout.trim()||/[\\/]/.test(exe.stdout.trim()))throw new AppError('INVALID_ARTIFACT','Electron bundle executable could not be identified');
   const port=await freePort(),log=await open(resolve(out,'electron.log'),'wx',0o600);

@@ -1,15 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,writeFile,readFile,mkdir,rm,symlink} from 'node:fs/promises';
+import {mkdtemp,writeFile,readFile,mkdir,rm,symlink,stat,realpath} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join} from 'node:path';
+import {join,dirname} from 'node:path';
 import {loadAdapter} from '../src/runtime/manifest.mjs';
 import {workspacePath} from '../src/drivers/application.mjs';
-import {readAsar,exportApplicationSources} from '../src/drivers/electron/artifact.mjs';
+import {readAsar,exportApplicationSources,identifyElectron,electronFrameworkBinary} from '../src/drivers/electron/artifact.mjs';
+import {prepareElectron} from '../src/drivers/electron/launch.mjs';
 import {redactObject,safeUrl} from '../src/drivers/web/observe.mjs';
 import {resolveApplicationValue,observeApplicationWitness,validateApplicationPlan} from '../src/verify/application.mjs';
 async function temp(t){const p=await mkdtemp(join(tmpdir(),'app2cli-application-test-'));t.after(()=>rm(p,{recursive:true,force:true}));return p;}
 function asar(header,data){const text=Buffer.from(JSON.stringify(header)),size=Math.ceil((8+text.length)/4)*4,bytes=Buffer.alloc(8+size+data.length);bytes.writeUInt32LE(4,0);bytes.writeUInt32LE(size,4);bytes.writeUInt32LE(size-4,8);bytes.writeUInt32LE(text.length,12);text.copy(bytes,16);data.copy(bytes,8+size);return bytes;}
+function asarMembers(members){
+  const header={files:{}},buffers=[];let offset=0;
+  for(const [path,value]of Object.entries(members)){
+    const bytes=Buffer.from(value),parts=path.split('/');let files=header.files;
+    for(const part of parts.slice(0,-1)){files[part]||={files:{}};files=files[part].files;}
+    files[parts.at(-1)]={size:bytes.length,offset:String(offset)};buffers.push(bytes);offset+=bytes.length;
+  }
+  return asar(header,Buffer.concat(buffers));
+}
 test('ASAR extractor reads actual bounded member bytes and rejects traversal and malformed ranges',async t=>{
   const root=await temp(t),path=join(root,'app.asar'),data=Buffer.from('{"name":"fixture"}');await writeFile(path,asar({files:{'package.json':{size:data.length,offset:'0'}}},data));
   const a=await readAsar(path);assert.deepEqual(await a.read('package.json'),data);const index=await exportApplicationSources(a,join(root,'sources'));assert.equal(index.sources.length,1);
@@ -42,4 +52,33 @@ test('multi-function plans cannot relabel a write as read or omit native rendere
 
 test('Electron command transport is accepted by the real manifest compiler',async t=>{
  const root=await temp(t);await writeFile(join(root,'adapter.json'),JSON.stringify({schemaVersion:1,id:'electron-fixture',description:'Schema regression fixture',platform:'electron',transport:'electron-api',verification:'native-file-readback',commands:{read:{description:'Read',readOnly:true,transport:'electron-api',inputSchema:{type:'object'}}},analysis:{recipe:'Fixture only',claims:[{operation:'fixture'}]},config:{}}));await writeFile(join(root,'adapter.mjs'),'export default {};');assert.equal((await loadAdapter(root)).manifest.transport,'electron-api');
+});
+
+test('standard Electron identity retains its entrypoint pin and launch readiness',async t=>{
+  const root=await temp(t),app=join(root,'Standard.app'),resource=join(app,'Contents/Resources');await mkdir(resource,{recursive:true});
+  await writeFile(join(resource,'app.asar'),asarMembers({'package.json':JSON.stringify({name:'fixture',version:'1',main:'main'}),'main.js':'module.exports = "\u0000";'}));
+  const identity=await identifyElectron(app);
+  assert.equal(identity.asarRelativePath,'Contents/Resources/app.asar');assert.equal(identity.name,'fixture');assert.equal(identity.entrypoint.readable,true);assert.match(identity.entrypoint.sha256,/^[a-f0-9]{64}$/);assert.equal(identity.execution.supported,true);
+});
+
+test('external resource manifests identify their actual archive and reject traversal',async t=>{
+  const root=await temp(t),app=join(root,'Nested.app'),resource=join(app,'Contents/Resources/app');await mkdir(resource,{recursive:true});
+  const manifest=join(resource,'package.json');await writeFile(manifest,JSON.stringify({name:'nested',version:'2',main:'./application.asar/launcher/index.js'}));
+  await writeFile(join(resource,'application.asar'),asarMembers({'launcher/index.js':'module.exports = {};'}));
+  const identity=await identifyElectron(app);assert.equal(identity.version,'2');assert.equal(identity.asarRelativePath,'Contents/Resources/app/application.asar');assert.equal(identity.entrypoint.readable,true);assert.deepEqual(identity.execution,{supported:false,blockers:['nonstandard-resource-layout']});
+  await writeFile(manifest,JSON.stringify({name:'escape',main:'../outside.asar/main.js'}));await assert.rejects(identifyElectron(app),{code:'INVALID_ARTIFACT'});
+});
+
+test('nontext entrypoints are reported before launch and never exported as JavaScript',async t=>{
+  const root=await temp(t),app=join(root,'Protected.app'),resource=join(app,'Contents/Resources');await mkdir(resource,{recursive:true});
+  await writeFile(join(resource,'app.asar'),asarMembers({'package.json':JSON.stringify({name:'protected',version:'3',main:'main.js'}),'main.js':Buffer.from([0xff,0,1,0xfe]),'readable.js':'export const value = 1;'}));
+  const identity=await identifyElectron(app);assert.equal(identity.entrypoint.readable,false);assert.deepEqual(identity.execution.blockers,['nontext-entrypoint']);
+  const index=await exportApplicationSources(identity.artifact,join(root,'sources'));assert.ok(index.excluded.some(e=>e.path==='main.js'));assert.ok(!index.sources.some(e=>e.path==='main.js'));assert.ok(index.sources.some(e=>e.path==='readable.js'));
+  const out=join(root,'run');await assert.rejects(prepareElectron(app,out),{code:'DESKTOP_BRIDGE_REQUIRED'});await assert.rejects(stat(out),{code:'ENOENT'});
+});
+
+test('branded framework discovery resolves regular binaries within the bundle',async t=>{
+  const root=await temp(t),app=join(root,'Branded.app'),framework=join(app,'Contents/Frameworks/Branded.framework'),binary=join(framework,'Versions/A/Branded');await mkdir(dirname(binary),{recursive:true});await writeFile(binary,'fixture bytes, not a real executable');await symlink('Versions/A/Branded',join(framework,'Branded'));
+  assert.equal(await electronFrameworkBinary(app),await realpath(binary));
+  await rm(join(framework,'Branded'));await writeFile(join(root,'outside'),'outside');await symlink(join(root,'outside'),join(framework,'Branded'));await assert.rejects(electronFrameworkBinary(app),{code:'INVALID_ARTIFACT'});
 });

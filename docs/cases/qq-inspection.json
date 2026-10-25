@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "producer": "Sanitized QQ experiment summary; not raw REA output or runtime acceptance",
+  "verifiedAt": "2026-10-25T14:12:47.900503+00:00",
+  "baselineCommit": "f9b87b7148dadec0380d4789831172d748a5440c",
+  "application": {
+    "name": "QQ",
+    "version": "7.0.2-53644",
+    "archive": "Contents/Resources/app/application.asar",
+    "artifactSha256": "e515fbf7c47d0e05a5539c9aeeea8a3268551dd5f6ddb7a39a9a4bb656c7bf12",
+    "entrypoint": {
+      "path": "app_launcher/index.js",
+      "available": true,
+      "readable": false,
+      "bytes": 80,
+      "sha256": "b9236a5727fb6cba0d9ed4579d2cd7ac2e87455712aa75b73cd729c2f2194e66"
+    },
+    "rendererSchemeObserved": "app:"
+  },
+  "result": {
+    "status": "desktop-bridge-required",
+    "businessApisVerified": 0,
+    "functionalCliGenerated": false,
+    "runtimeAcceptancePassed": false
+  },
+  "staticAnalysis": {
+    "status": "passed",
+    "sourceFiles": [
+      "app_launcher/adm-zip.js",
+      "app_launcher/index.js",
+      "app_launcher/launcher.js"
+    ],
+    "scope": "Three literal external bootstrap modules only; protected archive behavior and native loader implementation were not recovered",
+    "summary": {
+      "browser_windows": 0,
+      "explicit_web_preferences": 0,
+      "preload_entrypoints": 0,
+      "context_bridge_apis": 0,
+      "exposed_api_members": 0,
+      "ipc": {
+        "operations": 0,
+        "literal_channels": 0,
+        "dynamic_channel_operations": 0,
+        "renderer_transmissions": 0,
+        "renderer_listeners": 0,
+        "main_handlers": 0,
+        "paired_renderer_transmissions": 0,
+        "ambiguous_renderer_transmissions": 0,
+        "unpaired_literal_renderer_transmissions": 0
+      },
+      "sender_validation_observations": 0,
+      "utility_processes": 0,
+      "resolved_utility_entrypoints": 0,
+      "native_addon_bindings": 0,
+      "resolved_native_addon_bindings": 0
+    },
+    "statistics": {
+      "relevant_files": 4,
+      "nested_asar_containers": 0,
+      "text_bytes_read": 172,
+      "invalid_utf8_files": 0,
+      "parsed_javascript_files": 3,
+      "skipped_javascript_files": 0,
+      "visited_ast_nodes": 33,
+      "findings": 6,
+      "modules": 0,
+      "parse_failures": 0
+    },
+    "rawSourceAndAccountDataPublished": false
+  },
+  "fuseInspection": {
+    "operation": "inspect_electron_fuses",
+    "sha256": "c99ed185196c0b934aa6b01fc23e45b6e4c6ea842c69ddf576339cbad631be6c",
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "staticMetadataDoesNotProveRuntimeDebugAccess": true
+  },
+  "runtimeAttempts": [
+    {
+      "kind": "renderer-cdp",
+      "passed": false,
+      "observation": "Requested loopback endpoint unavailable; launcher had flags and active kernel process did not"
+    },
+    {
+      "kind": "signal-inspector",
+      "passed": false,
+      "kernelExited": true,
+      "clientRestored": true
+    },
+    {
+      "kind": "startup-node-options",
+      "passed": false,
+      "observation": "Packaged runtime reported unsupported Node options; no usable Inspector endpoint appeared"
+    },
+    {
+      "kind": "developer-tools-shortcut",
+      "passed": false,
+      "observation": "No developer-tools window observed"
+    }
+  ],
+  "framework": {
+    "fixtureTestsPassed": 62,
+    "fixtureTestsFailed": 0,
+    "liveQqBusinessEvidence": false,
+    "newCommand": "inspect electron <app> --out <new-directory>",
+    "generationErrorCode": "DESKTOP_BRIDGE_REQUIRED",
+    "generationStoppedBeforeLaunch": true,
+    "existingMarktextPinUnchanged": true,
+    "existingMarktextEntrypointStillSupported": true
+  },
+  "restoration": {
+    "normalLoginObserved": true,
+    "debugArgumentsAbsentOnQqProcesses": true,
+    "inspectorNodeOptionsAbsent": true,
+    "runAsNodeEnvironmentAbsent": true,
+    "requestedCdpPortClosed": true,
+    "defaultInspectorPortClosed": true,
+    "messagesSent": 0,
+    "contactOrGroupMutations": 0
+  },
+  "limitations": [
+    "The exact nontext entrypoint encoding was not determined.",
+    "The current read/write application-journey verifier cannot accept a read-only QQ experiment.",
+    "A native-loader/IPC execution bridge and independent read-only acceptance remain unimplemented.",
+    "Static counts cover only the explicit source slice, not the whole QQ application."
+  ]
+}

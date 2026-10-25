@@ -4,6 +4,7 @@ import {hash,writeJson,AppError} from '../utils.mjs';
 import {selectedPage} from '../drivers/web/session.mjs';
 import {safeUrl} from '../drivers/web/observe.mjs';
 import {runRea} from './rea.mjs';
+import {inspectElectron} from './electron.mjs';
 export function projectWebCapture(capture){
   const projected=structuredClone(capture),excluded=[];
   for(const script of projected.scripts.items){
@@ -19,6 +20,7 @@ export function projectWebCapture(capture){
 }
 export async function inspect(platform,target,flags){
   if(typeof flags.out!=='string')throw new AppError('INVALID_INPUT','--out is required');
+  if(platform==='electron')return inspectElectron(target,flags);
   const out=resolve(flags.out);await mkdir(out,{recursive:true,mode:0o700});const records=[],derivations=[];
   const run=async(args,name)=>{console.error('REA '+args[0]);const r=await runRea(args,resolve(out,name+'.json'));records.push({file:relative(out,r.file),sha256:r.sha256,operation:r.operation,evidenceId:r.raw.evidence_id});return r.raw;};
   if(platform==='web'){
@@ -49,7 +51,7 @@ export async function inspect(platform,target,flags){
   }else if(platform==='android'){
     await run(['inspect-android-package',resolve(target)],'package');
     if(flags.class){await run(['inspect-android-class',resolve(target),flags.class],'class');if(flags.method)await run(['inspect-android-method',resolve(target),flags.class,flags.method],'method');}
-  }else throw new AppError('UNSUPPORTED_PLATFORM','Currently supported: web, android');
+  }else throw new AppError('UNSUPPORTED_PLATFORM','Currently supported: web, android, electron');
   await writeJson(resolve(out,'evidence.json'),{schemaVersion:1,producer:'app2cli index referencing original REA stdout',platform,records,derivations});
   return {ok:true,platform,evidence:resolve(out,'evidence.json'),records:records.length,next:'Write or refine the semantic adapter, then build it against this evidence. Analysis alone does not prove a capability works.'};
 }

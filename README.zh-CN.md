@@ -35,6 +35,8 @@ node bin/app2cli.mjs generate /path/to/Editor.app
 
 当前样例限定在隔离测试命名空间内；CLI 运行仍需要原浏览器登录会话或 Electron 进程，但不需要 REA 或模型。见 [复现方法](docs/cases/application-generation.md)、[验收记录](docs/cases/application-generation-acceptance.json)、[网站生成代码](examples/linkding/README.md) 和 [桌面生成代码](examples/marktext/README.md)。
 
+可用 `inspect electron /path/to/Application.app --out .local/inspect/application` 先做不启动应用的 REA 静态诊断。QQ 7.0.2 的实测识别到了非标准归档布局和非明文入口，但没有跑通业务 API 或生成可用 QQ CLI；现有生成器会提前返回 `DESKTOP_BRIDGE_REQUIRED`。见 [QQ 实验与未完成项](docs/cases/qq.md)。
+
 ## API 优先
 
 默认生成策略已改为 API 优先。旧的显式 HTTP 路线仍支持提供真实 HAR 和自有测试资源契约，由 REA 分析网络证据，Agent 生成直接 HTTP CLI，测试器另发 GET 验证修改和恢复。鉴权值只在运行环境中注入。未找到可验证 API 时明确停止；旧的浏览器函数 / Android UI 路线必须显式传 `--allow-ui-fallback`。

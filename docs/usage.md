@@ -181,3 +181,23 @@ Custom touch controls can be allowlisted with `action: "touch"`. Unlike `tap`,
 this explicit operation uses an enabled unique element's freshly read bounds
 without requiring its `clickable` accessibility flag; native postconditions are
 still required. Updated caller allowlists on resume are recorded separately.
+
+## Inspect a desktop application without starting it
+
+```bash
+node bin/app2cli.mjs inspect electron /path/to/Application.app --out .local/inspect/application
+```
+
+This command identifies the bundle, follows a resource package's declared ASAR
+entrypoint, acquires bounded plaintext sources and runs actual REA static/fuse
+inspection. It never launches the app, enables debugging or uses a login session.
+Use a new output directory. `inspection.json` separates packaging support from
+runtime acceptance: static inspection always reports `runtimeTested: false`,
+`verifiedBusinessApis: 0` and `cliGenerated: false`.
+
+The launcher currently requires the standard `Contents/Resources/app.asar`
+layout and a readable entrypoint. A protected/nontext entrypoint or alternate
+archive layout stops generation with `DESKTOP_BRIDGE_REQUIRED` before launching
+the app. This indicates a missing execution bridge, not that the app has no APIs.
+The [QQ experiment](cases/qq.md) records one such case and its unsuccessful
+runtime-debugging checks. Metadata inspection is not business CLI coverage.
