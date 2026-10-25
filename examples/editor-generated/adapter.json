@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "editor",
+  "description": "Read and reversibly replace the current native editor buffer without saving files.",
+  "platform": "android",
+  "verification": "native-ui-readback",
+  "config": {
+    "package": "org.billthefarmer.editor",
+    "component": "org.billthefarmer.editor/.Editor",
+    "apkSha256": "343d17e11d0914e1a7708df2781580a0413e52501c0a41d91f7ef725d9615fe9"
+  },
+  "commands": {
+    "buffer.read": {
+      "description": "Read the actual native buffer and current editor mode.",
+      "readOnly": true,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      }
+    },
+    "buffer.replace": {
+      "description": "Replace the buffer using native text input, preserving the observed editor mode and document title.",
+      "readOnly": false,
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 8192,
+            "pattern": "^[\\x20-\\x7E\\n]*$"
+          }
+        }
+      }
+    }
+  },
+  "analysis": {
+    "recipe": "Editor.onCreate obtains an EditText with findViewById(R.id.text), makes it selectable with raw input type zero outside edit mode, and presents an optional all-files-access dialog. Editor.editClicked sets a multiline input type, sets edit=true, and recreates the activity. Discover the visible native Edit/View action from each fresh hierarchy; never reuse its identifier after recreation. Replace through focused native input, restore the observed mode, and compare fresh R.id.text readback and document title. Confirmation establishes displayed buffer contents, not file persistence.",
+    "claims": [
+      {
+        "operation": "inspect_android_package",
+        "contains": "org.billthefarmer.editor"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "this.textView = (EditText) findViewById(R.id.text);"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "this.textView.setTextIsSelectable(true);"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "R.string.access, R.string.manageFiles, R.string.access, R.string.cancel"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "private void editClicked(MenuItem menuItem)"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "this.edit = true;"
+      },
+      {
+        "operation": "inspect_android_method",
+        "contains": "recreate(this);"
+      }
+    ]
+  }
+}

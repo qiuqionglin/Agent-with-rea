@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "semantics": "replace-value",
+  "read": {
+    "command": "buffer.read",
+    "input": {}
+  },
+  "write": {
+    "command": "buffer.replace",
+    "input": {
+      "text": "$value"
+    }
+  },
+  "valuePath": "text",
+  "testValue": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible.",
+  "witness": {
+    "kind": "android-text",
+    "selector": "org.billthefarmer.editor:id/text",
+    "comparison": "equals",
+    "expected": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible."
+  }
+}

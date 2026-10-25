@@ -47,13 +47,15 @@ node bin/app2cli.mjs generate /path/to/application.apk \
 
 Use an authorized dedicated device/emulator. `--install` permits installing an absent package; an existing package with a different APK hash is rejected rather than replaced. With one authorized device, `--serial` can be omitted. `REA_ADB_PATH` selects the ADB executable. The runner discovers the package with REA, resolves its actual exported launcher via ADB, and gives the agent the real UI hierarchy. The agent can request additional REA class and method probes.
 
-The Android generation path shares the same loop and contract. The unseen-application acceptance for this change is a Web run; it is not evidence that arbitrary APK generation works. The earlier Fossify Calculator sample remains separately runnable and tested.
+The Android generation path shares the same loop and contract. A package-list query distinguishes an absent package from an ADB transport error before installation; a similarly named package is not an exact match. The earlier Fossify Calculator sample remains separately runnable and tested. See the [Editor APK walkthrough](android-generation.md) for the separate unseen-Android-app experiment.
 
 ## What a passed run establishes
 
 The initial implementation supports a deliberately narrow `replace-value` test contract: read a value, replace it using the original app, observe the changed value, and restore the baseline. It does not claim to cover every operation of the application.
 
 For Web, the runner chooses an unpredictable text marker. The agent must expose a read command, a mutation command, a baseline field, and a native DOM witness. A separate observer reloads the page and reads that witness directly; it never imports the generated adapter. The test also exercises a fresh CLI process, dry-run, deduplication, stale revisions and baseline restoration. Android uses a fresh native UI hierarchy and a scalar objective frozen across repair rounds. Android UI confirmation is not server confirmation.
+
+The observer also captures the actual native baseline, rejects an objective already visible before dispatch, and independently checks the dry-run and restored state against that baseline. It does not rely on the adapter's assertion that cleanup succeeded. Private `baseline-witness.json`, `dry-run-witness.json`, `independent-witness.json`, and `restoration-witness.json` retain the observations; Android records include the hierarchy and its digest. A successful observation also attempts a native screenshot at `independent-witness.png`. Screenshots are supporting evidence, while the checked native text determines the result.
 
 The agent returns structured JSON strings for the manifest, source module and test plan. Codex runs in read-only mode while authoring; the runner writes the candidate files and launches real tests in separate processes. Generated adapters are executable local code and are not a security sandbox. Use a dedicated application session. Prompts explicitly treat captured page/source content as untrusted data.
 

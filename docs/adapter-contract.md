@@ -41,6 +41,8 @@ Webpack factory `Function.toString()` is also not a stable source-version finger
 
 `refresh` has different meanings for different transports. A page reload can verify browser persistence. A new Android UI hierarchy confirms displayed state but says nothing about durable storage or backend state. Describe the distinction in the manifest and acceptance report.
 
+Android controls may change resource IDs when their mode changes. Read a new hierarchy after a transition instead of reusing the old ID. Keep initialization paths when repairing a candidate, including any precisely identified optional onboarding dialog. Do not send `KEYCODE_BACK` just to hide a presumed keyboard: input-method flags can indicate a shown input method even when a hardware keyboard is in use, and BACK can navigate away or open an unsaved-changes dialog. Keyboard visibility is not a content postcondition. The SDK exposes class, focus and password attributes as well as text, bounds and identifiers.
+
 ## Authoring loop for an agent
 
 1. Inspect the selected page/APK with REA and retain original evidence.

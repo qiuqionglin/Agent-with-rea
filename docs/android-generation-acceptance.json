@@ -1,0 +1,297 @@
+{
+  "producer": "Sanitized orchestrator acceptance summary, not raw REA or native model trace",
+  "assembledAt": "2026-10-25T02:38:07.560Z",
+  "application": {
+    "name": "Editor",
+    "version": "1.98",
+    "package": "org.billthefarmer.editor",
+    "apkUrl": "https://f-droid.org/repo/org.billthefarmer.editor_198.apk",
+    "apkBytes": 269122,
+    "apkSha256": "343d17e11d0914e1a7708df2781580a0413e52501c0a41d91f7ef725d9615fe9",
+    "source": "https://github.com/billthefarmer/editor",
+    "distribution": "https://f-droid.org/en/packages/org.billthefarmer.editor/",
+    "bundledAdapterBeforeExperiment": false,
+    "baselineCommit": "35109ed6966a6d3c0fe095f4878e7cb8cba05f30"
+  },
+  "status": "passed",
+  "verification": "native-ui-readback",
+  "device": {
+    "platform": "Android 13",
+    "architecture": "arm64-v8a",
+    "emulator": "BlueStacks Air",
+    "rootRequired": false,
+    "fridaUsed": false,
+    "shellUid": 2000,
+    "allFilesAccessGranted": false
+  },
+  "agent": {
+    "engine": "Codex CLI",
+    "model": "gpt-6.1-sol",
+    "effort": "high",
+    "perProcessConfigOnly": true
+  },
+  "finalRun": {
+    "startedAt": "2026-10-25T02:23:57.510Z",
+    "finishedAt": "2026-10-25T02:32:05.804Z",
+    "rounds": 4,
+    "probes": 3,
+    "candidates": 1,
+    "repairs": 0,
+    "adapterDigest": "8514910a195ef1fc8ad378fd7fffcba598aea6cef356de646d66d2417301f90c",
+    "manualAdapterEdits": false,
+    "frameworkUnchangedDuringExecution": true,
+    "checks": [
+      {
+        "name": "Generated CLI schema",
+        "passed": true
+      },
+      {
+        "name": "Dry run preserves application state",
+        "passed": true
+      },
+      {
+        "name": "Mutation and runtime fresh readback",
+        "passed": true
+      },
+      {
+        "name": "Independent native witness",
+        "passed": true,
+        "kind": "android-text",
+        "selector": "org.billthefarmer.editor:id/text",
+        "actual": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible.",
+        "expected": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible.",
+        "reloaded": false,
+        "hierarchySha256": "acdb7d785ea93f608d993a4ababfea308dfea2a7dc67af76f1fbdbb4849f8dfc",
+        "capturedAt": "2026-10-25T02:30:59.552Z"
+      },
+      {
+        "name": "Separate CLI process reads actual value",
+        "passed": true
+      },
+      {
+        "name": "Request replay is deduplicated",
+        "passed": true
+      },
+      {
+        "name": "Stale revision is rejected",
+        "passed": true
+      },
+      {
+        "name": "Original application content restored",
+        "passed": true
+      }
+    ],
+    "baseline": {
+      "text": "",
+      "mode": "view",
+      "documentTitle": []
+    },
+    "restoredData": {
+      "text": "",
+      "mode": "view",
+      "documentTitle": []
+    },
+    "baselineWitness": {
+      "kind": "android-text",
+      "selector": "org.billthefarmer.editor:id/text",
+      "actual": "",
+      "reloaded": false,
+      "hierarchySha256": "a853cea5a4a568ce99ac649b910cb8629e22c9aac3c77181919be024ee908be7",
+      "capturedAt": "2026-10-25T02:30:05.188Z"
+    },
+    "restorationWitness": {
+      "kind": "android-text",
+      "selector": "org.billthefarmer.editor:id/text",
+      "actual": "",
+      "expected": "",
+      "reloaded": false,
+      "hierarchySha256": "9f2817902c7b44b0b7a25dbc7cad0eb47e2b4dd114f895d3604d16b4f6a90f44",
+      "capturedAt": "2026-10-25T02:32:05.793Z"
+    },
+    "restored": true
+  },
+  "repeat": {
+    "preparation": "App restarted before the scenario after verifying the original buffer was empty; this does not prove write persistence through restart",
+    "status": "passed",
+    "passed": 8,
+    "restored": true,
+    "startedAt": "2026-10-25T02:32:23.017Z",
+    "finishedAt": "2026-10-25T02:34:36.236Z",
+    "nativeWitness": {
+      "name": "Independent native witness",
+      "passed": true,
+      "kind": "android-text",
+      "selector": "org.billthefarmer.editor:id/text",
+      "actual": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible.",
+      "expected": "REA editor buffer 7F3A: alpha=17; beta=[42] / reversible.",
+      "reloaded": false,
+      "hierarchySha256": "acdb7d785ea93f608d993a4ababfea308dfea2a7dc67af76f1fbdbb4849f8dfc",
+      "capturedAt": "2026-10-25T02:33:29.704Z"
+    }
+  },
+  "negativeControl": {
+    "producer": "Deliberately faulty test copy, not model output",
+    "fault": "dispatch returns success without effect and matches always returns true",
+    "caughtBy": "INDEPENDENT_WITNESS_FAILED",
+    "restored": true,
+    "originalAdapterChanged": false
+  },
+  "independentInstallation": {
+    "producer": "Parent-authored independent installation and native acceptance, not model output",
+    "status": "passed",
+    "outsideRepository": true,
+    "reaInstalled": false,
+    "codexDependencyInstalled": false,
+    "adapterDigest": "8514910a195ef1fc8ad378fd7fffcba598aea6cef356de646d66d2417301f90c",
+    "at": "2026-10-25T02:36:23.416Z",
+    "testValue": "REA Android live 4821",
+    "baseline": {
+      "text": "",
+      "mode": "view",
+      "documentTitle": []
+    },
+    "nativeWitness": {
+      "kind": "android-text",
+      "selector": "org.billthefarmer.editor:id/text",
+      "actual": "REA Android live 4821",
+      "expected": "REA Android live 4821",
+      "reloaded": false,
+      "hierarchySha256": "b9d3c07b4158544d0a10ae2053de3aff04a9d51895d0310bda9b80d1ba88ae7c",
+      "capturedAt": "2026-10-25T02:37:10.372Z"
+    },
+    "readPassed": true,
+    "writePassed": true,
+    "freshProcessReadPassed": true,
+    "restorationWitness": {
+      "kind": "android-text",
+      "selector": "org.billthefarmer.editor:id/text",
+      "actual": "",
+      "expected": "",
+      "reloaded": false,
+      "hierarchySha256": "9f2817902c7b44b0b7a25dbc7cad0eb47e2b4dd114f895d3604d16b4f6a90f44",
+      "capturedAt": "2026-10-25T02:37:54.541Z"
+    },
+    "restored": true,
+    "tarballSha256": "5b0102691a04671b8558c64c357799b21db68e459aaa3e1fb88b6418ae47286e",
+    "finishedAt": "2026-10-25T02:37:54.543Z"
+  },
+  "unitTests": {
+    "passed": 26,
+    "total": 26,
+    "kind": "Kernel, compiler, generation and Android protocol fixtures; separate from live app evidence"
+  },
+  "rea": {
+    "version": "6.7.0",
+    "provider": "jadx-headless-mcp 0.7.1",
+    "rawRecords": [
+      {
+        "operation": "inspect_android_package",
+        "evidenceId": "ev_415bc02555d6b0334d671b9b45442c87f26b6b4278f4012a237accb483fb8988",
+        "sha256": "74e119f29f8a7e286aafc2c67c0e9e052dab069d220436961317d40bc16dc1bc"
+      },
+      {
+        "operation": "inspect_android_class",
+        "evidenceId": "ev_5822740ba98382594bfd47cf954c5ec4551edff007c62c97f14bce035d121033",
+        "sha256": "7f722d9ee19a6442763db8d93237268249aab8ac58d8f501dcde7dac5137be02",
+        "className": "org.billthefarmer.editor.Editor"
+      },
+      {
+        "operation": "inspect_android_method",
+        "evidenceId": "ev_fadeb81bb114824ada05121c0520a4ba90809e82abfb5b9644722b022d5e832e",
+        "sha256": "709f78fa82b3fb5f8d783670900af7bb0fba42bd328645728ded51de3cc63131",
+        "className": "org.billthefarmer.editor.Editor",
+        "methodName": "onCreate"
+      },
+      {
+        "operation": "inspect_android_method",
+        "evidenceId": "ev_5950b4d7ffc3c9f0d140303aa808cfbbbe1b24dd4eafa6b0564f1dbc23d684a0",
+        "sha256": "2999150b143d66b903f7c2c90fd1eea33bcf1900a75225f82da98796fe2377fd",
+        "className": "org.billthefarmer.editor.Editor",
+        "methodName": "editClicked"
+      }
+    ],
+    "coverage": "Package metadata, class member inventory and selected method bodies; not whole-application behavior coverage",
+    "signatureVerification": "not_performed by the recorded REA package inspection"
+  },
+  "sourceDigests": {
+    "lib/generate.mjs": "526178dbe531a18898082c6fe4201a67090637e4ad9478431034131bd111df8f",
+    "lib/generation-session.mjs": "7b0aace8add5285eaa3ceb744cabbbd80af9bdd8631422b99eb71faa5d230ecb",
+    "lib/generation-test.mjs": "eb7e1a936c5689079bedf0fbead01a117a3fa26b1e7c3f2d8d7c37b449cbeac4",
+    "lib/android.mjs": "59e36b439732ce4acc6a017da90716750e47963a5693e37385c0d9101206944f",
+    "lib/runtime.mjs": "7246b88ecd326f5fc33386f0b98e3c3460f60418034a025cd99318b8fea0a6e3",
+    "lib/inspect.mjs": "e2024c34d6749e0db963e1c769eb8152ae5256fdbe86b98997c77b1d7eb8c50d",
+    "lib/rea.mjs": "5affd79b244aa7dea2d013c970aa6352d4596159f728da91bb310d5eb5b19c37"
+  },
+  "developmentFailures": {
+    "retainedPrivately": true,
+    "beforeFinalRun": [
+      {
+        "stage": "Initial preparation",
+        "failure": "pm path returned exit 1 for the uninstalled package before --install could run",
+        "resolution": "Generic exact package-list check plus installation and transport-error tests"
+      },
+      {
+        "stage": "Earlier generation candidate 1",
+        "failure": "Native edit/view transition changed the control resource ID",
+        "automaticFeedback": true,
+        "automaticTextRestoration": true
+      },
+      {
+        "stage": "Earlier generation candidate 2",
+        "failure": "Keyboard cleanup sent BACK and opened an unsaved-changes dialog; generated recovery could not locate the covered editor",
+        "automaticStop": "RESTORATION_FAILED",
+        "automaticSuccess": false
+      }
+    ],
+    "manualRecovery": {
+      "producer": "Parent-side native recovery after stopped failed generation; not an automatic adapter success",
+      "at": "2026-10-25T02:23:07.739Z",
+      "baselineText": "",
+      "restoredText": "",
+      "afterHierarchySha256": "a6a5f05f644dec5f34c8cb10889ff735e8619608d87f1e047acb64ce090d2c60",
+      "sourceAdapterModified": false,
+      "separateFromFinalRun": true
+    },
+    "genericImprovements": [
+      "Exact installed-package detection",
+      "Native class/focus attributes",
+      "Mode-transition and keyboard-navigation guidance",
+      "Independent baseline, dry-run and restoration observations with native screenshots"
+    ],
+    "finalRunStartedFromRelaunchedApplication": true
+  },
+  "screenshots": [
+    {
+      "file": "android-generation-witness.png",
+      "context": "Automatic generation native witness; long text can extend beyond the viewport",
+      "sha256": "9fd8f558025c4c503852d632f0a103a811184c45750b533e09b9a4a803e0a5f4"
+    },
+    {
+      "file": "android-installed-witness.png",
+      "context": "Different text written by the separately installed CLI and observed natively",
+      "sha256": "4cdae6ed09911ffdec5e94f7c099af27133c8ab9425f4138809fc82f604706e4"
+    }
+  ],
+  "boundaries": [
+    "Final generated module is byte-identical to the native model final response; no hand-written adapter was substituted",
+    "Shared runtime invokes the original installed app through native UI and keyboard input; no root, Frida or direct storage edits",
+    "Independent observer does not import the adapter and checks actual native text before mutation, after dry-run, after mutation and after restoration",
+    "The earlier automatic repair was unsuccessful and required a separately recorded parent recovery; it is not counted as final-run success",
+    "Final-run candidate passed without repair; bounded automatic failure feedback is additionally covered by fixture tests and the earlier real failure sequence",
+    "Current buffer contents and edit/view mode are validated, not saved files, process-restart persistence or backend state",
+    "Short ASCII inputs were exercised; the entire advertised input domain, other locales and arbitrary APKs are not established",
+    "Raw model traces, APK, decompiled bodies and private device/runtime records remain outside the public repository"
+  ],
+  "cleanup": {
+    "producer": "Test-device cleanup verification",
+    "at": "2026-10-25T02:43:06.445142+00:00",
+    "originalSettingsRestored": true,
+    "localAdbSettingEnabled": false,
+    "remoteAdbSettingEnabled": false,
+    "rootEnabled": false,
+    "debugPortListening": false,
+    "applicationBufferRestored": true,
+    "emulatorStopped": true,
+    "note": "The running emulator retained its debug listener despite the disabled setting, including after restart. It was closed after content restoration; the listener is now absent."
+  }
+}

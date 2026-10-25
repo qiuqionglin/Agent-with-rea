@@ -8,7 +8,9 @@
 
 完整命令和环境准备见 [English README](README.md)。
 
-已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。通用测试为 **22/22**。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
+已用此前没有适配器的在线应用 **Dillinger** 完成干净验收：输入网址后，agent 首轮生成的 CLI 通过 **8/8 真实检查**，再次复验也通过 **8/8**。故意谎报成功但不修改应用的测试副本，被独立观察器拦住；生成的包也通过仓库外独立安装和读取测试。当前通用测试为 **26/26**。见 [验收摘要](docs/generation-acceptance.json) 和 [未经手工修改的生成代码](examples/dillinger-generated/README.md)。
+
+Android 也已使用此前未适配的 **Editor 1.98** 完成 APK 输入验收：Agent 发起 3 次 REA 补充探查后生成候选，通过 **8/8 原生检查**；重启 App 后再次完整复验，同样通过 **8/8**。生成代码未经手改。见 [APK 复现步骤](docs/android-generation.md)、[Android 验收记录](docs/android-generation-acceptance.json) 和 [生成适配器](examples/editor-generated/README.md)。故意不执行修改却返回成功的副本被独立观察器拦截；仓库外安装的 CLI 也完成了第二组文本的读取、修改、原生回读和恢复，运行依赖中没有 REA 或 Codex。本例操作当前文本缓冲区，不宣称保存了文件或修改了后端。
 
 开发期间失败的运行和人工恢复步骤在摘要中单独披露，不算入成功验收。最终成功的干净运行没有沿用旧适配器，也没有在执行中修改框架或候选代码。本例验证的是浏览器本地持久化，不是服务端写入。
 
@@ -40,7 +42,7 @@ node bin/app2cli.mjs generate /path/to/application.apk \
   --id my-app --serial emulator-5554 --install --out .local/generate/android
 ```
 
-Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设备中不存在的包；现有安装包哈希不一致时会拒绝覆盖。新应用的自动生成实测选择 Web，Android 自动生成入口不能据此宣称已经覆盖任意 APK。
+Android 需要已配置的 REA/JADX 和授权设备。`--install` 仅安装设备中不存在的包；现有安装包哈希不一致时会拒绝覆盖。未适配的 Editor APK 已完成真实自动生成验收；这仍不能推断为覆盖任意 APK、任意功能。
 
 成功后，`result.json` 给出 CLI 路径、调用所需环境、适配器哈希和验证报告。先用 `--schema` 查看实际生成的命令。无需再次消耗模型调用即可复验：
 
@@ -56,6 +58,7 @@ node bin/app2cli.mjs verify .local/generate/dillinger --out .local/verify/dillin
 | --- | --- | --- |
 | Knockout TodoMVC | 调用原页面 view model 的增删改函数 | 模型、DOM、localStorage 一致，并通过页面刷新确认 |
 | Fossify Calculator 1.4.0 | 通过 ADB 操作原生控件，使用当前层级定位坐标 | 两次独立 UI 层级回读；不声称服务端确认或重启持久化 |
+| Editor 1.98，APK 自动生成 | 原生文本输入、编辑模式切换和模式恢复 | 独立 UI 回读、原文恢复、重启 App 后完整复验 |
 
 ```bash
 todomvc-cli todos create --title "Agent 创建的任务" --request-id task-001

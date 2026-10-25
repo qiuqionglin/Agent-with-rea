@@ -1,0 +1,12 @@
+{
+  "producer": "Framework projection of original Codex final response; module bytes are unchanged",
+  "noManualAdapterEdits": true,
+  "bundledBeforeRun": false,
+  "adapterDigest": "8514910a195ef1fc8ad378fd7fffcba598aea6cef356de646d66d2417301f90c",
+  "moduleSha256": "5a1e21e204fc6e271e6145a6a7c9076775b6d871c70509ef5ed07192e60153f3",
+  "nativeAgentTraceSha256": "4088fab016a38ef7b48d7b6f27bd95010b7fcf97e43fa5712f4258fc90f206c1",
+  "nativeFinalResponseSha256": "b05b6e28b55f65e369123df1be61380f8db167cd1322e8fdc71ccebdb2b82cc9",
+  "nativeCommandExecutions": 28,
+  "commandsReferencingOtherRecipes": 0,
+  "frameworkUnchangedDuringFinalRun": true
+}
